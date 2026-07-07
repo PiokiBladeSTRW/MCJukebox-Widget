@@ -579,13 +579,15 @@ Image {
         source: "../images/settings_bg_2.png"
 
         property string playlistName
-        property list<string> playlistFolders
         property string albumArt
 
+        property list<string> playlistFolders
         property list<string> displayTexts: ["Add Songs", "Add Album Art [Optional]"]
 
-        visible: playlistRoot.settingsPage === 2 ? 1: 0
+        visible: playlistRoot.settingsPage === 2
 
+
+        // Add Songs and Album Art Buttons
         Repeater {
             model: [0, 30]
 
@@ -624,6 +626,7 @@ Image {
             }
         }
 
+        // Playlist Name
         PC.TextField {
             id: namePlaylist
             height: 25
@@ -635,7 +638,6 @@ Image {
 
             placeholderText: "Enter Playlist Name: "
 
-
             background: Image {
                 anchors.fill: parent
                 source: namePlaylist.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
@@ -646,13 +648,13 @@ Image {
             }
         }
 
-
+        // Accept Button
         Button {
             width: 30
             height: 30
+
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-
             anchors.bottomMargin: 15
             anchors.rightMargin: 15
 
@@ -969,12 +971,13 @@ Image {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
 
+            placeholderText: "MPC Config Music Directory: "
+
+
             background: Image {
                 anchors.fill: parent
                 source: entryField.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
             }
-
-            placeholderText: "MPC Config Music Directory: "
 
             onAccepted: {
                 plasmoid.configuration.musicPath = text
