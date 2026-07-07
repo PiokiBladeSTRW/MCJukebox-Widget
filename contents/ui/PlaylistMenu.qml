@@ -205,55 +205,68 @@ Image {
         }
     }
 
-    // File Picker [ Album Art]
+    // File Picker [Album Art & Music]
     FileDialog {
         id: filePick
-        title: "Choose Album Art    "
 
-        nameFilters: ["Image File (*.png *.jpg *.jpeg *.webp)"]
+        property bool mode: 1      // 1: Album Art ; 0 : Music
+
         fileMode: FileDialog.OpenFile
+        title: mode ? "Choose Album Art " : "Choose Music File"
+        nameFilters: mode ? ["Image File (*.png *.jpg *.jpeg *.webp)"] : ["Music File (*.flac *.ogg *.mp3 *.opus *.wav *.aac)"]
 
         onAccepted: {
             let path = filePick.selectedFile.toString().replace("file://", "")
 
-            if(playlistRoot.settingsPage === 2) {
-                addPlaylist.albumArt = path
-            } else if(playlistRoot.settingsPage === 3) {
-                editPlaylist.newAlbumArt = path
+            // Album Art
+            if(mode) {
+                switch(playlistRoot.settingsPage) {
+                    case 2:
+                        addPlaylist.albumArt = path
+                        break
+                    case 3:
+                        editPlaylist.newAlbumArt = path
+                        break
+                    default: break
+                }
+
+            // Music
+            } else {
+
+                // Ensure Correct Music Directory
+                if(! path.startsWith(plasmoid.configuration.musicPath)) {
+                    folderWarning.open()
+                    return
+                }
+                path = path.replace(plasmoid.configuration.musicPath, "")
+
+                switch(playlistRoot.settingsPage) {
+                    case 0:
+                        playlistRoot.menuForceState(false)
+                        playlistRoot.tempSong(path)
+                        break
+
+                    case 3:
+                        // Add the Song to the Editable Roaster, to the SongsAddition List for MPC and for Index Lookup
+                        let title = path.split("/")
+                        editPlaylist.songsLookup[title[title.length - 1]] = Object.keys(editPlaylist.songsLookup).length + 1
+                        editPlaylist.songsList.push(title[title.length - 1])
+                        editPlaylist.songsAdd.push(path)
+                        break
+                    default: break
+                }
+
             }
+
+        }
+
+        onRejected:{
             filePick.close()
-        }
-    }
-
-    // File Picker [Songs]
-    FileDialog {
-        id: filePickMusic
-        title: "Choose Music File    "
-
-        nameFilters: ["Music File (*.flac *.ogg *.mp3 *.opus *.wav *.aac)"]
-        fileMode: FileDialog.OpenFile
-
-        onAccepted: {
-            let path = filePickMusic.selectedFile.toString().replace("file://", "")
-
-            if(! path.startsWith(plasmoid.configuration.musicPath)) {
-                folderWarning.open()
-                return
-            }
-
-            path = path.replace(plasmoid.configuration.musicPath, "")
-
             if(playlistRoot.settingsPage === 0) {
-                playlistRoot.tempSong(path)
-
-            } else if(playlistRoot.settingsPage === 3) {
-                let title = path.split("/")
-                editPlaylist.songsLookup[title[title.length - 1]] = Object.keys(editPlaylist.songsLookup).length + 1
-                editPlaylist.songsList.push(title[title.length - 1])
-                editPlaylist.songsAdd.push(path)
+                playlistRoot.menuForceState(false)
             }
-            filePickMusic.close()
         }
+
     }
 
     // -----------------------------
@@ -389,7 +402,8 @@ Image {
         visible: settingsPage === 0 && visibleCondn
 
         onClick: {
-            filePickMusic.open()
+            filePick.mode = 1
+            filePick.open()
         }
     }
 
@@ -620,6 +634,7 @@ Image {
                             folderPick.open()
                             break;
                         case 1:
+                            filePick.mode = 0
                             filePick.open();
                             break;
                     }
@@ -797,7 +812,8 @@ Image {
                                 folderPick.open();
                                 break;
                             case 1:
-                                filePickMusic.open();
+                                filePick.mode = 1
+                                filePick.open();
                                 break;
                             case 2:
                                 roasterEdit.visible = false;
@@ -855,6 +871,7 @@ Image {
                             roasterEdit .visible = true
                             break
                         case 1:
+                            filePick.mode = 0
                             filePick.open();
                             break;
                     }
