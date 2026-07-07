@@ -675,18 +675,21 @@ Image {
 
         z:2
         source: "../images/settings_bg_3.png"
-        visible: playlistRoot.settingsPage === 3 ? 1 : 0
+        visible: playlistRoot.settingsPage === 3
 
         property string chosenPlaylist: playlistRoot.playlists[0]
         property string playlistRename : ""
         property string newAlbumArt: ""
 
+        property list<string> displayTexts: ["Edit Songs Roaster", "Change Album Art"]
+
+        // Songs List to display on Roaster and a Dictionary to look up Indices of songs
         property list<string> songsList
         property var songsLookup
+
+        // List of Songs Added / Removed
         property list<string> songsAdd
         property list<int> removalIndices
-
-        property list<string> displayTexts: ["Edit Songs Roaster", "Change Album Art"]
 
         signal reset
 
@@ -814,6 +817,7 @@ Image {
             }
         }
 
+        // Edit Roaster and Album Art Buttons
         Repeater {
             model: [0, 30]
 
@@ -821,23 +825,24 @@ Image {
                 width: 250
                 height: 25
 
-                graphic: "button"
-
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenterOffset: 15
                 anchors.verticalCenterOffset: modelData
 
+
+                graphic: "button"
+
                 Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.
+
                     text: editPlaylist.displayTexts[index]
                     font.family: "Minecraft"
                     renderType: Text.NativeRendering
                     font.pixelSize: 14
 
                     color: "white"
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 onClick: {
@@ -861,7 +866,6 @@ Image {
 
             anchors.top: parent.top
             anchors.left: parent.left
-
             anchors.topMargin: 15
             anchors.leftMargin: 15
 
@@ -903,31 +907,12 @@ Image {
             }
         }
 
-
+        // Confirmation
         Button {
             width: 20
             height: 20
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-
-            anchors.bottomMargin: 15
-            anchors.rightMargin: 7.5
-
-            graphic: "delete"
-
-            onClick: {
-                playlistRoot.settingsPage = 1
-                playlistDelete(parent.chosenPlaylist)
-                parent.reset()
-            }
-        }
-
-        Button {
-            width: 20
-            height: 20
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-
             anchors.bottomMargin: 15
             anchors.rightMargin: 32.5
 
@@ -937,6 +922,24 @@ Image {
                 playlistRoot.settingsPage = 1
                 parent.removalIndices.sort((a,b) => b-a)
                 playlistEdited(parent.chosenPlaylist, parent.playlistRename, parent.newAlbumArt, parent.songsAdd, parent.removalIndices)
+                parent.reset()
+            }
+        }
+
+        // Delete Playlist
+        Button {
+            width: 20
+            height: 20
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.bottomMargin: 15
+            anchors.rightMargin: 7.5
+
+            graphic: "delete"
+
+            onClick: {
+                playlistRoot.settingsPage = 1
+                playlistDelete(parent.chosenPlaylist)
                 parent.reset()
             }
         }
