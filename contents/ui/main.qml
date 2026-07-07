@@ -22,14 +22,7 @@ PlasmoidItem {
 
     property bool menuOpen: false
     property bool playlistMenuOpen : false
-    property bool forceMenuOpen: false
-
-    onMenuOpenChanged : {
-        if(menuOpen === false && playlistMenuOpen) {
-            playlistMenuOpen = false
-        }
-    }
-
+    property bool keepMenuOpen: false
 
     // Music Player
     PS.DataSource {
@@ -149,22 +142,53 @@ PlasmoidItem {
         id: menu
         width: 400
         height: parent.height
-        fillMode: Image.Stretch
+        anchors.right: parent.right
+        anchors.rightMargin: root.menuOpen ? 0 : -340
 
         property string sourceFile : "out"
-        property bool playBG: false
         property bool menuCloseTimed: false
 
         source: "../images/background/" + sourceFile + ".png"
+        fillMode: Image.Stretch
 
-        Timer {
-            id: slowdown
-            interval: 300
+        // Menu Pop Animation
+        Behavior on anchors.rightMargin {
+            NumberAnimation {
+                duration: 300
+                easing.type: root.menuOpen ? Easing.InCubic : Easing.OutBack
+            }
+        }
 
-            onTriggered: {
-                if(plasmoid.configuration.playStatus) {
-                    parent.playBG = true
-                } else {
+
+        MouseArea{
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onClicked: {
+                if( !root.menuOpen) {
+                    clickSound.play()
+                    parrotAnim.stop()
+                    root.menuOpen = true
+                    parent.sourceFile = "menu"
+                }
+            }
+
+            onEntered: {
+                if( parent.menuCloseTimed ) {
+                    parent.menuCloseTimed = false
+                } else if (!plasmoid.configuration.playStatus) {
+                    parent.sourceFile = "out_highlight"
+                }
+            }
+
+            onExited: {
+                if(root.forceMenuOpen) {
+                    return
+                }
+
+                if(root.menuOpen) {
+                    parent.menuCloseTimed = true
+                } else if (!plasmoid.configuration.playStatus) {
                     parent.sourceFile = "out"
                 }
             }
@@ -183,9 +207,26 @@ PlasmoidItem {
         }
 
         Timer {
+            id: slowdown
+            interval: 300
+
+            onTriggered: {
+                if(root.playlistMenuOpen) {
+                    root.playlistMenuOpen = false
+                }
+
+                if(!plasmoid.configuration.playStatus) {
+                    parent.sourceFile = "out"
+                } else {
+                    parrotAnim.start()
+                }
+            }
+        }
+
+        Timer {
             id: parrotAnim
             interval: 50
-            running: parent.playBG
+            //running: !root.menuOpen && plasmoid.configuration.playStatus
             repeat: true
 
             property int anim_index: 0
@@ -200,48 +241,6 @@ PlasmoidItem {
                 parent.sourceFile= "playing/" + anim_index
             }
         }
-
-        MouseArea{
-            anchors.fill: parent
-            hoverEnabled: true
-
-            onClicked: {
-                if( !root.menuOpen ) {
-                    root.menuOpen = true
-                    clickSound.play()
-                    parent.playBG = false
-                    parent.sourceFile = "menu"
-                }
-            }
-
-            onEntered: {
-                if( parent.menuCloseTimed ) {
-                    parent.menuCloseTimed = false
-                } else if( !parent.playBG ) {
-                    parent.sourceFile = "out_highlight"
-                }
-            }
-
-            onExited: {
-                if( root.menuOpen && !root.forceMenuOpen) {
-                    parent.menuCloseTimed = true
-                } else if( !parent.playBG) {
-                    parent.sourceFile = "out"
-                }
-            }
-        }
-
-
-        anchors.right: parent.right
-        anchors.rightMargin: root.menuOpen ? 0 : -340
-
-        Behavior on anchors.rightMargin {
-            NumberAnimation {
-                duration: 300
-                easing.type: root.menuOpen ? Easing.InCubic : Easing.OutBack
-            }
-        }
-
 
         // Song Title
         Item {
