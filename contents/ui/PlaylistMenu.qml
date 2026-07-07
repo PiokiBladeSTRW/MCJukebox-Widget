@@ -498,14 +498,13 @@ Image {
         onClick: {
             switch(playlistRoot.settingsPage) {
 
-                case 0:
-                    playlistRoot.settingsPage = 1;
-                    menuForceState(true)
-                    break
+                // From Settings Selction
                 case 1:
                     playlistRoot.settingsPage = 0;
                     menuForceState(false)
                     break
+
+                // Anywhere Else
                 default:
                     playlistRoot.settingsPage = 1;
                     menuForceState(true)
@@ -526,8 +525,8 @@ Image {
 
         property list<string> displayTexts: ["Add Playlist", "Edit Playlist", "MPC Directory Config"]
 
-        visible: playlistRoot.settingsPage === 1 ? 1 : 0
-        opacity: playlistRoot.settingsPage === 1? 1 : 0
+        visible: playlistRoot.settingsPage === 1
+        opacity: playlistRoot.settingsPage === 1
 
         Behavior on opacity {
             NumberAnimation {
@@ -536,6 +535,7 @@ Image {
             }
         }
 
+        // Settings Page Selection
         Repeater {
             model: [-30, 0, 30]
 
