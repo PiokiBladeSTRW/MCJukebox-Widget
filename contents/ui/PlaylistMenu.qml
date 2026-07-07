@@ -952,22 +952,22 @@ Image {
 
         // This needs more work to be secure
         C.Label {
-            text: "⚠️ Make sure you know What you are Doing"
+            text: "⚠️ Make sure you know what you are Doing"
             font.bold: true
-            color: "red"
+            font.pixelSize: 16
+            font.family: "Minecraft"
+            color: "orange"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -30
+            anchors.verticalCenterOffset: 30
         }
 
         PC.TextField {
             id: entryField
             height: 25
-            width:250
-
+            width: 250
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 0
 
             background: Image {
                 anchors.fill: parent
