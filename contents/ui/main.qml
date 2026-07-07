@@ -94,122 +94,68 @@ PlasmoidItem {
 
     // Note Block Particles
     Item {
-        id: note_block_particle
-
-        visible: !root.menuOpen && plasmoid.configuration.playStatus ? true : false
+        id: noteParticles
 
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: 100
         anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 100
+
+        visible: plasmoid.configuration.playStatus && !root.menuOpen
 
         property list<color> colors: ["lime", "yellow", "red", "magenta", "blue"]
-        property int def_margin: 75
-        property int top_margin: 0
-        property int anim_index : 0
-        property int color_index: 0
+        property int noteIndex : 0
+        property int colorIndex: 0
+        property int baseOffset: 75
+        property int topOffset: 0
 
         Timer {
-            id: note_timer
+            id: noteTimer
             interval: 700
             repeat: true
             running: plasmoid.configuration.playStatus
 
             onTriggered: {
-
-                parent.anim_index += 1;
-                if(parent.anim_index === 3) {
-                    parent.anim_index = 0;
+                parent.noteIndex += 1;
+                if(parent.noteIndex === 3) {
+                    parent.noteIndex = 0;
                 }
 
-                if(parent.color_index <= 3) {
-                    parent.color_index += 1
-                } else {
-                    parent.color_index = 0
+                parent.colorIndex += 1
+                if(parent.colorIndex === 4) {
+                    parent.colorIndex = 0
                 }
             }
         }
 
-        Image {
-            id: note1
-            property int index: 0
-            source: "../images/note.png"
+        Repeater {
+            id: notes
+            model: [-32, 0, 32]
 
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: -32
+            Image {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenterOffset: modelData
+                anchors.verticalCenterOffset: index === parent.noteIndex ? parent.topOffset : parent.baseOffset
 
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: index === parent.anim_index ? parent.top_margin : parent.def_margin
+                visible: index === parent.noteIndex
+                source: "../images/note.png"
 
-            visible: index === parent.anim_index ? true : false
-
-            Behavior on anchors.verticalCenterOffset {
-                NumberAnimation {
-                    duration: 600
-                    easing.type: Easing.InOutQuad
+                Behavior on anchors.verticalCenterOffset {
+                    NumberAnimation {
+                        duration: 600
+                        easing.type: Easing.InOutQuad
+                    }
                 }
-            }
 
-            layer.enabled: true
-            layer.effect: MultiEffect {
-                colorization: 1.0
-                colorizationColor: parent.colors[parent.color_index]
-            }
-
-        }
-        Image {
-            id: note2
-            property int index: 1
-            source: "../images/note.png"
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: 0
-
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: index === parent.anim_index ? parent.top_margin : parent.def_margin
-
-            visible: index === parent.anim_index ? true : false
-
-            Behavior on anchors.verticalCenterOffset {
-                NumberAnimation {
-                    duration: 600
-                    easing.type: Easing.InOutQuad
+                // Different Colors of Notes
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    colorization: 1.0
+                    colorizationColor: parent.colors[parent.colorIndex]
                 }
-            }
 
-            layer.enabled: true
-            layer.effect: MultiEffect {
-                colorization: 1.0
-                colorizationColor: parent.colors[parent.color_index]
             }
         }
-        Image {
-            id: note3
-            property int index: 2
-            source: "../images/note.png"
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: 32
-
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: index === parent.anim_index ? parent.top_margin : parent.def_margin
-
-            visible: index === parent.anim_index ? true : false
-
-            Behavior on anchors.verticalCenterOffset {
-                NumberAnimation {
-                    duration: 600
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            layer.enabled: true
-            layer.effect: MultiEffect {
-                colorization: 1.0
-                colorizationColor: parent.colors[parent.color_index]
-            }
-        }
-
-
     }
 
     // Menu
