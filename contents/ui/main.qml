@@ -76,8 +76,8 @@ PlasmoidItem {
     // Sound Effect
     SoundEffect {
         id: clickSound
-        source: "file:///home/pioki/P-PF/Leftover/PlasmaDev/com.pioki.jukebox/contents/sounds/insert.wav"
-        volume: 0.3
+        source: "../sounds/insert.wav"
+        volume: 0.5
     }
 
     // Status Timer
@@ -222,6 +222,7 @@ PlasmoidItem {
             onClicked: {
                 if( !root.menuOpen ) {
                     root.menuOpen = true
+                    clickSound.play()
                     parent.playBG = false
                     parent.sourceFile = "menu"
                 }
