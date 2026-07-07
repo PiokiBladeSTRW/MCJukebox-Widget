@@ -174,34 +174,35 @@ Image {
         onAccepted: {
             let path = folderPick.selectedFolder.toString().replace("file://", "")
 
-            // Return In-case the folder isn't in Music Directory
+            // Ensure the Correct Music Directory
             if(! path.startsWith(plasmoid.configuration.musicPath)) {
                 warnPopup.open()
                 return
             }
-
-            // Remove the Music Directory prefix for MPC
             path = path.replace(plasmoid.configuration.musicPath, "")
 
-            if(playlistRoot.settingsPage === 0) {
-                playlistRoot.tempSong(path)
-
-            } else if(playlistRoot.settingsPage === 2) {
-                addPlaylist.playlistFolders.push(path)
-
-            } else {
-                editPlaylist.songsAdd.push(path)
-                executable.exec('ls -p "'+ plasmoid.configuration.musicPath + path +'" | grep -v /')
+            switch(playlistRoot.settingsPage) {
+                case 0:
+                    playlistRoot.menuForceState(false)
+                    playlistRoot.tempSong(path)
+                    break
+                case 2:
+                    addPlaylist.playlistFolders.push(path)
+                    break
+                case 3:
+                    editPlaylist.songsAdd.push(path)
+                    executable.exec('ls -p "'+ plasmoid.configuration.musicPath + path +'" | grep -v /')    // Grab list of files in chosen directory
+                    break
             }
 
-
-            folderPick.currentFolder = ""
             folderPick.close()
         }
 
         onRejected: {
-            folderPick.currentFolder = ""
             folderPick.close()
+            if(playlistRoot.settingsPage === 0) {
+                playlistRoot.menuForceState(false)
+            }
         }
     }
 
@@ -385,6 +386,7 @@ Image {
         visible: settingsPage === 0 && visibleCondn
 
         onClick: {
+            playlistRoot.menuForceState(true)
             folderPick.open()
         }
     }
@@ -402,6 +404,7 @@ Image {
         visible: settingsPage === 0 && visibleCondn
 
         onClick: {
+            playlistRoot.menuForceState(true)
             filePick.mode = 1
             filePick.open()
         }
