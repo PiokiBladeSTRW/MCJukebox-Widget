@@ -1,0 +1,66 @@
+
+Add the Settings Menu pages *
+
+Add Playlist 3 Working buttons : Playlist Name, Playlist Songs, Playlist Album cover *
+Edit Playlist 4 Working Buttons: Choose Playlist, Rename, Edit Songs Page, Edit Album Cover *
+
+Make the Add Playlist Page work with MPC *
+
+Edit Playlist having functioning Edit Songs Page *
+Make the Edit Playlist Page work with MPC*
+
+
+Scrollable Playlist Menu *
+
+Playlist Menu Having Temporary Folder and Temporary Music Option *
+
+Playlist Having functioning with Album Art *
+
+Hovering Over Playlist gives Title
+Hovering Over Search Song gives File Location
+
+Artist Name Below Song Name *
+
+Excessively long song names should slide and not go out of widget *
+
+Playlist Song names in edit playlist should have a ... if too long *
+
+Shuffle And Repeat button *
+
+Main page having a Small Search Icon to allow Searching of Songs *
+
+ReFactor the Code! Better Variable Handling, better Writing, Better Modularity [ Perhaps Before Search and Aritst Name]
+
+Change the Fonts to make it look better [Specifically settings Menu]
+
+Make it compatible with New users [Install MPC/MPD if not installed, if Installed ask the user for their Music folder directory with a brief tutorial! Update the config file containing it]
+
+
+BUGS:
+    Hitting Accept on Add/Edit Playlist should also close menu*
+    EditPlaylist playlist list not updated upon playlist addition*
+    Album Cover not copied! *
+    Dynamic removal leads to Index Error [Clicking the top song twice, despite different song, same index of 0!] *
+    In Editplaylist menu, the previous menu buttons still work *
+    No Playlist Delete Option! *
+    Occasionaly in edit playlist you leave menu but menu can't close. with the jukebox background. REALLY GLITCHY [has to do with menuForcedOpen]
+    Editing a playlist, then going back to edit that same playlist, the songsList is EMPTY. Also the fields are filled by default! *
+    If you do mpc clear or have nothing on play already, choosing a song does not display unless u restart widget
+
+UI ToDo:
+    Shuffle *
+    Loop*
+    Search*
+    Choose Folder*
+    Choose Music File*
+    Settings*
+
+    Settings Buttons Background *
+
+    Settings Menu 0,1,2,3 Background
+    Text Fields Background
+    Combo Boxes Background
+
+
+
+
