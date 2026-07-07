@@ -490,6 +490,8 @@ PlasmoidItem {
             visible: root.playlistMenuOpen? false : true
             opacity: root.menuOpen ? 1 : 0
 
+            property int playButtonIndex: 1
+
             Behavior on opacity {
                 NumberAnimation {
                     duration: 800
@@ -497,40 +499,71 @@ PlasmoidItem {
                 }
             }
 
-            // Previous
-            Button {
+            Repeater {
+                model: ["prev", 0, "next"]
+                Button {
+                    width: 25
+                    height: 25
 
-                width: 25
-                height: 25
-                graphic: "prev"
-                onClick: {
-                    if(root.elapsedTime < 0.05) {
-                        player.exec("mpc prev")
-                    } else {
-                        player.exec("mpc seek 0")
+                    graphic: index === parent.playButtonIndex ?  plasmoid.configuration.playStatus ? "pause" : "play" : modelData
+
+                    onClick: {
+                        switch(index) {
+                            case 0:
+                                if(root.elapsedTime < 0.05) {
+                                    player.exec("mpc prev")
+                                } else {
+                                    player.exec("mpc seek 0")
+                                }
+                                break
+
+                            case 1:
+                                player.exec("mpc toggle")
+                                plasmoid.configuration.playStatus = !plasmoid.configuration.playStatus
+                                break
+
+                            case 2:
+                                player.exec("mpc next")
+                                break
+                        }
                     }
                 }
             }
 
-            // Play Pause Level
-            Button {
-                width: 25
-                height: 25
-                graphic: plasmoid.configuration.playStatus ? "pause" : "play"
-                onClick:  {
-                    player.exec("mpc toggle")
-                    plasmoid.configuration.playStatus = !plasmoid.configuration.playStatus
-                }
-            }
-
-            // Next
-            Button {
-
-                width: 25
-                height: 25
-                graphic: "next"
-                onClick: player.exec("mpc next")
-            }
+            // Previous
+            // Button {
+            //
+            //     width: 25
+            //     height: 25
+            //     graphic: "prev"
+            //     onClick: {
+            //         if(root.elapsedTime < 0.05) {
+            //             player.exec("mpc prev")
+            //         } else {
+            //             player.exec("mpc seek 0")
+            //         }
+            //     }
+            // }
+            //
+            // // Play Pause Level
+            // Button {
+            //     width: 25
+            //     height: 25
+            //     graphic: plasmoid.configuration.playStatus ? "pause" : "play"
+            //     onClick:  {
+            //         player.exec("mpc toggle")
+            //         plasmoid.configuration.playStatus = !plasmoid.configuration.playStatus
+            //     }
+            // }
+            //
+            // // Next
+            // Button {
+            //
+            //     width: 25
+            //     height: 25
+            //     graphic: "next"
+            //     onClick: player.exec("mpc next")
+            // }
 
         }
     }
