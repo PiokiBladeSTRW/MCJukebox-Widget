@@ -5,6 +5,8 @@ import QtMultimedia
 import org.kde.plasma.plasmoid
 import org.kde.plasma.plasma5support 2.0 as PS
 
+import "../code/timeData.js" as TimeData
+
 
 // Main Component
 PlasmoidItem {
@@ -35,20 +37,10 @@ PlasmoidItem {
         connectedSources: []
 
         onNewData: (sourceName, data) =>{
-            if(sourceName === "mpc status"){
-                let x = data["stdout"].split("\n")
 
-                if(!x[0].startsWith("volume")) {
-                    let timeMatch = x[1].match(/(\d+:\d+)\/(\d+:\d+)/);
+            if( sourceName === "mpc status" ) {
+                     root.elapsedTime = TimeData.main(data) ;
 
-                    let current_time = timeMatch[1].split(":")
-                    let total_time = timeMatch[2].split(":")
-
-                    let current_sec = parseInt(current_time[0]*60) + parseInt(current_time[1])
-                    let total_sec = parseInt(total_time[0]*60 + parseInt(total_time[1]))
-
-                    elapsedTime = current_sec/total_sec
-                }
             } else if (sourceName.startsWith("mpc -f")) {
                 let x = data["stdout"].split("\x1f")
 
