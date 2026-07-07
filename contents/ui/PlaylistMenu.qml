@@ -7,6 +7,8 @@ import QtQuick.Controls as C
 Image {
     id: playlistRoot
     anchors.fill: parent
+
+
     property bool visibleCondn          // Boolean Assigned by ROOT
 
     property string homeDirPath
@@ -485,7 +487,6 @@ Image {
         height: 30
         anchors.top: playlistRoot.top
         anchors.right: playlistRoot.right
-
         anchors.topMargin: 15
         anchors.rightMargin: 15
 
@@ -543,22 +544,22 @@ Image {
                 width: 250
                 height: 25
 
-                graphic: "button"
-
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: modelData
 
+                graphic: "button"
+
                 Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+
                     text: settingsMenu.displayTexts[index]
                     font.family: "Minecraft"
                     renderType: Text.NativeRendering
                     font.pixelSize: 14
 
                     color: "white"
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 onClick: {
@@ -595,22 +596,22 @@ Image {
                 width: 250
                 height: 25
 
-                graphic: "button"
-
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: modelData
 
+                graphic: "button"
+
                 Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+
                     text: addPlaylist.displayTexts[index]
                     font.family: "Minecraft"
                     renderType: Text.NativeRendering
                     font.pixelSize: 14
 
                     color: "white"
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 onClick: {
@@ -721,6 +722,7 @@ Image {
                 width: roasterEdit.width
                 height: 80
                 radius: 10
+
                 color: "#303030"
 
                 C.ScrollView {
@@ -750,16 +752,17 @@ Image {
 
                                 Text {
                                     width: 300
+                                    anchors.left: parent.left
+
                                     text: modelData
                                     color: "white"
                                     font.pixelSize: 12
-                                    anchors.left: parent.left
                                     elide: Text.ElideRight
                                 }
 
                                 Image {
-                                    source: "../images/trash.svg"
                                     anchors.right: parent.right
+                                    source: "../images/trash.svg"
                                     visible: songItem.hovered
                                 }
                             }
