@@ -18,10 +18,10 @@ Image {
     property list<string> supportedFormats: ["flac", "ogg", "mp3", "opus", "wav", "aac"]
 
     signal playlistChosen(string playlist)
-    signal menuForced(bool x)
     signal playlistAdded(string title, list<string> playlistFolders, string albumArt)
     signal playlistEdited(string chosenPlaylist, string newName, string albumArt, list<string> songsAdded, list<int> songsRemoved)
     signal playlistDelete(string chosenPlaylist)
+    signal menuForceState(bool state)
 
     signal tempSong(string chosenDir)
 
@@ -127,11 +127,11 @@ Image {
     C.Popup {
         id: warnPopup
         anchors.centerIn: parent
-
         width: 260
         height: 140
         modal: true
         focus: true
+
         closePolicy: C.Popup.CloseOnEscape | C.Popup.CloseOnPressOutside
 
         background: Rectangle {
@@ -140,8 +140,8 @@ Image {
         }
 
         contentItem: Column {
-            spacing: 12
             anchors.fill: parent
+            spacing: 12
             padding: 10
 
             C.Label {
@@ -273,7 +273,6 @@ Image {
         onClick: {
             searchBar.visible = true
             searchBar.width = 80
-            menuForced(true)
         }
 
         PC.TextField {
@@ -345,7 +344,6 @@ Image {
             onClicked: {
                 searchBar.width= 0
                 searchBarOff.start()
-                menuForced(false)
             }
         }
 
@@ -502,13 +500,15 @@ Image {
 
                 case 0:
                     playlistRoot.settingsPage = 1;
+                    menuForceState(true)
                     break
                 case 1:
                     playlistRoot.settingsPage = 0;
+                    menuForceState(false)
                     break
                 default:
-                    menuForced(false);
                     playlistRoot.settingsPage = 1;
+                    menuForceState(true)
                     break
             }
         }
@@ -562,7 +562,6 @@ Image {
                 }
 
                 onClick: {
-                    menuForced(true);
                     playlistRoot.settingsPage = index + 2
                 }
             }

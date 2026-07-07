@@ -187,7 +187,7 @@ PlasmoidItem {
             }
 
             onExited: {
-                if(root.forceMenuOpen) {
+                if(root.keepMenuOpen) {
                     return
                 }
 
@@ -366,8 +366,8 @@ PlasmoidItem {
                 plasmoid.configuration.playStatus =  true
             }
 
-            onMenuForced: (state) => {
-                root.forceMenuOpen = state
+            onMenuForceState: (state) => {
+                root.keepMenuOpen = state
             }
 
             onTempSong: (dir) => {
