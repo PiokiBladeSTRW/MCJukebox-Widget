@@ -118,8 +118,8 @@ Image {
 
         Component.onCompleted: {
             // Fetch Latest playlists List
-            exec("mpc lsplaylists")
-            exec("ls /home")
+            connectSource("mpc lsplaylists")
+            connectSource("ls /home")
         }
     }
 
