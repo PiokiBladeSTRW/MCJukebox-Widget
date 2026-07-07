@@ -143,6 +143,7 @@ PlasmoidItem {
         }
     }
 
+
     // Menu
     Image {
         id: menu
@@ -241,6 +242,8 @@ PlasmoidItem {
             }
         }
 
+
+        // Song Title
         Item {
             id: textContainer
             width: 300 // The visible viewport window width
@@ -273,6 +276,7 @@ PlasmoidItem {
                 // implicitWidth is the Default width of text/image if not constraint by width
                 width: implicitWidth
 
+                // Text Scroll Animation
                 SequentialAnimation on x {
                     running: scrollingText.width > textContainer.width
                     loops: Animation.Infinite
@@ -478,8 +482,6 @@ PlasmoidItem {
         }
 
 
-
-
         // Play/Pause & Forward/Backward
         Column{
             anchors.right: parent.right
@@ -529,42 +531,6 @@ PlasmoidItem {
                     }
                 }
             }
-
-            // Previous
-            // Button {
-            //
-            //     width: 25
-            //     height: 25
-            //     graphic: "prev"
-            //     onClick: {
-            //         if(root.elapsedTime < 0.05) {
-            //             player.exec("mpc prev")
-            //         } else {
-            //             player.exec("mpc seek 0")
-            //         }
-            //     }
-            // }
-            //
-            // // Play Pause Level
-            // Button {
-            //     width: 25
-            //     height: 25
-            //     graphic: plasmoid.configuration.playStatus ? "pause" : "play"
-            //     onClick:  {
-            //         player.exec("mpc toggle")
-            //         plasmoid.configuration.playStatus = !plasmoid.configuration.playStatus
-            //     }
-            // }
-            //
-            // // Next
-            // Button {
-            //
-            //     width: 25
-            //     height: 25
-            //     graphic: "next"
-            //     onClick: player.exec("mpc next")
-            // }
-
         }
     }
 }
