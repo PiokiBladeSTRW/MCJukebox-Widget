@@ -6,6 +6,7 @@ import org.kde.plasma.plasmoid
 import org.kde.plasma.plasma5support 2.0 as PS
 
 import "../code/timeData.js" as TimeData
+import "../code/titles.js" as Titles
 
 
 // Main Component
@@ -42,15 +43,7 @@ PlasmoidItem {
                      root.elapsedTime = TimeData.main(data) ;
 
             } else if (sourceName.startsWith("mpc -f")) {
-                let x = data["stdout"].split("\x1f")
-
-                root.trackArtist = x[0]
-
-                if(x[1]) {
-                    root.trackTitle = x[1]
-                } else {
-                    root.trackTitle = x[2]
-                }
+                [root.trackTitle, root.trackArtist] = Titles.main(data)
             }
             disconnectSource(sourceName)
         }
@@ -60,8 +53,8 @@ PlasmoidItem {
         }
 
         Component.onCompleted: {
-            exec("mkdir ~/.cache/jukebox_covers")
-            exec("mpc update")
+            connectSource("mkdir ~/.cache/jukebox_covers")
+            connectSource("mpc update")
         }
     }
 

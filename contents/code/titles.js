@@ -1,0 +1,24 @@
+// Handle the Song and Artist Titles
+function main(output) {
+
+    /*
+     * Input is in the form of "<ArtistName>\x1f<TitleTrack>\x1f<FileLocation>"
+     *
+     * \x1f: Is the Unit Seperator ASCII Character, not displayed in Prints
+     * In Case the song Lacks Metadata containing TitleTrack, the FileLocation would be used
+     *
+     * Output: x[0]: <Artist Name> ; x[1]: <Track Title> ; x[2]: <File Location>
+     */
+    let x = output["stdout"].split("\x1f")
+
+    let trackArtist = x[0]
+    let trackTitle = ''
+
+    if(x[1]) {
+        trackTitle = x[1]
+    } else {
+        trackTitle = x[2]
+    }
+
+    return [trackTitle, trackArtist]
+}
