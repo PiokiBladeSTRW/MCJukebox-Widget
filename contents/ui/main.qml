@@ -165,17 +165,22 @@ PlasmoidItem {
             hoverEnabled: true
 
             onClicked: {
+                // Open Menu
                 if( !root.menuOpen) {
                     clickSound.play()
                     parrotAnim.stop()
+
                     root.menuOpen = true
                     parent.sourceFile = "menu"
                 }
             }
 
             onEntered: {
+                // Stop Menu From Closing if Menu is Open but about to Close
                 if( parent.menuCloseTimed ) {
                     parent.menuCloseTimed = false
+
+                // Highlight Jukebox
                 } else if (!plasmoid.configuration.playStatus) {
                     parent.sourceFile = "out_highlight"
                 }
@@ -186,8 +191,11 @@ PlasmoidItem {
                     return
                 }
 
+                // Start Counting for Menu Close
                 if(root.menuOpen) {
                     parent.menuCloseTimed = true
+
+                // Remove Highlight Jukebox
                 } else if (!plasmoid.configuration.playStatus) {
                     parent.sourceFile = "out"
                 }
@@ -211,10 +219,12 @@ PlasmoidItem {
             interval: 300
 
             onTriggered: {
+                // Disable PlaylistMenu if Open
                 if(root.playlistMenuOpen) {
                     root.playlistMenuOpen = false
                 }
 
+                // Either Set Menu to be Jukebox or Parrot Animation
                 if(!plasmoid.configuration.playStatus) {
                     parent.sourceFile = "out"
                 } else {
@@ -226,7 +236,6 @@ PlasmoidItem {
         Timer {
             id: parrotAnim
             interval: 50
-            //running: !root.menuOpen && plasmoid.configuration.playStatus
             repeat: true
 
             property int anim_index: 0
