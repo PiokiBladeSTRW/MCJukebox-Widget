@@ -14,8 +14,6 @@ Image {
     property string homeDirPath
     property int settingsPage: 0        // 0: Disabled, 1: Selection, 2: Adding Playlist, 3: EditPlaylist, 4: MPC Modification
     property list<string> playlists
-    property list<string> searchResults
-    property list<string> searchResultsDir
 
     property list<string> supportedFormats: ["flac", "ogg", "mp3", "opus", "wav", "aac"]
 
@@ -56,19 +54,15 @@ Image {
         engine: "executable"
         connectedSources: []
 
+        property var callbackRegistry: ({})
+
         onNewData: (sourceName, data) =>{
 
+            // Fetch Latest Playlist Lists
             if(sourceName === "mpc lsplaylists") {
                 playlistRoot.playlists = data["stdout"].trim().split("\n")
 
-            } else if(sourceName.startsWith("mpc search")) {
-
-                if(sourceName.startsWith("mpc search -f '%title%'")){
-                    playlistRoot.searchResults = data["stdout"].trim().split("\n")
-                } else {
-                    playlistRoot.searchResultsDir = data["stdout"].trim().split("\n")
-                }
-
+            // Fetch default Music Directory
             } else if (sourceName === "ls /home") {
                 playlistRoot.homeDirPath= "/home/"+ data["stdout"].trim()
 
@@ -76,46 +70,24 @@ Image {
                     plasmoid.configuration.musicPath = playlistRoot.homeDirPath + "/Music/"
                 }
 
-            } else if (sourceName.startsWith("mpc playlist")) {
-                let songsList = data["stdout"].trim().split("\n")
-                let songsHashMap = {}
 
-                for (let i = 0 ; i < songsList.length ; i++) {
-                    songsHashMap[String(songsList[i])] = i + 1
-                }
+            // Siblings Called Command Execution
+            } else if(callbackRegistry[sourceName]) {
+                var callbackFunc = callbackRegistry[sourceName];
 
-                editPlaylist.songsList = songsList
-                editPlaylist.songsLookup = songsHashMap
-
-            } else if (sourceName.startsWith("ls -p")) {
-
-                let files = data["stdout"].trim().split("\n")
-                let songs = []
-
-                for (let i =0 ; i< files.length ; i++ ) {
-                    let splitFile = String(files[i]).trim().split(".")
-
-                    //Check for valid file format
-                    if( playlistRoot.supportedFormats.includes( splitFile[splitFile.length - 1] )){
-                        songs.push(files[i])
-                    }
-                }
-                songs.sort()
-
-                let baseVal = Object.keys(editPlaylist.songsLookup).length + 1
-                for (let i = 0; i < songs.length ; i++){
-                    editPlaylist.songsLookup[songs[i]] = baseVal + i
-                }
-
-                editPlaylist.songsList.push(...songs)
+                callbackFunc(data["stdout"]);
+                delete callbackRegistry[sourceName]
             }
-
 
             disconnectSource(sourceName)
         }
 
-        function exec(cmd) {
+        function exec(cmd, callback) {
             connectSource(cmd)
+
+            if(callback) {
+                callbackRegistry[cmd] = callback
+            }
         }
 
         Component.onCompleted: {
@@ -191,7 +163,31 @@ Image {
                     break
                 case 3:
                     editPlaylist.songsAdd.push(path)
-                    executable.exec('ls -p "'+ plasmoid.configuration.musicPath + path +'" | grep -v /')    // Grab list of files in chosen directory
+
+                    // Obtain songs in the Chosen Directory
+                    executable.exec('ls -p "'+ plasmoid.configuration.musicPath + path +'" | grep -v /', function songsInDir(output) {
+
+                        // Output contains a list of Songs in Chosen Folder
+                        let files = output.trim().split("\n")
+                        let songs = []
+
+                        for (let i =0 ; i< files.length ; i++ ) {
+                            let splitFile = String(files[i]).trim().split(".")
+
+                            //Check for valid file format
+                            if( playlistRoot.supportedFormats.includes( splitFile[splitFile.length - 1] )){
+                                songs.push(files[i])
+                            }
+                        }
+                        songs.sort()
+
+                        // Obtain the next Index position for new Songs in Lookup hashmap
+                        let baseVal = Object.keys(editPlaylist.songsLookup).length + 1
+                        for (let i = 0; i < songs.length ; i++){
+                            editPlaylist.songsLookup[songs[i]] = baseVal + i
+                        }
+
+                        editPlaylist.songsList.push(...songs)})
                     break
             }
 
@@ -276,12 +272,16 @@ Image {
 
     // Search Bar
     Button {
+        id: searchButton
         height: 25
         width: 25
         anchors.top: parent.top
         anchors.topMargin: 10
         anchors.left: parent.left
         anchors.leftMargin: 30
+
+        property list<string> searchResults
+        property list<string> searchResultsDir
 
         graphic: "search"
 
@@ -304,10 +304,24 @@ Image {
                 }
             }
 
+            // Slow Down Searches to Save CPU Cycle
+            Timer {
+                id: debounce
+                interval: 300
+                onTriggered: {
+                    executable.exec("mpc search -f '%title%' title "+ parent.text, function handleSearchResults(output) {
+                        searchButton.searchResults = output.trim().split("\n")
+                    })
+
+                    executable.exec("mpc search -f '%file%' title "+ parent.text, function handleSearchResults(output) {
+                        searchButton.searchResultsDir = output.trim().split("\n")
+                    })
+                }
+            }
+
 
             onTextChanged: {
-                executable.exec("mpc search -f '%title%' title "+ text)
-                executable.exec("mpc search -f '%file%' title "+ text)
+                debounce.start()
             }
         }
 
@@ -326,7 +340,7 @@ Image {
                 ListView {
                     height: 60
                     width: parent.width
-                    model: playlistRoot.searchResults
+                    model: searchButton.searchResults
                     spacing: 2
 
                     bottomMargin: 10
@@ -340,7 +354,7 @@ Image {
                         bottomPadding: 0
 
                         onClicked: {
-                            tempSong(playlistRoot.searchResultsDir[index])
+                            tempSong(searchButton.searchResultsDir[index])
                             searchBar.width= 0
                             searchBarOff.start()
                         }
@@ -869,7 +883,19 @@ Image {
                 onClick: {
                     switch(index) {
                         case 0:
-                            executable.exec("mpc playlist "+ editPlaylist.chosenPlaylist)
+                            executable.exec("mpc playlist "+ editPlaylist.chosenPlaylist, function obtainSongsList(output) {
+                                // Output Contans a List of Songs in the Given Playlist
+                                let songsList = output.trim().split("\n")
+                                let songsHashMap = {}
+
+                                for (let i = 0 ; i < songsList.length ; i++) {
+                                    songsHashMap[String(songsList[i])] = i + 1
+                                }
+
+                                editPlaylist.songsList = songsList
+                                editPlaylist.songsLookup = songsHashMap
+                            })
+
                             roasterEdit .visible = true
                             break
                         case 1:
