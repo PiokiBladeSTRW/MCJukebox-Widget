@@ -176,6 +176,10 @@ PlasmoidItem {
             }
 
             onEntered: {
+                if(root.keepMenuOpen) {
+                    return
+                }
+
                 // Stop Menu From Closing if Menu is Open but about to Close
                 if( parent.menuCloseTimed ) {
                     parent.menuCloseTimed = false
