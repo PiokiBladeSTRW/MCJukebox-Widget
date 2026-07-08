@@ -210,17 +210,17 @@ Image {
     FileDialog {
         id: filePick
 
-        property bool mode: 1      // 1: Album Art ; 0 : Music
+        property bool artMode: true      // true: Album Art ; false : Music
 
         fileMode: FileDialog.OpenFile
-        title: mode ? "Choose Album Art " : "Choose Music File"
-        nameFilters: mode ? ["Image File (*.png *.jpg *.jpeg *.webp)"] : ["Music File (*.flac *.ogg *.mp3 *.opus *.wav *.aac)"]
+        title: artMode ? "Choose Album Art " : "Choose Music File"
+        nameFilters: artMode ? ["Image File (*.png *.jpg *.jpeg *.webp)"] : ["Music File (*.flac *.ogg *.mp3 *.opus *.wav *.aac)"]
 
         onAccepted: {
             let path = filePick.selectedFile.toString().replace("file://", "")
 
             // Album Art
-            if(mode) {
+            if(artMode) {
                 switch(playlistRoot.settingsPage) {
                     case 2:
                         addPlaylist.albumArt = path
@@ -276,7 +276,6 @@ Image {
 
     // Search Bar
     Button {
-        z: 1
         height: 25
         width: 25
         anchors.top: parent.top
@@ -289,6 +288,7 @@ Image {
         onClick: {
             searchBar.visible = true
             searchBar.width = 80
+            playlistRoot.menuForceState(true)
         }
 
         PC.TextField {
@@ -341,6 +341,8 @@ Image {
 
                         onClicked: {
                             tempSong(playlistRoot.searchResultsDir[index])
+                            searchBar.width= 0
+                            searchBarOff.start()
                         }
                     }
                 }
@@ -367,6 +369,7 @@ Image {
             id: searchBarOff
             interval: 300
             onTriggered: {
+                playlistRoot.menuForceState(false)
                 searchBar.visible = false
             }
         }
@@ -580,6 +583,7 @@ Image {
                 }
 
                 onClick: {
+                    // Index + 2 to Account for Page 0 and index starting at 0
                     playlistRoot.settingsPage = index + 2
                 }
             }
@@ -857,7 +861,7 @@ Image {
 
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     text: editPlaylist.displayTexts[index]
                     font.family: "Minecraft"
