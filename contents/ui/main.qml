@@ -182,10 +182,12 @@ PlasmoidItem {
 
                 // Stop Menu From Closing if Menu is Open but about to Close
                 if( parent.menuCloseTimed ) {
+                    //console.log("Cancelling MenuClose")
                     parent.menuCloseTimed = false
 
-                // Highlight Jukebox
-                } else if (!plasmoid.configuration.playStatus) {
+                // Highlight Jukebox    [menuOpen in condition to handle Edge Cases]
+                } else if (!plasmoid.configuration.playStatus && !root.menuOpen) {
+                    //console.log("Add Highlight")
                     parent.sourceFile = "out_highlight"
                 }
             }
@@ -197,10 +199,12 @@ PlasmoidItem {
 
                 // Start Counting for Menu Close
                 if(root.menuOpen) {
+                    //console.log("Initializing MenuClose")
                     parent.menuCloseTimed = true
 
                 // Remove Highlight Jukebox
                 } else if (!plasmoid.configuration.playStatus) {
+                    //console.log("Removing highlight")
                     parent.sourceFile = "out"
                 }
             }
@@ -212,6 +216,7 @@ PlasmoidItem {
             running: parent.menuCloseTimed
 
             onTriggered: {
+                //console.log("CLOSE")
                 parent.menuCloseTimed = false
                 root.menuOpen = false
                 slowdown.start()

@@ -427,27 +427,21 @@ Image {
         z: 1
         visible: playlistRoot.visibleCondn && settingsPage === 0
 
-        // MouseArea {
-        //     z:2
-        //     anchors.fill: parent
-        //
-        //     visible: settingsPage === 0 && visibleCondn
-        //
-        //     hoverEnabled: true
-        //
-        //     onEntered: {
-        //         console.log("in")
-        //         menuForced(true)
-        //     }
-        //     onExited: {
-        //         console.log("out")
-        //         menuForced(false)
-        //     }
-        // }
-
         clip: true
         contentWidth: playlistGrid.width
         contentHeight: playlistGrid.height
+
+        // Ensure Menu Stays Open
+        HoverHandler {
+            id: hoverer
+            onHoveredChanged: {
+                if(hovered) {
+                    playlistRoot.menuForceState(true)
+                } else {
+                    playlistRoot.menuForceState(false)
+                }
+            }
+        }
 
         C.ScrollBar.vertical: C.ScrollBar {
             visible: playlistRoot.visibleCondn
@@ -470,20 +464,21 @@ Image {
                     height: 50
                     width: 50
 
-                    //detectHover: true
-
+                    // Try Set Album art from Cache, if Errors & properly initialized, Fallsback to Default
                     source: "file://"+  playlistRoot.homeDirPath + "/.cache/jukebox_covers/"+modelData+".png"
-                    opacity: index === plasmoid.configuration.playlistIndex ? 1 : 0.6
-                    active: visibleCondn && settingsPage === 0
-
-                    //C.ToolTip.visible: hovered
-                    //C.ToolTip.text: modelData
-
                     onStatusChanged: {
-                        if(playlistRoot.homeDirPath && status === 3) {
+                        if(status === 3 && playlistRoot.homeDirPath) {
                             source= "../images/note_block.png"
                         }
                     }
+
+                    opacity: index === plasmoid.configuration.playlistIndex ? 1 : 0.6
+                    active: visibleCondn && settingsPage === 0
+
+                    // Name of Playlist upon Hover
+                    detectHover: true
+                    C.ToolTip.visible: hovered
+                    C.ToolTip.text: modelData
 
                     onClick: {
                         plasmoid.configuration.playlistIndex = index
