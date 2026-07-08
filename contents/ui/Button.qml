@@ -2,9 +2,10 @@ import QtQuick
 
 Image {
     property bool active: true
+    property string graphic: "mud"
+
     property bool detectHover: false
     property bool hovered: false
-    property string graphic: "mud"
     signal click
 
     source: "../images/" + graphic + ".png"
