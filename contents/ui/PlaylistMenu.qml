@@ -557,7 +557,7 @@ Image {
         property list<string> displayTexts: ["Add Playlist", "Edit Playlist", "MPC Directory Config"]
 
         visible: playlistRoot.settingsPage === 1
-        opacity: playlistRoot.settingsPage === 1
+        opacity: visible
 
         Behavior on opacity {
             NumberAnimation {
@@ -617,6 +617,14 @@ Image {
         property list<string> displayTexts: ["Add Songs", "Add Album Art [Optional]"]
 
         visible: playlistRoot.settingsPage === 2
+        opacity: visible ? 1 : 0
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.Linear
+            }
+        }
 
 
         // Add Songs and Album Art Buttons
@@ -709,6 +717,14 @@ Image {
         z:2
         source: "../images/settings_bg_3.png"
         visible: playlistRoot.settingsPage === 3
+        opacity: visible ? 1 : 0
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.Linear
+            }
+        }
 
         property string chosenPlaylist: playlistRoot.playlists[0]
         property string playlistRename : ""
@@ -1003,6 +1019,14 @@ Image {
         z:2
         source: "../images/settings_bg_4.png"
         visible: playlistRoot.settingsPage === 4 ? 1 : 0
+        opacity: visible ? 1 : 0
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.Linear
+            }
+        }
 
         // This needs more work to be secure
         C.Label {
