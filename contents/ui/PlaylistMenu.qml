@@ -284,7 +284,7 @@ Image {
         property list<string> searchResults
         property list<string> searchResultsDir
 
-        graphic: "search"
+        graphic: "playlistMenu_icons/search"
 
         onClick: {
             searchBar.visible = true
@@ -399,7 +399,7 @@ Image {
         anchors.bottomMargin: 15
         anchors.rightMargin: 2
 
-        graphic: "folder_pick"
+        graphic: "playlistMenu_icons/folder_pick"
 
         visible: settingsPage === 0 && visibleCondn
 
@@ -417,7 +417,7 @@ Image {
         anchors.bottomMargin: 15
         anchors.rightMargin: 35
 
-        graphic: "music_pick"
+        graphic: "playlistMenu_icons/music_pick"
 
         visible: settingsPage === 0 && visibleCondn
 
@@ -520,7 +520,7 @@ Image {
         anchors.topMargin: 15
         anchors.rightMargin: 15
 
-        graphic: playlistRoot.settingsPage === 0 ? "settings" : "back"
+        graphic: playlistRoot.settingsPage === 0 ? "playlistMenu_icons/settings" : "playlistMenu_icons/back"
 
         visible: visibleCondn
 
@@ -552,7 +552,7 @@ Image {
 
         z:1
 
-        source: "../images/settings_bg_1.png"
+        source: "../images/background/settings_bg_1.png"
 
         property list<string> displayTexts: ["Add Playlist", "Edit Playlist", "MPC Directory Config"]
 
@@ -608,7 +608,7 @@ Image {
 
         z: 2
 
-        source: "../images/settings_bg_2.png"
+        source: "../images/background/settings_bg_2.png"
 
         property string playlistName
         property string albumArt
@@ -699,7 +699,7 @@ Image {
             anchors.bottomMargin: 15
             anchors.rightMargin: 15
 
-            graphic: "enter"
+            graphic: "playlistMenu_icons/enter"
 
             onClick: {
                 playlistRoot.settingsPage = 1
@@ -715,7 +715,7 @@ Image {
         anchors.fill: parent
 
         z:2
-        source: "../images/settings_bg_3.png"
+        source: "../images/background/settings_bg_3.png"
         visible: playlistRoot.settingsPage === 3
         opacity: visible ? 1 : 0
 
@@ -760,7 +760,7 @@ Image {
             color: "#171616"
             radius: 10
 
-            property list<string> displayGraphics: ["folder_pick", "music_pick", "enter"]
+            property list<string> displayGraphics: ["playlistMenu_icons/folder_pick", "playlistMenu_icons/music_pick", "playlistMenu_icons/enter"]
 
             visible: false
 
@@ -810,7 +810,7 @@ Image {
 
                                 Image {
                                     anchors.right: parent.right
-                                    source: "../images/trash.svg"
+                                    source: "../images/playlistMenu_icons/trash.svg"
                                     visible: songItem.hovered
                                 }
                             }
@@ -942,7 +942,7 @@ Image {
 
             background: Image{
                 anchors.fill: parent
-                source: "../images/checkbox.png"
+                source: "../images/playlistMenu_icons/checkbox.png"
             }
 
             onActivated: {
@@ -981,7 +981,7 @@ Image {
             anchors.bottomMargin: 15
             anchors.rightMargin: 32.5
 
-            graphic: "enter"
+            graphic: "playlistMenu_icons/enter"
 
             onClick: {
                 playlistRoot.settingsPage = 1
@@ -1000,7 +1000,7 @@ Image {
             anchors.bottomMargin: 15
             anchors.rightMargin: 7.5
 
-            graphic: "delete"
+            graphic: "playlistMenu_icons/delete"
 
             onClick: {
                 playlistRoot.settingsPage = 1
@@ -1017,7 +1017,7 @@ Image {
         anchors.fill: parent
 
         z:2
-        source: "../images/settings_bg_4.png"
+        source: "../images/background/settings_bg_4.png"
         visible: playlistRoot.settingsPage === 4 ? 1 : 0
         opacity: visible ? 1 : 0
 

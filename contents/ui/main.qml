@@ -449,13 +449,13 @@ PlasmoidItem {
 
             // Shuffle Songs
             Button {
-                graphic: "shuffle"
+                graphic: "main_icons/shuffle"
                 onClick: player.exec("mpc shuffle")
             }
 
             // Backward 10s
             Button {
-                graphic: "backward"
+                graphic: "main_icons/backward"
                 onClick: player.exec("mpc seek -10")
             }
 
@@ -484,13 +484,13 @@ PlasmoidItem {
 
             // Forward 10s
             Button {
-                graphic: "forward"
+                graphic: "main_icons/forward"
                 onClick: player.exec("mpc seek +10")
             }
 
             // Loop Song
             Button {
-                graphic: "loop"
+                graphic: "main_icons/loop"
                 onClick: {
                     player.exec("mpc single")
                     player.exec("mpc repeat")
@@ -519,12 +519,12 @@ PlasmoidItem {
             }
 
             Repeater {
-                model: ["prev", 0, "next"]
+                model: ["main_icons/prev", 0, "main_icons/next"]
                 Button {
                     width: 25
                     height: 25
 
-                    graphic: index === parent.playButtonIndex ?  plasmoid.configuration.playStatus ? "pause" : "play" : modelData
+                    graphic: index === parent.playButtonIndex ?  plasmoid.configuration.playStatus ? "main_icons/pause" : "main_icons/play" : modelData
 
                     onClick: {
                         switch(index) {

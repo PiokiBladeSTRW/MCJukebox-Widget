@@ -29,13 +29,15 @@ Shuffle And Repeat button *
 
 Main page having a Small Search Icon to allow Searching of Songs *
 
-The Settings Icon should Change to a X icon upon entering settings Menu
+The Settings Icon should Change to a X icon upon entering settings Menu*
+
+Settings should have Fade Ins*
 
 ReFactor the Code! Better Variable Handling, better Writing, Better Modularity [ Perhaps Before Search and Aritst Name]
 
 Change the Fonts to make it look better [Specifically settings Menu]
 
-The same song can be added twice to the same playlist
+The same song can be added twice to the same playlist #             -> Made into Feature, Might have uses
 
 Make it compatible with New users [Install MPC/MPD if not installed, if Installed ask the user for their Music folder directory with a brief tutorial! Update the config file containing it]
 
@@ -61,9 +63,9 @@ UI ToDo:
 
     Settings Buttons Background *
 
-    Settings Menu 0,1,2,3 Background
-    Text Fields Background
-    Combo Boxes Background
+    Settings Menu 0,1,2,3 Background*
+    Text Fields Background*
+    Combo Boxes Background*
 
 
 
