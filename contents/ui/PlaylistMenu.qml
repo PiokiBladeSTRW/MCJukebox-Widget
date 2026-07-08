@@ -21,6 +21,7 @@ Image {
     signal playlistAdded(string title, list<string> playlistFolders, string albumArt)
     signal playlistEdited(string chosenPlaylist, string newName, string albumArt, list<string> songsAdded, list<int> songsRemoved)
     signal playlistDelete(string chosenPlaylist)
+
     signal menuForceState(bool state)
 
     signal tempSong(string chosenDir)
@@ -519,7 +520,7 @@ Image {
         anchors.topMargin: 15
         anchors.rightMargin: 15
 
-        graphic: "settings"
+        graphic: playlistRoot.settingsPage === 0 ? "settings" : "back"
 
         visible: visibleCondn
 

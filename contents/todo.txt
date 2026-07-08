@@ -16,8 +16,8 @@ Playlist Menu Having Temporary Folder and Temporary Music Option *
 
 Playlist Having functioning with Album Art *
 
-Hovering Over Playlist gives Title
-Hovering Over Search Song gives File Location
+Hovering Over Playlist gives Title *
+Hovering Over Search Song gives File Location *
 
 Artist Name Below Song Name *
 
