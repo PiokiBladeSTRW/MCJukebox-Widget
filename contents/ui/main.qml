@@ -172,6 +172,7 @@ PlasmoidItem {
 
         property string sourceFile : "out"
         property bool menuCloseTimed: false
+        property bool animateParrot: false
 
         source: "../images/background/" + sourceFile + ".png"
         fillMode: Image.Stretch
@@ -193,7 +194,7 @@ PlasmoidItem {
                 // Open Menu
                 if( !root.menuOpen) {
                     clickSound.play()
-                    parrotAnim.stop()
+                    parent.animateParrot = false
 
                     root.menuOpen = true
                     parent.sourceFile = "menu"
@@ -262,28 +263,31 @@ PlasmoidItem {
                 if(!plasmoid.configuration.playStatus) {
                     parent.sourceFile = "out"
                 } else {
-                    parrotAnim.start()
+                    parent.sourceFile = "empty"
+                    parent.animateParrot = true
                 }
             }
         }
 
-        Timer {
-            id: parrotAnim
-            interval: 50
-            repeat: true
+        AnimatedSprite {
+            id: parentAnim
+            anchors.fill: parent
 
-            property int anim_index: 0
+            source: "../images/background/out_play.png"
 
-            onTriggered: {
-                if(anim_index<=10) {
-                    anim_index += 1
-                } else {
-                    anim_index = 0
-                }
+            frameWidth: 450
+            frameHeight: 120
 
-                parent.sourceFile= "playing/" + anim_index
-            }
+            frameCount: 12
+            frameRate: 20
+
+            visible: parent.animateParrot
+            running: parent.animateParrot
+            loops: Animation.Infinite
+
+            smooth: false
         }
+
 
         // Song Title
         Item {
