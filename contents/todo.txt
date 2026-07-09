@@ -1,6 +1,7 @@
 To Do:
 
-Avoid Prompt Injection in folder/file names using ' '
+Avoid Prompt Injection in folder/file names using ' '       !! Imp
+
 Improve Polling of mpc status and title grab. Should not be grabbed every second, title only when song is changed and time ONLY when songs are playing
 Same command fired twice in playlistMenu will run only once due to CallbackRegistry swalloing one up
 For Setting pages use Loader
@@ -31,7 +32,7 @@ Bugs:
 If you do mpc clear or have nothing on play already, choosing a song does not display unless u restart widget *
 artMode referred to as just mode elsewhere! *
 in playlistAdded signal in main.qml, off-by-one bug *
-timeData.js allows Division by Zero if someone intentionally adds a bad mp3, handle it
+timeData.js allows Division by Zero if someone intentionally adds a bad mp3, handle it *
 
 
 

@@ -15,12 +15,12 @@ function main(output) {
     let trackTitle = ''
 
     if(x[1]) {
-        trackTitle = x[1]
+        trackTitle = String(x[1])
     } else {
-        trackTitle = x[2]
+        trackTitle = String(x[2])
     }
 
-    if(trackTitle, trackArtist) {
+    if(trackTitle) {
         return [trackTitle, trackArtist]
     } else {
         return ["", ""]

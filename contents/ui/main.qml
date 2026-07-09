@@ -24,6 +24,31 @@ PlasmoidItem {
     property bool playlistMenuOpen : false
     property bool keepMenuOpen: false
 
+    // Event Listener
+    PS.DataSource {
+        id: eventListener
+        engine: "executable"
+        connectedSources: []
+
+        onNewData: (sourceName, data) => {
+            disconnectSource(sourceName)
+            player.exec("mpc -f '%artist%\x1f%title%\x1f%file%' current")
+
+            idleTimer.start()
+        }
+
+        Component.onCompleted:{
+            connectSource("mpc idle player")
+        }
+    }
+    Timer {
+        id: idleTimer
+        interval: 500
+        onTriggered: {
+            eventListener.connectSource("mpc idle player")
+        }
+    }
+
     // Music Player
     PS.DataSource {
         id: player
@@ -48,6 +73,7 @@ PlasmoidItem {
         Component.onCompleted: {
             connectSource("mkdir ~/.cache/jukebox_covers")
             connectSource("mpc update")
+            connectSource("mpc -f '%artist%\x1f%title%\x1f%file%' current")
         }
     }
 
@@ -62,11 +88,10 @@ PlasmoidItem {
     Timer {
         interval: 1000
         repeat: true
-        running: true
+        running: plasmoid.configuration.playStatus && root.menuOpen
 
         onTriggered: {
             player.exec("mpc status")
-            player.exec("mpc -f '%artist%\x1f%title%\x1f%file%' current")
         }
     }
 
