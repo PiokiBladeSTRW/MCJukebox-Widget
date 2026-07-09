@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls as C
 import org.kde.plasma.components 3.0 as PC
 
 // MPC Directory Edit
@@ -22,7 +21,7 @@ Image {
     signal settingsPageChanged(int newPage)
 
     // This needs more work to be secure
-    C.Label {
+    PC.Label {
         text: "⚠️ Make sure you know what you are Doing"
         font.bold: true
         font.pixelSize: 16

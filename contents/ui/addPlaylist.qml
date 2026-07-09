@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls as C
 import org.kde.plasma.components 3.0 as PC
 
 // Add Playlist Menu

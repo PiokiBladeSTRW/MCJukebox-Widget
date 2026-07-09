@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls as C
 import org.kde.plasma.components 3.0 as PC
 
 // Edit Playlist Menu
@@ -74,7 +73,7 @@ Image {
 
             color: "#303030"
 
-            C.ScrollView {
+            PC.ScrollView {
                 anchors.fill: parent
                 clip: true
 
@@ -83,7 +82,7 @@ Image {
                     spacing: 2
 
                     // Text with onClick function
-                    delegate: C.ItemDelegate {
+                    delegate: PC.ItemDelegate {
                         id: songItem
                         width: roasterDisplay.width
                         height: 24
