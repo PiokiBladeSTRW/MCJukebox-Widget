@@ -13,8 +13,8 @@ Make the Buttons with text a new component of LabelledButton since they are used
 Improve File namings [Change Button to graphicButton or such, import Control just as without C or beter Name] *
 Replace the parrotAnim system with a AnimatedSprite *
 Rename main function to better names in JS, for further clarity *
-Adding album art via edit playlist does not add album art to the roaster
-Reopening the widget should not reset elapsed time
+Adding album art via edit playlist does not add album art to the roaster *
+Reopening the widget should not reset elapsed time *
 
 Perhaps centralize Bash Calling
 Perhaps the Background image can also become a State machine

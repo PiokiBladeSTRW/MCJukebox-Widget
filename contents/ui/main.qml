@@ -73,6 +73,7 @@ PlasmoidItem {
         Component.onCompleted: {
             connectSource("mkdir ~/.cache/jukebox_covers")
             connectSource("mpc update")
+            connectSource("mpc status")
             connectSource("mpc -f '%artist%\x1f%title%\x1f%file%' current")
         }
     }
