@@ -423,7 +423,7 @@ Image {
 
         onClick: {
             playlistRoot.menuForceState(true)
-            filePick.mode = 1
+            filePick.artMode = 1
             filePick.open()
         }
     }
@@ -659,7 +659,7 @@ Image {
                             folderPick.open()
                             break;
                         case 1:
-                            filePick.mode = 0
+                            filePick.artMode = 0
                             filePick.open();
                             break;
                     }
@@ -845,7 +845,7 @@ Image {
                                 folderPick.open();
                                 break;
                             case 1:
-                                filePick.mode = 1
+                                filePick.artMode = 1
                                 filePick.open();
                                 break;
                             case 2:
@@ -916,7 +916,7 @@ Image {
                             roasterEdit .visible = true
                             break
                         case 1:
-                            filePick.mode = 0
+                            filePick.artMode = 0
                             filePick.open();
                             break;
                     }
