@@ -2,7 +2,6 @@ import QtQuick
 import org.kde.plasma.plasma5support 2.0 as PS
 import org.kde.plasma.components 3.0 as PC
 import QtQuick.Dialogs
-import QtQuick.Controls as C
 
 Image {
     id: playlistRoot
@@ -63,7 +62,6 @@ Image {
             // Fetch Latest Playlist Lists
             if(sourceName === "mpc lsplaylists") {
                 playlistRoot.playlists = data["stdout"].trim().split("\n")
-                console.log(playlistRoot.playlists)
 
                 // Fetch default Music Directory
             } else if (sourceName === "ls /home") {
@@ -107,7 +105,7 @@ Image {
     }
 
     // Wrong Directory File/Folder Picked Warning
-    C.Popup {
+    PC.Popup {
         id: warnPopup
         anchors.centerIn: parent
         width: 260
@@ -115,7 +113,7 @@ Image {
         modal: true
         focus: true
 
-        closePolicy: C.Popup.CloseOnEscape | C.Popup.CloseOnPressOutside
+        closePolicy: PC.Popup.CloseOnEscape | PC.Popup.CloseOnPressOutside
 
         background: Rectangle {
             color: "black"
@@ -127,18 +125,18 @@ Image {
             spacing: 12
             padding: 10
 
-            C.Label {
+            PC.Label {
                 text: "⚠️ WARNING"
                 font.bold: true
                 color: "red"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
-            C.Label {
+            PC.Label {
                 text: "Playlist/Music Directories should be in\n"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
-            C.Label {
+            PC.Label {
                 text: plasmoid.configuration.musicPath
                 font.bold: true
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -342,7 +340,7 @@ Image {
 
             visible: searchBar.visible
 
-            C.ScrollView {
+            PC.ScrollView {
                 anchors.fill: parent
                 clip:true
 
@@ -355,7 +353,7 @@ Image {
                     bottomMargin: 10
 
                     // Text with onClick function
-                    delegate: C.ItemDelegate {
+                    delegate: PC.ItemDelegate {
                         width: 70
                         height: 15
                         text: modelData
@@ -466,9 +464,9 @@ Image {
             }
         }
 
-        C.ScrollBar.vertical: C.ScrollBar {
+        PC.ScrollBar.vertical: PC.ScrollBar {
             visible: playlistRoot.visibleCondn
-            policy: C.ScrollBar.AsNeeded
+            policy: PC.ScrollBar.AsNeeded
         }
 
         // Your Playlist Display remains almost identical inside
@@ -500,8 +498,8 @@ Image {
 
                     // Name of Playlist upon Hover
                     detectHover: true
-                    C.ToolTip.visible: hovered
-                    C.ToolTip.text: modelData
+                    PC.ToolTip.visible: hovered
+                    PC.ToolTip.text: modelData
 
                     onClick: {
                         plasmoid.configuration.playlistIndex = index
