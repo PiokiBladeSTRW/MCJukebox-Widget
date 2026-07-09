@@ -3,6 +3,8 @@ import org.kde.plasma.plasma5support 2.0 as PS
 import org.kde.plasma.components 3.0 as PC
 import QtQuick.Dialogs
 
+import "../code/binarySearch.js" as BinSearch
+
 Image {
     id: playlistRoot
     anchors.fill: parent
@@ -60,7 +62,7 @@ Image {
         onNewData: (sourceName, data) =>{
 
             // Fetch Latest Playlist Lists
-            if(sourceName === "mpc lsplaylists") {
+            if(sourceName === "mpc lsplaylists | sort") {
                 playlistRoot.playlists = data["stdout"].trim().split("\n")
 
                 // Fetch default Music Directory
@@ -99,7 +101,7 @@ Image {
 
         Component.onCompleted: {
             // Fetch Latest playlists List
-            connectSource("mpc lsplaylists")
+            connectSource("mpc lsplaylists | sort")
             connectSource("ls /home")
         }
     }
@@ -112,6 +114,8 @@ Image {
         height: 140
         modal: true
         focus: true
+
+        property bool dirWarn: true      // true: Directory Warning / false: Duplicate Name Warning
 
         closePolicy: PC.Popup.CloseOnEscape | PC.Popup.CloseOnPressOutside
 
@@ -126,18 +130,18 @@ Image {
             padding: 10
 
             PC.Label {
-                text: "⚠️ WARNING"
+                text: parent.dirWarn ? "⚠️ WARNING" : "🚫 ERROR"
                 font.bold: true
                 color: "red"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
             PC.Label {
-                text: "Playlist/Music Directories should be in\n"
+                text: parent.dirWarn ? "Playlist/Music Directories should be in\n" : "A Playlist by that name Exists Already"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             PC.Label {
-                text: plasmoid.configuration.musicPath
+                text: parent.dirWarn ? plasmoid.configuration.musicPath : ""
                 font.bold: true
                 anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -155,6 +159,7 @@ Image {
 
             // Ensure the Correct Music Directory
             if(! path.startsWith(plasmoid.configuration.musicPath)) {
+                warnPopup.dirWarn = true
                 warnPopup.open()
                 return
             }
@@ -631,23 +636,40 @@ Image {
             }
 
             function onPlaylistAdded(playlistName, playlistFolders, albumArt) {
+
+                // Ensure playlist of Name doesn't exist'
+                if(BinSearch.existsInArray(playlistName, playlistRoot.playlists)) {
+                    warnPopup.dirWarn = false
+                    warnPopup.open()
+                    return
+                }
+
                 playlistRoot.playlistAdded(playlistName, playlistFolders, albumArt)
-                executable.exec("mpc lsplaylists")
+                executable.exec("mpc lsplaylists | sort")
             }
 
             function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
-                playlistRoot.playlistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices)
+                // Ensure playlist of Name doesn't exist
+                if(BinSearch.existsInArray(playlistRename, playlistRoot.playlists)) {
+                    warnPopup.dirWarn = false
+                    warnPopup.open()
+                    return
+                }
 
+                // Force grid model Update to update Album Arts
                 if(newAlbumArt) {
                     playlistGridRepeater.model = []
                     playlistGridRepeater.model = playlistRoot.playlists
                 }
-                executable.exec("mpc lsplaylists")
+
+
+                playlistRoot.playlistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices)
+                executable.exec("mpc lsplaylists | sort")
             }
 
             function onPlaylistDelete(chosenPlaylist) {
                 playlistRoot.playlistDelete(chosenPlaylist)
-                executable.exec("mpc lsplaylists")
+                executable.exec("mpc lsplaylists | sort")
             }
         }
     }
