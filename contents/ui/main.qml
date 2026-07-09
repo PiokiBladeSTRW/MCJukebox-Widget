@@ -392,7 +392,7 @@ PlasmoidItem {
                 player.exec("mpc clearplaylist "+ title)
                 player.exec("cp "+ albumArt + " ~/.cache/jukebox_covers/"+title+".png")
 
-                for (let i = 0; i <= playlistFolders.length; i++) {
+                for (let i = 0; i < playlistFolders.length; i++) {
                     let folderPath = '"' + playlistFolders[i] + '"';
                     player.exec("mpc addplaylist "+ title + " " + folderPath);
                 }
