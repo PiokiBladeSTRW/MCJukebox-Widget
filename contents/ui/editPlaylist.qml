@@ -24,8 +24,6 @@ Image {
     property string playlistRename : ""
     property string newAlbumArt: ""
 
-    property list<string> displayTexts: ["Edit Songs Roaster", "Change Album Art"]
-
     // Songs List to display on Roaster and a Dictionary to look up Indices of songs
     property list<string> songsList
     property var songsLookup
@@ -169,42 +167,46 @@ Image {
     }
 
     // Edit Roaster and Album Art Buttons
-    Repeater {
-        model: [0, 30]
+    Column {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 15
+        anchors.verticalCenterOffset: 15
+        spacing: 5
 
-        LabelledButton {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenterOffset: 15
-            anchors.verticalCenterOffset: modelData
+        Repeater {
+            model: ["Edit Songs Roaster", "Change Album Art"]
 
-            text: editPlaylist.displayTexts[index]
+            LabelledButton {
+                text: modelData
 
-            onClick: {
-                switch(index) {
-                    case 0:
-                        executable.exec("mpc playlist "+ editPlaylist.chosenPlaylist, function obtainSongsList(output) {
-                            // Output Contans a List of Songs in the Given Playlist
-                            let songsList = output.trim().split("\n")
-                            let songsHashMap = {}
+                onClick: {
+                    switch(index) {
+                        case 0:
+                            executable.exec("mpc playlist "+ editPlaylist.chosenPlaylist, function obtainSongsList(output) {
+                                // Output Contans a List of Songs in the Given Playlist
+                                let songsList = output.trim().split("\n")
+                                let songsHashMap = {}
 
-                            for (let i = 0 ; i < songsList.length ; i++) {
-                                songsHashMap[String(songsList[i])] = i + 1
-                            }
+                                for (let i = 0 ; i < songsList.length ; i++) {
+                                    songsHashMap[String(songsList[i])] = i + 1
+                                }
 
-                            editPlaylist.songsList = songsList
-                            editPlaylist.songsLookup = songsHashMap
-                        })
+                                editPlaylist.songsList = songsList
+                                editPlaylist.songsLookup = songsHashMap
+                            })
 
-                        roasterEdit .visible = true
-                        break
-                    case 1:
-                        filePickOpen(1)
-                        break;
+                            roasterEdit .visible = true
+                            break
+                        case 1:
+                            filePickOpen(1)
+                            break;
+                    }
                 }
             }
         }
     }
+
 
     PC.ComboBox {
         id: pickPlaylist

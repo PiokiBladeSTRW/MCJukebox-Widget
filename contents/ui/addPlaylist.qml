@@ -14,7 +14,6 @@ Image {
     property string albumArt
 
     property list<string> playlistFolders
-    property list<string> displayTexts: ["Add Songs", "Add Album Art [Optional]"]
 
     signal settingsPageChanged(int newPage)
     signal folderPickOpen()
@@ -34,28 +33,33 @@ Image {
 
 
     // Add Songs and Album Art Buttons
-    Repeater {
-        model: [0, 30]
 
-        LabelledButton {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: modelData
+    Column {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 15
+        spacing: 5
 
-            text: addPlaylist.displayTexts[index]
+        Repeater {
+            model: ["Add Songs", "Add Album Art [Optional]"]
 
-            onClick: {
-                switch(index) {
-                    case 0:
-                        addPlaylist.folderPickOpen()
-                        break;
-                    case 1:
-                        addPlaylist.filePickOpen(1)
-                        break;
+            LabelledButton {
+                text: modelData
+
+                onClick: {
+                    switch(index) {
+                        case 0:
+                            addPlaylist.folderPickOpen()
+                            break;
+                        case 1:
+                            addPlaylist.filePickOpen(1)
+                            break;
+                    }
                 }
             }
         }
     }
+
 
     // Playlist Name
     PC.TextField {

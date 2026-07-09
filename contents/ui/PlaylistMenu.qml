@@ -560,8 +560,6 @@ Image {
 
         source: "../images/background/settings_bg_1.png"
 
-        property list<string> displayTexts: ["Add Playlist", "Edit Playlist", "MPC Directory Config"]
-
         visible: playlistRoot.settingsPage === 1
         opacity: visible
 
@@ -572,23 +570,25 @@ Image {
             }
         }
 
-        // Settings Page Selection
-        Repeater {
-            model: [-30, 0, 30]
+        // Settings Page
+        Column {
+            anchors.centerIn: parent
+            spacing: 5
 
-            LabelledButton {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: modelData
+            Repeater {
+                model: ["Add Playlist", "Edit Playlist", "MPC Directory Config"]
 
-                text: settingsMenu.displayTexts[index]
+                LabelledButton {
+                    text: modelData
 
-                onClick: {
-                    // Index + 2 to Account for Page 0 and index starting at 0
-                    playlistRoot.settingsPage = index + 2
+                    onClick: {
+                        // Index + 2 to Account for Page 0 and index starting at 0
+                        playlistRoot.settingsPage = index + 2
+                    }
                 }
             }
         }
+
     }
 
     Loader {
