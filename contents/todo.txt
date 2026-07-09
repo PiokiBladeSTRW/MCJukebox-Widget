@@ -8,7 +8,7 @@ Break down AddPlaylist, EditPlaylist, MPC Edit to there own files *
 For Setting pages use Loader *
 Avoid Risky Mutation in editPlaylist roaster edit, instead of direct JS functions, add a = at front to reassign to be safe  # Kept, working as intended
 Remove redundant import of controls *
-Use Columns and such instead of model: [30,0,-30] for verticalCenterOffset
+Use Columns and such instead of model: [30,0,-30] for verticalCenterOffset*
 Make the Buttons with text a new component of LabelledButton since they are used many a times *
 Improve File namings [Change Button to graphicButton or such, import Control just as without C or beter Name] *
 Replace the parrotAnim system with a AnimatedSprite *

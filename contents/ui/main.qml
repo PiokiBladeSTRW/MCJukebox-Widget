@@ -425,8 +425,6 @@ PlasmoidItem {
                     let folderPath = '"' + playlistFolders[i] + '"';
                     player.exec("mpc addplaylist "+ title + " " + folderPath);
                 }
-
-                execute("mpc lsplaylists")
             }
 
             onPlaylistEdited: (playlist, newName, albumArt, songsAdded, songsRemoval) => {
@@ -448,14 +446,11 @@ PlasmoidItem {
                 for (let i =0; i<songsRemoval.length ; i++) {
                     player.exec("mpc delplaylist "+ newName+" "+ songsRemoval[i])
                 }
-
-                execute("mpc lsplaylists")
             }
 
             onPlaylistDelete: (playlist) => {
                 player.exec("mpc rm "+ playlist)
 
-                execute("mpc lsplaylists")
             }
         }
 

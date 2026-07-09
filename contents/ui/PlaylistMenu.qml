@@ -479,6 +479,7 @@ Image {
             bottomPadding: 20
 
             Repeater {
+                id: playlistGridRepeater
                 model: playlistRoot.playlists
 
                 VisualButton {
@@ -617,7 +618,6 @@ Image {
             ignoreUnknownSignals: true
 
             function onSettingsPageChanged(newPage) {
-                console.log("BOOM")
                 playlistRoot.settingsPage = newPage
             }
 
@@ -631,19 +631,21 @@ Image {
             }
 
             function onPlaylistAdded(playlistName, playlistFolders, albumArt) {
-                console.log('add')
                 playlistRoot.playlistAdded(playlistName, playlistFolders, albumArt)
                 executable.exec("mpc lsplaylists")
             }
 
             function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
-                console.log('edit')
                 playlistRoot.playlistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices)
+
+                if(newAlbumArt) {
+                    playlistGridRepeater.model = []
+                    playlistGridRepeater.model = playlistRoot.playlists
+                }
                 executable.exec("mpc lsplaylists")
             }
 
             function onPlaylistDelete(chosenPlaylist) {
-                console.log("del")
                 playlistRoot.playlistDelete(chosenPlaylist)
                 executable.exec("mpc lsplaylists")
             }
