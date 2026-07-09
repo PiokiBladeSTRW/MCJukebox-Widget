@@ -28,7 +28,7 @@ Change the Fonts to make it look better [Specifically settings Menu]
 Make it compatible with New users [Install MPC/MPD if not installed, if Installed ask the user for their Music folder directory with a brief tutorial! Update the config file containing it]
 
 Bugs:
-If you do mpc clear or have nothing on play already, choosing a song does not display unless u restart widget
+If you do mpc clear or have nothing on play already, choosing a song does not display unless u restart widget *
 artMode referred to as just mode elsewhere!
 in playlistAdded signal in main.qml, off-by-one bug
 timeData.js allows Division by Zero if someone intentionally adds a bad mp3, handle it

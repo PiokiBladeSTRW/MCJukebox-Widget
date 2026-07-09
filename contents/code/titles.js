@@ -20,5 +20,10 @@ function main(output) {
         trackTitle = x[2]
     }
 
-    return [trackTitle, trackArtist]
+    if(trackTitle, trackArtist) {
+        return [trackTitle, trackArtist]
+    } else {
+        return ["", ""]
+    }
+
 }
