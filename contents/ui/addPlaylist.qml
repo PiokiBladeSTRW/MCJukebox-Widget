@@ -37,27 +37,12 @@ Image {
     Repeater {
         model: [0, 30]
 
-        Button {
-            width: 250
-            height: 25
-
+        LabelledButton {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: modelData
 
-            graphic: "button"
-
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                text: addPlaylist.displayTexts[index]
-                font.family: "Minecraft"
-                renderType: Text.NativeRendering
-                font.pixelSize: 14
-
-                color: "white"
-            }
+            text: addPlaylist.displayTexts[index]
 
             onClick: {
                 switch(index) {
@@ -95,7 +80,7 @@ Image {
     }
 
     // Accept Button
-    Button {
+    VisualButton {
         width: 30
         height: 30
 

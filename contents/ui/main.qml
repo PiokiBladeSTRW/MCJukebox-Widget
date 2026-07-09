@@ -367,7 +367,7 @@ PlasmoidItem {
         }
 
         // Playlist Choice Menu Toggle
-        Button {
+        VisualButton {
             id: playlist_menu_toggle
 
             height: 100
@@ -473,13 +473,13 @@ PlasmoidItem {
             }
 
             // Shuffle Songs
-            Button {
+            VisualButton {
                 graphic: "main_icons/shuffle"
                 onClick: player.exec("mpc shuffle")
             }
 
             // Backward 10s
-            Button {
+            VisualButton {
                 graphic: "main_icons/backward"
                 onClick: player.exec("mpc seek -10")
             }
@@ -508,13 +508,13 @@ PlasmoidItem {
             }
 
             // Forward 10s
-            Button {
+            VisualButton {
                 graphic: "main_icons/forward"
                 onClick: player.exec("mpc seek +10")
             }
 
             // Loop Song
-            Button {
+            VisualButton {
                 graphic: "main_icons/loop"
                 onClick: {
                     player.exec("mpc single")
@@ -545,7 +545,7 @@ PlasmoidItem {
 
             Repeater {
                 model: ["main_icons/prev", 0, "main_icons/next"]
-                Button {
+                VisualButton {
                     width: 25
                     height: 25
 

@@ -278,7 +278,7 @@ Image {
     // -----------------------------
 
     // Search Bar
-    Button {
+    VisualButton {
         id: searchButton
         height: 25
         width: 25
@@ -397,7 +397,7 @@ Image {
     }
 
     // Temporary Songs Options
-    Button {
+    VisualButton {
         height: 25
         width: 25
         anchors.bottom: parent.bottom
@@ -415,7 +415,7 @@ Image {
         }
     }
 
-    Button {
+    VisualButton {
         height: 25
         width: 25
         anchors.bottom: parent.bottom
@@ -481,7 +481,7 @@ Image {
             Repeater {
                 model: playlistRoot.playlists
 
-                Button {
+                VisualButton {
                     height: 50
                     width: 50
 
@@ -516,7 +516,7 @@ Image {
     // -----------------------------
 
     // Settings Toggle
-    Button {
+    VisualButton {
         id: settingsToggle
 
         width: 30
@@ -576,27 +576,12 @@ Image {
         Repeater {
             model: [-30, 0, 30]
 
-            Button {
-                width: 250
-                height: 25
-
+            LabelledButton {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: modelData
 
-                graphic: "button"
-
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    text: settingsMenu.displayTexts[index]
-                    font.family: "Minecraft"
-                    renderType: Text.NativeRendering
-                    font.pixelSize: 14
-
-                    color: "white"
-                }
+                text: settingsMenu.displayTexts[index]
 
                 onClick: {
                     // Index + 2 to Account for Page 0 and index starting at 0

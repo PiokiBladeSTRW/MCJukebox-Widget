@@ -128,7 +128,7 @@ Image {
         Repeater {
             model: [20, 60, 320]
 
-            Button {
+            VisualButton {
                 width: 20
                 height: 20
 
@@ -172,29 +172,13 @@ Image {
     Repeater {
         model: [0, 30]
 
-        Button {
-            width: 250
-            height: 25
-
+        LabelledButton {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenterOffset: 15
             anchors.verticalCenterOffset: modelData
 
-
-            graphic: "button"
-
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                text: editPlaylist.displayTexts[index]
-                font.family: "Minecraft"
-                renderType: Text.NativeRendering
-                font.pixelSize: 14
-
-                color: "white"
-            }
+            text: editPlaylist.displayTexts[index]
 
             onClick: {
                 switch(index) {
@@ -271,7 +255,7 @@ Image {
     }
 
     // Confirmation
-    Button {
+    VisualButton {
         width: 20
         height: 20
         anchors.bottom: parent.bottom
@@ -290,7 +274,7 @@ Image {
     }
 
     // Delete Playlist
-    Button {
+    VisualButton {
         width: 20
         height: 20
         anchors.bottom: parent.bottom
