@@ -86,7 +86,6 @@ Image {
         }
 
         function exec(cmd, callback) {
-
             if(callback) {
                 let uniqueCommand = cmd + " #" + callbackUniqueID
                 callbackUniqueID += 1
@@ -169,10 +168,10 @@ Image {
                     playlistRoot.tempSong(path)
                     break
                 case 2:
-                    addPlaylist.playlistFolders.push(path)
+                    settingMenus.item.playlistFolders.push(path)
                     break
                 case 3:
-                    editPlaylist.songsAdd.push(path)
+                    settingMenus.item.songsAdd.push(path)
 
                     // Obtain songs in the Chosen Directory
                     executable.exec('ls -p "'+ plasmoid.configuration.musicPath + path +'" | grep -v /', function songsInDir(output) {
@@ -192,12 +191,12 @@ Image {
                         songs.sort()
 
                         // Obtain the next Index position for new Songs in Lookup hashmap
-                        let baseVal = Object.keys(editPlaylist.songsLookup).length + 1
+                        let baseVal = Object.keys(settingMenus.item.songsLookup).length + 1
                         for (let i = 0; i < songs.length ; i++){
-                            editPlaylist.songsLookup[songs[i]] = baseVal + i
+                            settingMenus.item.songsLookup[songs[i]] = baseVal + i
                         }
 
-                        editPlaylist.songsList.push(...songs)})
+                        settingMenus.item.songsList.push(...songs)})
                     break
             }
 
@@ -229,10 +228,10 @@ Image {
             if(artMode) {
                 switch(playlistRoot.settingsPage) {
                     case 2:
-                        addPlaylist.albumArt = path
+                        settingMenus.item.albumArt = path
                         break
                     case 3:
-                        editPlaylist.newAlbumArt = path
+                        settingMenus.item.newAlbumArt = path
                         break
                     default: break
                 }
@@ -256,9 +255,9 @@ Image {
                     case 3:
                         // Add the Song to the Editable Roaster, to the SongsAddition List for MPC and for Index Lookup
                         let title = path.split("/")
-                        editPlaylist.songsLookup[title[title.length - 1]] = Object.keys(editPlaylist.songsLookup).length + 1
-                        editPlaylist.songsList.push(title[title.length - 1])
-                        editPlaylist.songsAdd.push(path)
+                        settingMenus.item.songsLookup[title[title.length - 1]] = Object.keys(settingMenus.item.songsLookup).length + 1
+                        settingMenus.item.songsList.push(title[title.length - 1])
+                        settingMenus.item.songsAdd.push(path)
                         break
                     default: break
                 }
@@ -609,466 +608,68 @@ Image {
         }
     }
 
-
-    // Add Playlist Menu
-    Image {
-        id: addPlaylist
+    Loader {
+        id: settingMenus
         anchors.fill: parent
 
-        z: 2
-
-        source: "../images/background/settings_bg_2.png"
-
-        property string playlistName
-        property string albumArt
-
-        property list<string> playlistFolders
-        property list<string> displayTexts: ["Add Songs", "Add Album Art [Optional]"]
-
-        visible: playlistRoot.settingsPage === 2
-        opacity: visible ? 1 : 0
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 500
-                easing.type: Easing.Linear
+        source: {
+            switch(playlistRoot.settingsPage) {
+                case 2: return "addPlaylist.qml"; break;
+                case 3: return "editPlaylist.qml"; break;
+                case 4: return "mpcConfig.qml"; break;
+                default: return ""
             }
         }
 
-
-        // Add Songs and Album Art Buttons
-        Repeater {
-            model: [0, 30]
-
-            Button {
-                width: 250
-                height: 25
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: modelData
-
-                graphic: "button"
-
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    text: addPlaylist.displayTexts[index]
-                    font.family: "Minecraft"
-                    renderType: Text.NativeRendering
-                    font.pixelSize: 14
-
-                    color: "white"
-                }
-
-                onClick: {
-                    switch(index) {
-                        case 0:
-                            folderPick.open()
-                            break;
-                        case 1:
-                            filePick.artMode = 0
-                            filePick.open();
-                            break;
-                    }
-                }
+        onLoaded: {
+            switch(playlistRoot.settingsPage) {
+                case 3:
+                    item.playlists = playlistRoot.playlists
+                    break
             }
         }
 
-        // Playlist Name
-        PC.TextField {
-            id: namePlaylist
-            height: 25
-            width:250
+        Connections {
+            target: settingMenus.item
+            ignoreUnknownSignals: true
 
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -30
-
-            placeholderText: "Enter Playlist Name: "
-
-            background: Image {
-                anchors.fill: parent
-                source: namePlaylist.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
+            function onSettingsPageChanged(newPage) {
+                console.log("BOOM")
+                playlistRoot.settingsPage = newPage
             }
 
-            onTextChanged: {
-                parent.playlistName = text
-            }
-        }
-
-        // Accept Button
-        Button {
-            width: 30
-            height: 30
-
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.bottomMargin: 15
-            anchors.rightMargin: 15
-
-            graphic: "playlistMenu_icons/enter"
-
-            onClick: {
-                playlistRoot.settingsPage = 1
-                playlistAdded(parent.playlistName, parent.playlistFolders, parent.albumArt)
-            }
-        }
-    }
-
-
-    // Edit Playlist Menu
-    Image {
-        id: editPlaylist
-        anchors.fill: parent
-
-        z:2
-        source: "../images/background/settings_bg_3.png"
-        visible: playlistRoot.settingsPage === 3
-        opacity: visible ? 1 : 0
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 500
-                easing.type: Easing.Linear
-            }
-        }
-
-        property string chosenPlaylist: playlistRoot.playlists[0]
-        property string playlistRename : ""
-        property string newAlbumArt: ""
-
-        property list<string> displayTexts: ["Edit Songs Roaster", "Change Album Art"]
-
-        // Songs List to display on Roaster and a Dictionary to look up Indices of songs
-        property list<string> songsList
-        property var songsLookup
-
-        // List of Songs Added / Removed
-        property list<string> songsAdd
-        property list<int> removalIndices
-
-        signal reset
-
-        onReset: {
-            renamePlaylist.text = ""
-            pickPlaylist.currentIndex = 0
-        }
-
-
-        // Modify List of Songs in a Given Playlist [AvailableSongsList = Roaster]
-        Rectangle {
-            id: roasterEdit
-            width: 350
-            height: parent.height
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: -20
-            z:3
-
-            color: "#171616"
-            radius: 10
-
-            property list<string> displayGraphics: ["playlistMenu_icons/folder_pick", "playlistMenu_icons/music_pick", "playlistMenu_icons/enter"]
-
-            visible: false
-
-            // List of Songs Displayed
-            Rectangle {
-                id: roasterDisplay
-                width: roasterEdit.width
-                height: 80
-                radius: 10
-
-                color: "#303030"
-
-                C.ScrollView {
-                    anchors.fill: parent
-                    clip: true
-
-                    ListView {
-                        model: editPlaylist.songsList
-                        spacing: 2
-
-                        // Text with onClick function
-                        delegate: C.ItemDelegate {
-                            id: songItem
-                            width: roasterDisplay.width
-                            height: 24
-                            text: ""
-
-                            background: Rectangle {
-                                anchors.fill: parent
-                                radius: 10
-
-                                color: parent.hovered ? "#80170f" : "#303030"
-                            }
-
-                            contentItem: Item {
-                                anchors.fill: parent
-
-                                Text {
-                                    width: 300
-                                    anchors.left: parent.left
-
-                                    text: modelData
-                                    color: "white"
-                                    font.pixelSize: 12
-                                    elide: Text.ElideRight
-                                }
-
-                                Image {
-                                    anchors.right: parent.right
-                                    source: "../images/playlistMenu_icons/trash.svg"
-                                    visible: songItem.hovered
-                                }
-                            }
-
-                            onClicked: {
-                                editPlaylist.removalIndices.push(editPlaylist.songsLookup[modelData])
-                                editPlaylist.songsList.splice(index, 1)
-                            }
-                        }
-                    }
-                }
+            function onFolderPickOpen() {
+                folderPick.open()
             }
 
-            // Addition and Confirmation Button
-            Repeater {
-                model: [20, 60, 320]
-
-                Button {
-                    width: 20
-                    height: 20
-
-                    anchors.bottom: parent.bottom
-                    anchors.left: parent.left
-                    anchors.bottomMargin: 10
-                    anchors.leftMargin: modelData
-
-                    graphic: roasterEdit.displayGraphics[index]
-
-                    onClick : {
-                        switch(index) {
-                            case 0:
-                                folderPick.open();
-                                break;
-                            case 1:
-                                filePick.artMode = 1
-                                filePick.open();
-                                break;
-                            case 2:
-                                roasterEdit.visible = false;
-                                break
-                        }
-                    }
-                }
+            function onFilePickOpen(artMode) {
+                filePick.artMode = artMode
+                filePick.open()
             }
 
-            // Area Outside for another Exit
-            MouseArea {
-                height: parent.height
-                width: 50
-                anchors.right: parent.right
-                anchors.rightMargin: -50
-
-                onClicked: {
-                    roasterEdit.visible = false
-                }
-            }
-        }
-
-        // Edit Roaster and Album Art Buttons
-        Repeater {
-            model: [0, 30]
-
-            Button {
-                width: 250
-                height: 25
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenterOffset: 15
-                anchors.verticalCenterOffset: modelData
-
-
-                graphic: "button"
-
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    text: editPlaylist.displayTexts[index]
-                    font.family: "Minecraft"
-                    renderType: Text.NativeRendering
-                    font.pixelSize: 14
-
-                    color: "white"
-                }
-
-                onClick: {
-                    switch(index) {
-                        case 0:
-                            executable.exec("mpc playlist "+ editPlaylist.chosenPlaylist, function obtainSongsList(output) {
-                                // Output Contans a List of Songs in the Given Playlist
-                                let songsList = output.trim().split("\n")
-                                let songsHashMap = {}
-
-                                for (let i = 0 ; i < songsList.length ; i++) {
-                                    songsHashMap[String(songsList[i])] = i + 1
-                                }
-
-                                editPlaylist.songsList = songsList
-                                editPlaylist.songsLookup = songsHashMap
-                            })
-
-                            roasterEdit .visible = true
-                            break
-                        case 1:
-                            filePick.artMode = 0
-                            filePick.open();
-                            break;
-                    }
-                }
-            }
-        }
-
-        PC.ComboBox {
-            id: pickPlaylist
-            height: 25
-            width: 60
-
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.topMargin: 15
-            anchors.leftMargin: 15
-
-            model : playlistRoot.playlists
-
-            Component.onCompleted: {
-                popup.height = 120
+            function onPlaylistAdded(playlistName, playlistFolders, albumArt) {
+                console.log('add')
+                playlistRoot.playlistAdded(playlistName, playlistFolders, albumArt)
+                executable.exec("mpc lsplaylists")
             }
 
-            background: Image{
-                anchors.fill: parent
-                source: "../images/playlistMenu_icons/checkbox.png"
+            function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
+                console.log('edit')
+                playlistRoot.playlistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices)
+                executable.exec("mpc lsplaylists")
             }
 
-            onActivated: {
-                parent.chosenPlaylist = currentText
-            }
-        }
-
-        PC.TextField {
-            id: renamePlaylist
-            height: 25
-            width:250
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -30
-            anchors.horizontalCenterOffset: 15
-
-            placeholderText: "Rename Playlist [Optional]: "
-
-            background: Image {
-                anchors.fill: parent
-                source: renamePlaylist.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
-            }
-
-            onTextChanged: {
-                parent.playlistRename = text
-            }
-        }
-
-        // Confirmation
-        Button {
-            width: 20
-            height: 20
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.bottomMargin: 15
-            anchors.rightMargin: 32.5
-
-            graphic: "playlistMenu_icons/enter"
-
-            onClick: {
-                playlistRoot.settingsPage = 1
-                parent.removalIndices.sort((a,b) => b-a)
-                playlistEdited(parent.chosenPlaylist, parent.playlistRename, parent.newAlbumArt, parent.songsAdd, parent.removalIndices)
-                parent.reset()
-            }
-        }
-
-        // Delete Playlist
-        Button {
-            width: 20
-            height: 20
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.bottomMargin: 15
-            anchors.rightMargin: 7.5
-
-            graphic: "playlistMenu_icons/delete"
-
-            onClick: {
-                playlistRoot.settingsPage = 1
-                playlistDelete(parent.chosenPlaylist)
-                parent.reset()
-            }
-        }
-    }
-
-
-    // MPC Directory Edit
-    Image {
-        id: mpcEdit
-        anchors.fill: parent
-
-        z:2
-        source: "../images/background/settings_bg_4.png"
-        visible: playlistRoot.settingsPage === 4 ? 1 : 0
-        opacity: visible ? 1 : 0
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 500
-                easing.type: Easing.Linear
-            }
-        }
-
-        // This needs more work to be secure
-        C.Label {
-            text: "⚠️ Make sure you know what you are Doing"
-            font.bold: true
-            font.pixelSize: 16
-            font.family: "Minecraft"
-            color: "orange"
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 30
-        }
-
-        PC.TextField {
-            id: entryField
-            height: 25
-            width: 250
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-
-            placeholderText: "MPC Config Music Directory: "
-
-
-            background: Image {
-                anchors.fill: parent
-                source: entryField.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
-            }
-
-            onAccepted: {
-                plasmoid.configuration.musicPath = text
-                playlistRoot.settingsPage = 1
+            function onPlaylistDelete(chosenPlaylist) {
+                console.log("del")
+                playlistRoot.playlistDelete(chosenPlaylist)
+                executable.exec("mpc lsplaylists")
             }
         }
     }
 
 }
+
+
+
+
+
