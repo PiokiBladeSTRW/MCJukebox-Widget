@@ -1,6 +1,6 @@
 // Handle Time Data Updating upon 'mpc status'
 
-function main(output) {
+function handleElapsedTime(output) {
 
     /*
      * The Received Output is in the form of:

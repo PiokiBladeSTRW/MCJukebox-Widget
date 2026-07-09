@@ -1,5 +1,5 @@
 // Handle the Song and Artist Titles
-function main(output) {
+function handleTrackTitles(output) {
 
     /*
      * Input is in the form of "<ArtistName>\x1f<TitleTrack>\x1f<FileLocation>"

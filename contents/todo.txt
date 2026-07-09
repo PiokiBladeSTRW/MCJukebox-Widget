@@ -12,7 +12,7 @@ Use Columns and such instead of model: [30,0,-30] for verticalCenterOffset
 Make the Buttons with text a new component of LabelledButton since they are used many a times *
 Improve File namings [Change Button to graphicButton or such, import Control just as without C or beter Name] *
 Replace the parrotAnim system with a AnimatedSprite *
-Rename main function to better names in JS, for further clarity
+Rename main function to better names in JS, for further clarity *
 Adding album art via edit playlist does not add album art to the roaster
 Reopening the widget should not reset elapsed time
 

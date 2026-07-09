@@ -58,10 +58,10 @@ PlasmoidItem {
         onNewData: (sourceName, data) =>{
 
             if( sourceName === "mpc status" ) {
-                     root.elapsedTime = TimeData.main(data) ;
+                     root.elapsedTime = TimeData.handleElapsedTime(data) ;
 
             } else if (sourceName.startsWith("mpc -f")) {
-                [root.trackTitle, root.trackArtist] = Titles.main(data)
+                [root.trackTitle, root.trackArtist] = Titles.handleTrackTitles(data)
             }
             disconnectSource(sourceName)
         }
