@@ -56,14 +56,16 @@ Image {
         connectedSources: []
 
         property var callbackRegistry: ({})
+        property int callbackUniqueID: 0
 
         onNewData: (sourceName, data) =>{
 
             // Fetch Latest Playlist Lists
             if(sourceName === "mpc lsplaylists") {
                 playlistRoot.playlists = data["stdout"].trim().split("\n")
+                console.log(playlistRoot.playlists)
 
-            // Fetch default Music Directory
+                // Fetch default Music Directory
             } else if (sourceName === "ls /home") {
                 playlistRoot.homeDirPath= "/home/"+ data["stdout"].trim()
 
@@ -72,7 +74,7 @@ Image {
                 }
 
 
-            // Siblings Called Command Execution
+                // Siblings Called Command Execution
             } else if(callbackRegistry[sourceName]) {
                 var callbackFunc = callbackRegistry[sourceName];
 
@@ -84,11 +86,18 @@ Image {
         }
 
         function exec(cmd, callback) {
-            connectSource(cmd)
 
             if(callback) {
-                callbackRegistry[cmd] = callback
+                let uniqueCommand = cmd + " #" + callbackUniqueID
+                callbackUniqueID += 1
+
+                callbackRegistry[uniqueCommand] = callback
+
+                connectSource(uniqueCommand)
+            } else {
+                connectSource(cmd)
             }
+
         }
 
         Component.onCompleted: {
