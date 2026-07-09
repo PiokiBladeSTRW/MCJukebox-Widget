@@ -1,3 +1,51 @@
+To Do:
+
+Avoid Prompt Injection in folder/file names using ' '
+Improve Polling of mpc status and title grab. Should not be grabbed every second, title only when song is changed and time ONLY when songs are playing
+Same command fired twice in playlistMenu will run only once due to CallbackRegistry swalloing one up
+For Setting pages use Loader
+Avoid Risky Mutation in editPlaylist roaster edit, instead of direct JS functions, add a = at front to reassign to be safe
+Use Columns and such instead of model: [30,0,-30] for verticalCenterOffset
+Break down AddPlaylist, EditPlaylist, MPC Edit to there own files
+Make the Buttons with text a new component of LabelledButton since they are used many a times
+Improve File namings [Change Button to graphicButton or such, import Control just as without C or beter Name]
+Replace the parrotAnim system with a AnimatedSprite
+Rename main function to better names in JS, for further clarity
+
+Perhaps centralize Bash Calling
+Perhaps the Background image can also become a State machine
+
+Use More comments especially multi-line to better describe code work flow
+
+Make the codes not PIXEL Perfect. the values should be more dependend on Root Height/Width to Ensure that different Resolutions Work Fine
+
+Reduce dependency of one component on other's naming
+
+ReFactor the Code! Better Variable Handling, better Writing, Better Modularity [ Perhaps Before Search and Aritst Name]
+
+Change the Fonts to make it look better [Specifically settings Menu]
+
+Make it compatible with New users [Install MPC/MPD if not installed, if Installed ask the user for their Music folder directory with a brief tutorial! Update the config file containing it]
+
+Bugs:
+If you do mpc clear or have nothing on play already, choosing a song does not display unless u restart widget
+artMode referred to as just mode elsewhere!
+in playlistAdded signal in main.qml, off-by-one bug
+timeData.js allows Division by Zero if someone intentionally adds a bad mp3, handle it
+
+
+
+
+
+
+
+
+
+
+
+
+
+[DONE TO-DOS: ]
 
 Add the Settings Menu pages *
 
@@ -8,7 +56,6 @@ Make the Add Playlist Page work with MPC *
 
 Edit Playlist having functioning Edit Songs Page *
 Make the Edit Playlist Page work with MPC*
-
 
 Scrollable Playlist Menu *
 
@@ -33,13 +80,7 @@ The Settings Icon should Change to a X icon upon entering settings Menu*
 
 Settings should have Fade Ins*
 
-ReFactor the Code! Better Variable Handling, better Writing, Better Modularity [ Perhaps Before Search and Aritst Name]
-
-Change the Fonts to make it look better [Specifically settings Menu]
-
 The same song can be added twice to the same playlist #             -> Made into Feature, Might have uses
-
-Make it compatible with New users [Install MPC/MPD if not installed, if Installed ask the user for their Music folder directory with a brief tutorial! Update the config file containing it]
 
 
 BUGS:
@@ -49,9 +90,8 @@ BUGS:
     Dynamic removal leads to Index Error [Clicking the top song twice, despite different song, same index of 0!] *
     In Editplaylist menu, the previous menu buttons still work *
     No Playlist Delete Option! *
-    Occasionaly in edit playlist you leave menu but menu can't close. with the jukebox background. REALLY GLITCHY [has to do with menuForcedOpen]
+    Occasionaly in edit playlist you leave menu but menu can't close. with the jukebox background. REALLY GLITCHY [has to do with menuForcedOpen] *
     Editing a playlist, then going back to edit that same playlist, the songsList is EMPTY. Also the fields are filled by default! *
-    If you do mpc clear or have nothing on play already, choosing a song does not display unless u restart widget
 
 UI ToDo:
     Shuffle *
