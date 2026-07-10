@@ -1,10 +1,8 @@
 import QtQuick
-import org.kde.plasma.plasma5support 2.0 as PS
 import org.kde.plasma.components 3.0 as PC
 import QtQuick.Dialogs
 
 import "../code/binarySearch.js" as BinSearch
-import "../code/dirSanitize.js" as DirSanitize
 
 Image {
     id: root
@@ -19,14 +17,7 @@ Image {
 
     property list<string> supportedFormats: ["flac", "ogg", "mp3", "opus", "wav", "aac"]
 
-    signal playlistChosen(string playlist)
-    signal playlistAdded(string title, list<string> playlistFolders, string albumArt)
-    signal playlistEdited(string chosenPlaylist, string newName, string albumArt, list<string> songsAdded, list<int> songsRemoved)
-    signal playlistDelete(string chosenPlaylist)
-
     signal menuForceState(bool state)
-
-    signal tempSong(string chosenDir)
 
 
     source: "../images/amethyst_block"
@@ -40,71 +31,27 @@ Image {
         }
     }
 
-    function sanitize(input) {
-        return DirSanitize.inputClean(input)
+    function playlistsListUpdate(output) {
+        root.playlists = output.trim().split("\n")
+    }
+
+    function handleHomeDir(output) {
+        root.homeDirPath = "/home/"+ output.trim()
+
+        if( !plasmoid.configuration.musicPath) {
+            plasmoid.configuration.musicPath = root.homeDirPath + "/Music/"
+        }
+    }
+
+    Component.onCompleted: {
+        bash.playlistsListUpdate(playlistsListUpdate)
+        bash.homeRegister(handleHomeDir)
     }
 
 
     // -----------------------------
     // UTILITIES
     // -----------------------------
-
-
-    // Executing Terminal Commands
-    PS.DataSource {
-        id: executable
-        engine: "executable"
-        connectedSources: []
-
-        property var callbackRegistry: ({})
-        property int callbackUniqueID: 0
-
-        onNewData: (sourceName, data) =>{
-
-            // Fetch Latest Playlist Lists
-            if(sourceName === "mpc lsplaylists | sort -f") {
-                root.playlists = data["stdout"].trim().split("\n")
-
-                // Fetch default Music Directory
-            } else if (sourceName === "ls /home") {
-                root.homeDirPath= "/home/"+ data["stdout"].trim()
-
-                if(plasmoid.configuration.musicPath === "" ){
-                    plasmoid.configuration.musicPath = root.homeDirPath + "/Music/"
-                }
-
-
-                // Siblings Called Command Execution
-            } else if(callbackRegistry[sourceName]) {
-                var callbackFunc = callbackRegistry[sourceName];
-
-                callbackFunc(data["stdout"]);
-                delete callbackRegistry[sourceName]
-            }
-
-            disconnectSource(sourceName)
-        }
-
-        function exec(cmd, callback) {
-            if(callback) {
-                let uniqueCommand = cmd + " #" + callbackUniqueID
-                callbackUniqueID += 1
-
-                callbackRegistry[uniqueCommand] = callback
-
-                connectSource(uniqueCommand)
-            } else {
-                connectSource(cmd)
-            }
-
-        }
-
-        Component.onCompleted: {
-            // Fetch Latest playlists List
-            connectSource("mpc lsplaylists | sort -f")
-            connectSource("ls /home")
-        }
-    }
 
     // Wrong Directory File/Folder Picked Warning
     PC.Popup {
@@ -154,6 +101,34 @@ Image {
         id : folderPick
         title: "Choose Music Folder"
 
+        // When EditPlaylist Adds a Folder to Roaster, Arrange the obtained list of Songs in given Directory
+        function inputSongsInDir(output) {
+
+            // Output contains a list of Files in Chosen Folder
+            let files = output.trim().split("\n")
+            let songs = []
+
+            // Add the File to the songs list if of Suitable file Format and sorts
+            for (let i =0 ; i< files.length ; i++ ) {
+                let splitFile = String(files[i]).trim().split(".")
+
+                //Check for valid file format
+                if( root.supportedFormats.includes( splitFile[splitFile.length - 1] )){
+                    songs.push(files[i])
+                }
+            }
+            songs.sort()
+
+            // Obtain the next Index position for new Songs in Lookup hashmap and Add the songs to Lookup
+            let baseVal = Object.keys(settingMenus.item.songsLookup).length + 1
+            for (let i = 0; i < songs.length ; i++){
+                settingMenus.item.songsLookup[songs[i]] = baseVal + i
+            }
+
+            settingMenus.item.songsList.push(...songs)
+        }
+
+
         onAccepted: {
             let path = folderPick.selectedFolder.toString().replace("file://", "")
 
@@ -168,39 +143,14 @@ Image {
             switch(root.settingsPage) {
                 case 0:
                     root.menuForceState(false)
-                    root.tempSong(path)
+                    bash.tempSong(path)
                     break
                 case 2:
                     settingMenus.item.playlistFolders.push(path)
                     break
                 case 3:
                     settingMenus.item.songsAdd.push(path)
-
-                    // Obtain songs in the Chosen Directory
-                    let finalPath = sanitize(plasmoid.configuration.musicPath + path)
-                    executable.exec('ls -p '+ finalPath + ' | grep -v /', function songsInDir(output) {
-
-                        // Output contains a list of Songs in Chosen Folder
-                        let files = output.trim().split("\n")
-                        let songs = []
-
-                        for (let i =0 ; i< files.length ; i++ ) {
-                            let splitFile = String(files[i]).trim().split(".")
-
-                            //Check for valid file format
-                            if( root.supportedFormats.includes( splitFile[splitFile.length - 1] )){
-                                songs.push(files[i])
-                            }
-                        }
-                        songs.sort()
-
-                        // Obtain the next Index position for new Songs in Lookup hashmap
-                        let baseVal = Object.keys(settingMenus.item.songsLookup).length + 1
-                        for (let i = 0; i < songs.length ; i++){
-                            settingMenus.item.songsLookup[songs[i]] = baseVal + i
-                        }
-
-                        settingMenus.item.songsList.push(...songs)})
+                    bash.obtainSongsDirectory(path, folderPick.inputSongsInDir)
                     break
             }
 
@@ -254,7 +204,7 @@ Image {
                 switch(root.settingsPage) {
                     case 0:
                         root.menuForceState(false)
-                        root.tempSong(path)
+                        bash.tempSong(path)
                         break
 
                     case 3:
@@ -323,11 +273,12 @@ Image {
                 id: debounce
                 interval: 300
                 onTriggered: {
-                    executable.exec("mpc search -f '%title%' title "+ parent.text, function handleSearchResults(output) {
+                    // The Second Argument Boolean is whether we are searching Title or File
+                    bash.search(parent.text, true, function(output) {
                         searchButton.searchResults = output.trim().split("\n")
                     })
 
-                    executable.exec("mpc search -f '%file%' title "+ parent.text, function handleSearchResults(output) {
+                    bash.search(parent.text, false, function(output) {
                         searchButton.searchResultsDir = output.trim().split("\n")
                     })
                 }
@@ -368,7 +319,7 @@ Image {
                         bottomPadding: 0
 
                         onClicked: {
-                            tempSong(searchButton.searchResultsDir[index])
+                            bash.tempSong(searchButton.searchResultsDir[index])
                             searchBar.width= 0
                             searchBarOff.start()
                         }
@@ -511,7 +462,7 @@ Image {
 
                     onClick: {
                         plasmoid.configuration.playlistIndex = index
-                        playlistChosen(modelData);
+                        bash.playlistChosen(modelData);
                     }
                 }
             }
@@ -647,23 +598,8 @@ Image {
                     return
                 }
 
-                root.playlistAdded(root.sanitize(playlistName), playlistFolders, root.sanitize(albumArt))
-                executable.exec("mpc lsplaylists | sort -f")
-            }
-
-            function onSongsListObtain(chosenPlaylist) {
-                executable.exec("mpc playlist "+ chosenPlaylist, function obtainSongsList(output) {
-                    // Output Contans a List of Songs in the Given Playlist
-                    let songsList = output.trim().split("\n")
-                    let songsHashMap = {}
-
-                    for (let i = 0 ; i < songsList.length ; i++) {
-                        songsHashMap[String(songsList[i])] = i + 1
-                    }
-
-                    settingMenus.item.songsList = songsList
-                    settingMenus.item.songsLookup = songsHashMap
-                })
+                bash.addPlaylist(playlistName, playlistFolders, albumArt)
+                bash.playlistsListUpdate(playlistsListUpdate)
             }
 
             function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
@@ -681,18 +617,10 @@ Image {
                 }
 
 
-                root.playlistEdited(root.sanitize(chosenPlaylist), root.sanitize(playlistRename), root.sanitize(newAlbumArt), songsAdded, removalIndices)
-                executable.exec("mpc lsplaylists | sort -f")
+                root.playlistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices)
+                bash.playlistsListUpdate(playlistsListUpdate)
             }
 
-            function onPlaylistDelete(chosenPlaylist) {
-                root.playlistDelete(root.sanitize(chosenPlaylist))
-                executable.exec("mpc lsplaylists | sort -f")
-            }
-
-            function onMusicPathChanged(newPath) {
-                plasmoid.configuration.musicPath = newPath
-            }
         }
     }
 

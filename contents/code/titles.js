@@ -9,7 +9,7 @@ function handleTrackTitles(output) {
      *
      * Output: x[0]: <Artist Name> ; x[1]: <Track Title> ; x[2]: <File Location>
      */
-    let x = output["stdout"].split("\x1f")
+    let x = output.split("\x1f")
 
     let trackArtist = x[0]
     let trackTitle = ''

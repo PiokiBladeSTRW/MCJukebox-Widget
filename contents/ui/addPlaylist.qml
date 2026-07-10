@@ -19,7 +19,8 @@ Image {
     signal folderPickOpen()
     signal filePickOpen(bool artMode)
 
-    signal playlistAdded(string title, list<string> playlistFolders, string albumArt)
+    signal playlistAdded(string playlistName, list<string> playlistFolders, string albumArt)
+
 /*
     visible: playlistRoot.settingsPage === 2
     opacity: visible ? 1 : 0

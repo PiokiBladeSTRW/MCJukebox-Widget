@@ -19,7 +19,6 @@ Image {
     // }
 
     signal settingsPageChanged(int newPage)
-    signal musicPathChanged(string newPath)
 
     // This needs more work to be secure
     PC.Label {
@@ -48,7 +47,7 @@ Image {
         }
 
         onAccepted: {
-            root.musicPathChanged(text)
+            plasmoid.configuration.musicPath = newPath
             root.settingsPageChanged(1)
         }
     }

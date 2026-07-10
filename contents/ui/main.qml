@@ -3,12 +3,9 @@ import QtQuick
 import QtQuick.Effects
 import QtMultimedia
 import org.kde.plasma.plasmoid
-import org.kde.plasma.plasma5support 2.0 as PS
 
 import "../code/timeData.js" as TimeData
 import "../code/titles.js" as Titles
-import "../code/dirSanitize.js" as DirSanitize
-
 
 // Main Component
 PlasmoidItem {
@@ -25,57 +22,24 @@ PlasmoidItem {
     property bool playlistMenuOpen : false
     property bool keepMenuOpen: false
 
-    // Event Listener
-    PS.DataSource {
-        id: eventListener
-        engine: "executable"
-        connectedSources: []
 
-        onNewData: (sourceName, data) => {
-            disconnectSource(sourceName)
-            player.exec("mpc -f '%artist%\x1f%title%\x1f%file%' current")
-
-            idleTimer.start()
-        }
-
-        Component.onCompleted:{
-            connectSource("mpc idle player")
-        }
-    }
-    Timer {
-        id: idleTimer
-        interval: 500
-        onTriggered: {
-            eventListener.connectSource("mpc idle player")
-        }
+    // Terminal Commands Handler
+    BashExec {
+        id: bash
+        listenerCallback: titleUpdate
     }
 
-    // Music Player
-    PS.DataSource {
-        id: player
-        engine: "executable"
-        connectedSources: []
+    function statusUpdate(output) {
+        root.elapsedTime = TimeData.handleElapsedTime(output);
+    }
+    function titleUpdate(output) {
+        [root.trackTitle, root.trackArtist] = Titles.handleTrackTitles(output)
+    }
 
-        onNewData: (sourceName, data) =>{
-            if( sourceName === "mpc status" ) {
-                     root.elapsedTime = TimeData.handleElapsedTime(data) ;
-
-            } else if (sourceName.startsWith("mpc -f")) {
-                [root.trackTitle, root.trackArtist] = Titles.handleTrackTitles(data)
-            }
-            disconnectSource(sourceName)
-        }
-
-        function exec(cmd) {
-            connectSource(cmd)
-        }
-
-        Component.onCompleted: {
-            connectSource("mkdir ~/.cache/jukebox_covers")
-            connectSource("mpc update")
-            connectSource("mpc status")
-            connectSource("mpc -f '%artist%\x1f%title%\x1f%file%' current")
-        }
+    Component.onCompleted: {
+        bash.bootUp()
+        bash.statusUpdate(statusUpdate)
+        bash.titlesUpdate(titleUpdate)
     }
 
     // Sound Effect
@@ -92,7 +56,7 @@ PlasmoidItem {
         running: plasmoid.configuration.playStatus && root.menuOpen
 
         onTriggered: {
-            player.exec("mpc status")
+            bash.statusUpdate(statusUpdate)
         }
     }
 
@@ -398,60 +362,8 @@ PlasmoidItem {
         PlaylistMenu {
             visibleCondn: root.playlistMenuOpen
 
-            onPlaylistChosen: (playlist) => {
-                player.exec("mpc clear")
-                player.exec("mpc load "+ playlist)
-                player.exec("mpc toggle")
-                plasmoid.configuration.playStatus =  true
-            }
-
             onMenuForceState: (state) => {
-                sanitize("hell")
                 root.keepMenuOpen = state
-            }
-
-            onTempSong: (dir) => {
-                player.exec("mpc clear")
-                player.exec("mpc add "+ dir)
-                player.exec("mpc toggle")
-            }
-
-            onPlaylistAdded: (title, playlistFolders, albumArt) => {
-                player.exec("mpc update")
-                player.exec("mpc save "+ title)
-                player.exec("mpc clearplaylist "+ title)
-                player.exec("cp "+ albumArt + " ~/.cache/jukebox_covers/"+title+".png")
-
-                for (let i = 0; i < playlistFolders.length; i++) {
-                    let folderPath = sanitize(playlistFolders[i]);
-                    player.exec("mpc addplaylist "+ title + " " + folderPath);
-                }
-            }
-
-            onPlaylistEdited: (playlist, newName, albumArt, songsAdded, songsRemoval) => {
-                if(newName) {
-                    player.exec("mpc renplaylist "+ playlist +" "+ newName)
-                } else {
-                    newName = playlist
-                }
-
-                if(albumArt) {
-                    player.exec("rm ~/.cache/jukebox_covers/"+playlist+".png")
-                    player.exec("cp "+ albumArt + " ~/.cache/jukebox_covers/"+newName+".png")
-                }
-
-                for (let i = 0; i<songsAdded.length; i++) {
-                    player.exec("mpc addplaylist "+ newName + " "+ sanitize(songsAdded[i]))
-                }
-
-                for (let i =0; i<songsRemoval.length ; i++) {
-                    player.exec("mpc delplaylist "+ newName+" "+ songsRemoval[i])
-                }
-            }
-
-            onPlaylistDelete: (playlist) => {
-                player.exec("mpc rm "+ playlist)
-
             }
         }
 
@@ -475,13 +387,13 @@ PlasmoidItem {
             // Shuffle Songs
             VisualButton {
                 graphic: "main_icons/shuffle"
-                onClick: player.exec("mpc shuffle")
+                onClick: bash.shuffleToggle()
             }
 
             // Backward 10s
             VisualButton {
                 graphic: "main_icons/backward"
-                onClick: player.exec("mpc seek -10")
+                onClick: bash.seekPosition("-10")
             }
 
             // Progress Bar
@@ -510,16 +422,13 @@ PlasmoidItem {
             // Forward 10s
             VisualButton {
                 graphic: "main_icons/forward"
-                onClick: player.exec("mpc seek +10")
+                onClick: bash.seekPosition("+10")
             }
 
             // Loop Song
             VisualButton {
                 graphic: "main_icons/loop"
-                onClick: {
-                    player.exec("mpc single")
-                    player.exec("mpc repeat")
-                }
+                onClick: bash.repeatToggle()
             }
         }
 
@@ -555,19 +464,19 @@ PlasmoidItem {
                         switch(index) {
                             case 0:
                                 if(root.elapsedTime < 0.05) {
-                                    player.exec("mpc prev")
+                                    bash.changeSong(-1)
                                 } else {
-                                    player.exec("mpc seek 0")
+                                    bash.seekPosition("0")
                                 }
                                 break
 
                             case 1:
-                                player.exec("mpc toggle")
+                                bash.playToggle()
                                 plasmoid.configuration.playStatus = !plasmoid.configuration.playStatus
                                 break
 
                             case 2:
-                                player.exec("mpc next")
+                                bash.changeSong(1)
                                 break
                         }
                     }

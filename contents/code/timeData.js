@@ -20,7 +20,7 @@ function handleElapsedTime(output) {
 
 
     // Split Data By Lines
-    let x = output["stdout"].split("\n") ;
+    let x = output.split("\n") ;
 
 
     // Ensure a Song is Actually Playing
