@@ -20,7 +20,11 @@ Add Fade In-Outs to All Components
 Perhaps centralize Bash Calling
 Perhaps the Background image can also become a State machine        # Decided not to, current system works fine, States with String for this case works just the same!
 
+Sanitize Search
 Sanitize a Bit Hard to read, as it is used inconsistently across
+
+Code readability kind-of sucks
+Better LabelledButton*
 
 Use More comments especially multi-line to better describe code work flow
 
