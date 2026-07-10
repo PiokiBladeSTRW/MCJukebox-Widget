@@ -36,6 +36,7 @@ Image {
     signal settingsPageChanged(int newPage)
     signal folderPickOpen()
     signal filePickOpen(bool artMode)
+    signal songsListObtain(string chosenPlaylist)
 
     signal playlistEdited(string chosenPlaylist, string newName, string albumArt, list<string> songsAdded, list<int> songsRemoved)
     signal playlistDelete(string chosenPlaylist)
@@ -183,19 +184,7 @@ Image {
                 onClick: {
                     switch(index) {
                         case 0:
-                            executable.exec("mpc playlist "+ editPlaylist.chosenPlaylist, function obtainSongsList(output) {
-                                // Output Contans a List of Songs in the Given Playlist
-                                let songsList = output.trim().split("\n")
-                                let songsHashMap = {}
-
-                                for (let i = 0 ; i < songsList.length ; i++) {
-                                    songsHashMap[String(songsList[i])] = i + 1
-                                }
-
-                                editPlaylist.songsList = songsList
-                                editPlaylist.songsLookup = songsHashMap
-                            })
-
+                            editPlaylist.songsListObtain(editPlaylist.chosenPlaylist)
                             roasterEdit .visible = true
                             break
                         case 1:

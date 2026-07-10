@@ -651,6 +651,21 @@ Image {
                 executable.exec("mpc lsplaylists | sort -f")
             }
 
+            function onSongsListObtain(chosenPlaylist) {
+                executable.exec("mpc playlist "+ chosenPlaylist, function obtainSongsList(output) {
+                    // Output Contans a List of Songs in the Given Playlist
+                    let songsList = output.trim().split("\n")
+                    let songsHashMap = {}
+
+                    for (let i = 0 ; i < songsList.length ; i++) {
+                        songsHashMap[String(songsList[i])] = i + 1
+                    }
+
+                    settingMenus.item.songsList = songsList
+                    settingMenus.item.songsLookup = songsHashMap
+                })
+            }
+
             function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
                 // Ensure playlist of Name doesn't exist
                 if(BinSearch.existsInArray(playlistRename, playlistRoot.playlists)) {
