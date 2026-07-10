@@ -3,7 +3,7 @@ import org.kde.plasma.components 3.0 as PC
 
 // Edit Playlist Menu
 Image {
-    id: editPlaylist
+    id: root
     anchors.fill: parent
 
     z:2
@@ -77,7 +77,7 @@ Image {
                 clip: true
 
                 ListView {
-                    model: editPlaylist.songsList
+                    model: root.songsList
                     spacing: 2
 
                     // Text with onClick function
@@ -115,8 +115,8 @@ Image {
                         }
 
                         onClicked: {
-                            editPlaylist.removalIndices.push(editPlaylist.songsLookup[modelData])
-                            editPlaylist.songsList.splice(index, 1)
+                            root.removalIndices.push(root.songsLookup[modelData])
+                            root.songsList.splice(index, 1)
                         }
                     }
                 }
@@ -184,7 +184,7 @@ Image {
                 onClick: {
                     switch(index) {
                         case 0:
-                            editPlaylist.songsListObtain(editPlaylist.chosenPlaylist)
+                            root.songsListObtain(root.chosenPlaylist)
                             roasterEdit .visible = true
                             break
                         case 1:
@@ -207,7 +207,7 @@ Image {
         anchors.topMargin: 15
         anchors.leftMargin: 15
 
-        model : editPlaylist.playlists
+        model : root.playlists
 
         Component.onCompleted: {
             popup.height = 120
@@ -258,9 +258,9 @@ Image {
 
         onClick: {
             parent.removalIndices.sort((a,b) => b-a)
-            editPlaylist.playlistEdited(parent.chosenPlaylist, parent.playlistRename, parent.newAlbumArt, parent.songsAdd, parent.removalIndices)
+            root.playlistEdited(parent.chosenPlaylist, parent.playlistRename, parent.newAlbumArt, parent.songsAdd, parent.removalIndices)
             parent.reset()
-            editPlaylist.settingsPageChanged(1)
+            root.settingsPageChanged(1)
         }
     }
 
@@ -276,9 +276,9 @@ Image {
         graphic: "playlistMenu_icons/delete"
 
         onClick: {
-            editPlaylist.playlistDelete(parent.chosenPlaylist)
+            root.playlistDelete(parent.chosenPlaylist)
             parent.reset()
-            editPlaylist.settingsPageChanged(1)
+            root.settingsPageChanged(1)
         }
     }
 }

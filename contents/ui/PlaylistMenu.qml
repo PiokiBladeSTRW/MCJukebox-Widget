@@ -7,7 +7,7 @@ import "../code/binarySearch.js" as BinSearch
 import "../code/dirSanitize.js" as DirSanitize
 
 Image {
-    id: playlistRoot
+    id: root
     anchors.fill: parent
 
 
@@ -63,14 +63,14 @@ Image {
 
             // Fetch Latest Playlist Lists
             if(sourceName === "mpc lsplaylists | sort -f") {
-                playlistRoot.playlists = data["stdout"].trim().split("\n")
+                root.playlists = data["stdout"].trim().split("\n")
 
                 // Fetch default Music Directory
             } else if (sourceName === "ls /home") {
-                playlistRoot.homeDirPath= "/home/"+ data["stdout"].trim()
+                root.homeDirPath= "/home/"+ data["stdout"].trim()
 
                 if(plasmoid.configuration.musicPath === "" ){
-                    plasmoid.configuration.musicPath = playlistRoot.homeDirPath + "/Music/"
+                    plasmoid.configuration.musicPath = root.homeDirPath + "/Music/"
                 }
 
 
@@ -165,10 +165,10 @@ Image {
             }
             path = path.replace(plasmoid.configuration.musicPath, "")
 
-            switch(playlistRoot.settingsPage) {
+            switch(root.settingsPage) {
                 case 0:
-                    playlistRoot.menuForceState(false)
-                    playlistRoot.tempSong(path)
+                    root.menuForceState(false)
+                    root.tempSong(path)
                     break
                 case 2:
                     settingMenus.item.playlistFolders.push(path)
@@ -188,7 +188,7 @@ Image {
                             let splitFile = String(files[i]).trim().split(".")
 
                             //Check for valid file format
-                            if( playlistRoot.supportedFormats.includes( splitFile[splitFile.length - 1] )){
+                            if( root.supportedFormats.includes( splitFile[splitFile.length - 1] )){
                                 songs.push(files[i])
                             }
                         }
@@ -209,8 +209,8 @@ Image {
 
         onRejected: {
             folderPick.close()
-            if(playlistRoot.settingsPage === 0) {
-                playlistRoot.menuForceState(false)
+            if(root.settingsPage === 0) {
+                root.menuForceState(false)
             }
         }
     }
@@ -230,7 +230,7 @@ Image {
 
             // Album Art
             if(artMode) {
-                switch(playlistRoot.settingsPage) {
+                switch(root.settingsPage) {
                     case 2:
                         settingMenus.item.albumArt = path
                         break
@@ -251,10 +251,10 @@ Image {
                 }
                 path = path.replace(plasmoid.configuration.musicPath, "")
 
-                switch(playlistRoot.settingsPage) {
+                switch(root.settingsPage) {
                     case 0:
-                        playlistRoot.menuForceState(false)
-                        playlistRoot.tempSong(path)
+                        root.menuForceState(false)
+                        root.tempSong(path)
                         break
 
                     case 3:
@@ -273,8 +273,8 @@ Image {
 
         onRejected:{
             filePick.close()
-            if(playlistRoot.settingsPage === 0) {
-                playlistRoot.menuForceState(false)
+            if(root.settingsPage === 0) {
+                root.menuForceState(false)
             }
         }
 
@@ -302,7 +302,7 @@ Image {
         onClick: {
             searchBar.visible = true
             searchBar.width = 80
-            playlistRoot.menuForceState(true)
+            root.menuForceState(true)
         }
 
         PC.TextField {
@@ -397,7 +397,7 @@ Image {
             id: searchBarOff
             interval: 300
             onTriggered: {
-                playlistRoot.menuForceState(false)
+                root.menuForceState(false)
                 searchBar.visible = false
             }
         }
@@ -417,7 +417,7 @@ Image {
         visible: settingsPage === 0 && visibleCondn
 
         onClick: {
-            playlistRoot.menuForceState(true)
+            root.menuForceState(true)
             folderPick.open()
         }
     }
@@ -435,7 +435,7 @@ Image {
         visible: settingsPage === 0 && visibleCondn
 
         onClick: {
-            playlistRoot.menuForceState(true)
+            root.menuForceState(true)
             filePick.artMode = 1
             filePick.open()
         }
@@ -453,7 +453,7 @@ Image {
         anchors.horizontalCenterOffset: 15
 
         z: 1
-        visible: playlistRoot.visibleCondn && settingsPage === 0
+        visible: root.visibleCondn && settingsPage === 0
 
         clip: true
         contentWidth: playlistGrid.width
@@ -464,15 +464,15 @@ Image {
             id: hoverer
             onHoveredChanged: {
                 if(hovered) {
-                    playlistRoot.menuForceState(true)
+                    root.menuForceState(true)
                 } else {
-                    playlistRoot.menuForceState(false)
+                    root.menuForceState(false)
                 }
             }
         }
 
         PC.ScrollBar.vertical: PC.ScrollBar {
-            visible: playlistRoot.visibleCondn
+            visible: root.visibleCondn
             policy: PC.ScrollBar.AsNeeded
         }
 
@@ -487,16 +487,16 @@ Image {
 
             Repeater {
                 id: playlistGridRepeater
-                model: playlistRoot.playlists
+                model: root.playlists
 
                 VisualButton {
                     height: 50
                     width: 50
 
                     // Try Set Album art from Cache, if Errors & properly initialized, Fallsback to Default
-                    source: "file://"+  playlistRoot.homeDirPath + "/.cache/jukebox_covers/"+modelData+".png"
+                    source: "file://"+  root.homeDirPath + "/.cache/jukebox_covers/"+modelData+".png"
                     onStatusChanged: {
-                        if(status === 3 && playlistRoot.homeDirPath) {
+                        if(status === 3 && root.homeDirPath) {
                             source= "../images/note_block.png"
                         }
                     }
@@ -529,29 +529,29 @@ Image {
 
         width: 30
         height: 30
-        anchors.top: playlistRoot.top
-        anchors.right: playlistRoot.right
+        anchors.top: root.top
+        anchors.right: root.right
         anchors.topMargin: 15
         anchors.rightMargin: 15
 
-        graphic: playlistRoot.settingsPage === 0 ? "playlistMenu_icons/settings" : "playlistMenu_icons/back"
+        graphic: root.settingsPage === 0 ? "playlistMenu_icons/settings" : "playlistMenu_icons/back"
 
         visible: visibleCondn
 
         z: 3
 
         onClick: {
-            switch(playlistRoot.settingsPage) {
+            switch(root.settingsPage) {
 
                 // From Settings Selction
                 case 1:
-                    playlistRoot.settingsPage = 0;
+                    root.settingsPage = 0;
                     menuForceState(false)
                     break
 
                 // Anywhere Else
                 default:
-                    playlistRoot.settingsPage = 1;
+                    root.settingsPage = 1;
                     menuForceState(true)
                     break
             }
@@ -568,7 +568,7 @@ Image {
 
         source: "../images/background/settings_bg_1.png"
 
-        visible: playlistRoot.settingsPage === 1
+        visible: root.settingsPage === 1
         opacity: visible
 
         Behavior on opacity {
@@ -591,7 +591,7 @@ Image {
 
                     onClick: {
                         // Index + 2 to Account for Page 0 and index starting at 0
-                        playlistRoot.settingsPage = index + 2
+                        root.settingsPage = index + 2
                     }
                 }
             }
@@ -604,7 +604,7 @@ Image {
         anchors.fill: parent
 
         source: {
-            switch(playlistRoot.settingsPage) {
+            switch(root.settingsPage) {
                 case 2: return "addPlaylist.qml"; break;
                 case 3: return "editPlaylist.qml"; break;
                 case 4: return "mpcConfig.qml"; break;
@@ -613,9 +613,9 @@ Image {
         }
 
         onLoaded: {
-            switch(playlistRoot.settingsPage) {
+            switch(root.settingsPage) {
                 case 3:
-                    item.playlists = playlistRoot.playlists
+                    item.playlists = root.playlists
                     break
             }
         }
@@ -626,7 +626,7 @@ Image {
             ignoreUnknownSignals: true
 
             function onSettingsPageChanged(newPage) {
-                playlistRoot.settingsPage = newPage
+                root.settingsPage = newPage
             }
 
             function onFolderPickOpen() {
@@ -641,13 +641,13 @@ Image {
             function onPlaylistAdded(playlistName, playlistFolders, albumArt) {
 
                 // Ensure playlist of Name doesn't exist'
-                if(BinSearch.existsInArray(playlistName, playlistRoot.playlists)) {
+                if(BinSearch.existsInArray(playlistName, root.playlists)) {
                     warnPopup.dirWarn = false
                     warnPopup.open()
                     return
                 }
 
-                playlistRoot.playlistAdded(playlistRoot.sanitize(playlistName), playlistFolders, playlistRoot.sanitize(albumArt))
+                root.playlistAdded(root.sanitize(playlistName), playlistFolders, root.sanitize(albumArt))
                 executable.exec("mpc lsplaylists | sort -f")
             }
 
@@ -668,7 +668,7 @@ Image {
 
             function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
                 // Ensure playlist of Name doesn't exist
-                if(BinSearch.existsInArray(playlistRename, playlistRoot.playlists)) {
+                if(BinSearch.existsInArray(playlistRename, root.playlists)) {
                     warnPopup.dirWarn = false
                     warnPopup.open()
                     return
@@ -677,16 +677,16 @@ Image {
                 // Force grid model Update to update Album Arts
                 if(newAlbumArt) {
                     playlistGridRepeater.model = []
-                    playlistGridRepeater.model = playlistRoot.playlists
+                    playlistGridRepeater.model = root.playlists
                 }
 
 
-                playlistRoot.playlistEdited(playlistRoot.sanitize(chosenPlaylist), playlistRoot.sanitize(playlistRename), playlistRoot.sanitize(newAlbumArt), songsAdded, removalIndices)
+                root.playlistEdited(root.sanitize(chosenPlaylist), root.sanitize(playlistRename), root.sanitize(newAlbumArt), songsAdded, removalIndices)
                 executable.exec("mpc lsplaylists | sort -f")
             }
 
             function onPlaylistDelete(chosenPlaylist) {
-                playlistRoot.playlistDelete(playlistRoot.sanitize(chosenPlaylist))
+                root.playlistDelete(root.sanitize(chosenPlaylist))
                 executable.exec("mpc lsplaylists | sort -f")
             }
 

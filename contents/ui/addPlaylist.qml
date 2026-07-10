@@ -3,7 +3,7 @@ import org.kde.plasma.components 3.0 as PC
 
 // Add Playlist Menu
 Image {
-    id: addPlaylist
+    id: root
     anchors.fill: parent
 
     z: 2
@@ -49,10 +49,10 @@ Image {
                 onClick: {
                     switch(index) {
                         case 0:
-                            addPlaylist.folderPickOpen()
+                            root.folderPickOpen()
                             break;
                         case 1:
-                            addPlaylist.filePickOpen(1)
+                            root.filePickOpen(1)
                             break;
                     }
                 }
@@ -96,8 +96,8 @@ Image {
         graphic: "playlistMenu_icons/enter"
 
         onClick: {
-            addPlaylist.playlistAdded(parent.playlistName, parent.playlistFolders, parent.albumArt)
-            addPlaylist.settingsPageChanged(1)
+            root.playlistAdded(parent.playlistName, parent.playlistFolders, parent.albumArt)
+            root.settingsPageChanged(1)
         }
     }
 }

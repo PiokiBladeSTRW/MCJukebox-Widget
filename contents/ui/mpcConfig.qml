@@ -3,7 +3,7 @@ import org.kde.plasma.components 3.0 as PC
 
 // MPC Directory Edit
 Image {
-    id: mpcEdit
+    id: root
     anchors.fill: parent
 
     z:2
@@ -48,8 +48,8 @@ Image {
         }
 
         onAccepted: {
-            mpcEdit.musicPathChanged(text)
-            mpcEdit.settingsPageChanged(1)
+            root.musicPathChanged(text)
+            root.settingsPageChanged(1)
         }
     }
 }
