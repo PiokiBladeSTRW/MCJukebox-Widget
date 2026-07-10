@@ -4,6 +4,7 @@ import org.kde.plasma.components 3.0 as PC
 import QtQuick.Dialogs
 
 import "../code/binarySearch.js" as BinSearch
+import "../code/dirSanitize.js" as DirSanitize
 
 Image {
     id: playlistRoot
@@ -39,9 +40,8 @@ Image {
         }
     }
 
-    //Wrapper function
-    function execute(cmd) {
-        executable.exec(cmd)
+    function sanitize(input) {
+        return DirSanitize.inputClean(input)
     }
 
 
@@ -60,6 +60,8 @@ Image {
         property int callbackUniqueID: 0
 
         onNewData: (sourceName, data) =>{
+
+            console.log("\n->", sourceName, data["stdout"])
 
             // Fetch Latest Playlist Lists
             if(sourceName === "mpc lsplaylists | sort") {
@@ -177,7 +179,8 @@ Image {
                     settingMenus.item.songsAdd.push(path)
 
                     // Obtain songs in the Chosen Directory
-                    executable.exec('ls -p "'+ plasmoid.configuration.musicPath + path +'" | grep -v /', function songsInDir(output) {
+                    let finalPath = sanitize(plasmoid.configuration.musicPath + path)
+                    executable.exec('ls -p '+ finalPath + ' | grep -v /', function songsInDir(output) {
 
                         // Output contains a list of Songs in Chosen Folder
                         let files = output.trim().split("\n")
@@ -618,6 +621,7 @@ Image {
             }
         }
 
+
         Connections {
             target: settingMenus.item
             ignoreUnknownSignals: true
@@ -644,7 +648,7 @@ Image {
                     return
                 }
 
-                playlistRoot.playlistAdded(playlistName, playlistFolders, albumArt)
+                playlistRoot.playlistAdded(playlistRoot.sanitize(playlistName), playlistFolders, playlistRoot.sanitize(albumArt))
                 executable.exec("mpc lsplaylists | sort")
             }
 
@@ -663,13 +667,17 @@ Image {
                 }
 
 
-                playlistRoot.playlistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices)
+                playlistRoot.playlistEdited(playlistRoot.sanitize(chosenPlaylist), playlistRoot.sanitize(playlistRename), playlistRoot.sanitize(newAlbumArt), songsAdded, removalIndices)
                 executable.exec("mpc lsplaylists | sort")
             }
 
             function onPlaylistDelete(chosenPlaylist) {
-                playlistRoot.playlistDelete(chosenPlaylist)
+                playlistRoot.playlistDelete(playlistRoot.sanitize(chosenPlaylist))
                 executable.exec("mpc lsplaylists | sort")
+            }
+
+            function onMusicPathChanged(newPath) {
+                plasmoid.configuration.musicPath = playlistRoot.sanitize(newPath)
             }
         }
     }

@@ -7,6 +7,7 @@ import org.kde.plasma.plasma5support 2.0 as PS
 
 import "../code/timeData.js" as TimeData
 import "../code/titles.js" as Titles
+import "../code/dirSanitize.js" as DirSanitize
 
 
 // Main Component
@@ -56,6 +57,7 @@ PlasmoidItem {
         connectedSources: []
 
         onNewData: (sourceName, data) =>{
+            console.log("\n->",sourceName, data["stdout"])
 
             if( sourceName === "mpc status" ) {
                      root.elapsedTime = TimeData.handleElapsedTime(data) ;
@@ -411,9 +413,8 @@ PlasmoidItem {
 
             onTempSong: (dir) => {
                 player.exec("mpc clear")
-                player.exec("mpc add '"+ dir +"'")
+                player.exec("mpc add "+ dir)
                 player.exec("mpc toggle")
-                console.log(dir)
             }
 
             onPlaylistAdded: (title, playlistFolders, albumArt) => {
@@ -423,7 +424,7 @@ PlasmoidItem {
                 player.exec("cp "+ albumArt + " ~/.cache/jukebox_covers/"+title+".png")
 
                 for (let i = 0; i < playlistFolders.length; i++) {
-                    let folderPath = '"' + playlistFolders[i] + '"';
+                    let folderPath = sanitize(playlistFolders[i]);
                     player.exec("mpc addplaylist "+ title + " " + folderPath);
                 }
             }
@@ -437,11 +438,11 @@ PlasmoidItem {
 
                 if(albumArt) {
                     player.exec("rm ~/.cache/jukebox_covers/"+playlist+".png")
-                    player.exec("cp '"+ albumArt + "' ~/.cache/jukebox_covers/"+newName+".png")
+                    player.exec("cp "+ albumArt + " ~/.cache/jukebox_covers/"+newName+".png")
                 }
 
                 for (let i = 0; i<songsAdded.length; i++) {
-                    player.exec("mpc addplaylist "+ newName+ " '"+ songsAdded[i] +"'")
+                    player.exec("mpc addplaylist "+ newName + " "+ sanitize(songsAdded[i]))
                 }
 
                 for (let i =0; i<songsRemoval.length ; i++) {

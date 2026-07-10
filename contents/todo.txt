@@ -16,8 +16,11 @@ Rename main function to better names in JS, for further clarity *
 Adding album art via edit playlist does not add album art to the roaster *
 Reopening the widget should not reset elapsed time *
 
+Add Fade In-Outs to All Components
 Perhaps centralize Bash Calling
-Perhaps the Background image can also become a State machine
+Perhaps the Background image can also become a State machine        # Decided not to, current system works fine, States with String for this case works just the same!
+
+Sanitize a Bit Hard to read, as it is used inconsistently across
 
 Use More comments especially multi-line to better describe code work flow
 
@@ -36,7 +39,11 @@ If you do mpc clear or have nothing on play already, choosing a song does not di
 artMode referred to as just mode elsewhere! *
 in playlistAdded signal in main.qml, off-by-one bug *
 timeData.js allows Division by Zero if someone intentionally adds a bad mp3, handle it *
-Two Playlist having same name will quietly error without letting user know
+Two Playlist having same name will quietly error without letting user know*
+
+Playlist song removal bugs out, because the order printed out is based on file name but final list does account for Artist Name!!
+Updating Album Art Again Fails to live Update
+
 
 
 

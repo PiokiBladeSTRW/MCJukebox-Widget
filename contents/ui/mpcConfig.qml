@@ -19,11 +19,11 @@ Image {
     // }
 
     signal settingsPageChanged(int newPage)
+    signal musicPathChanged(string newPath)
 
     // This needs more work to be secure
     PC.Label {
         text: "⚠️ Make sure you know what you are Doing"
-        font.bold: true
         font.pixelSize: 16
         font.family: "Minecraft"
         color: "orange"
@@ -48,7 +48,7 @@ Image {
         }
 
         onAccepted: {
-            plasmoid.configuration.musicPath = text
+            mpcEdit.musicPathChanged(text)
             mpcEdit.settingsPageChanged(1)
         }
     }
