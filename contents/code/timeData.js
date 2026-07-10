@@ -46,8 +46,8 @@ function handleElapsedTime(output) {
         let total_time = timeMatch[2].split(":") ;
 
         // Convert the time into Pure Seconds and of INT
-        let current_sec = parseInt(current_time[0]*60) + parseInt(current_time[1]) ;
-        let total_sec = parseInt(total_time[0]*60 + parseInt(total_time[1])) ;
+        let current_sec = parseInt( parseInt(current_time[0]) *60) + parseInt(current_time[1]) ;
+        let total_sec = parseInt( parseInt(total_time[0]) *60 + parseInt(total_time[1])) ;
 
         if(total_sec===0) {
             return 0

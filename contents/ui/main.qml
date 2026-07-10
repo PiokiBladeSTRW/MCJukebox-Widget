@@ -57,8 +57,6 @@ PlasmoidItem {
         connectedSources: []
 
         onNewData: (sourceName, data) =>{
-            console.log("\n->",sourceName, data["stdout"])
-
             if( sourceName === "mpc status" ) {
                      root.elapsedTime = TimeData.handleElapsedTime(data) ;
 
@@ -408,6 +406,7 @@ PlasmoidItem {
             }
 
             onMenuForceState: (state) => {
+                sanitize("hell")
                 root.keepMenuOpen = state
             }
 

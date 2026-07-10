@@ -61,10 +61,8 @@ Image {
 
         onNewData: (sourceName, data) =>{
 
-            console.log("\n->", sourceName, data["stdout"])
-
             // Fetch Latest Playlist Lists
-            if(sourceName === "mpc lsplaylists | sort") {
+            if(sourceName === "mpc lsplaylists | sort -f") {
                 playlistRoot.playlists = data["stdout"].trim().split("\n")
 
                 // Fetch default Music Directory
@@ -103,7 +101,7 @@ Image {
 
         Component.onCompleted: {
             // Fetch Latest playlists List
-            connectSource("mpc lsplaylists | sort")
+            connectSource("mpc lsplaylists | sort -f")
             connectSource("ls /home")
         }
     }
@@ -247,7 +245,8 @@ Image {
 
                 // Ensure Correct Music Directory
                 if(! path.startsWith(plasmoid.configuration.musicPath)) {
-                    folderWarning.open()
+                    warnPopup.dirWarn = true
+                    warnPopup.open()
                     return
                 }
                 path = path.replace(plasmoid.configuration.musicPath, "")
@@ -649,7 +648,7 @@ Image {
                 }
 
                 playlistRoot.playlistAdded(playlistRoot.sanitize(playlistName), playlistFolders, playlistRoot.sanitize(albumArt))
-                executable.exec("mpc lsplaylists | sort")
+                executable.exec("mpc lsplaylists | sort -f")
             }
 
             function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
@@ -668,16 +667,16 @@ Image {
 
 
                 playlistRoot.playlistEdited(playlistRoot.sanitize(chosenPlaylist), playlistRoot.sanitize(playlistRename), playlistRoot.sanitize(newAlbumArt), songsAdded, removalIndices)
-                executable.exec("mpc lsplaylists | sort")
+                executable.exec("mpc lsplaylists | sort -f")
             }
 
             function onPlaylistDelete(chosenPlaylist) {
                 playlistRoot.playlistDelete(playlistRoot.sanitize(chosenPlaylist))
-                executable.exec("mpc lsplaylists | sort")
+                executable.exec("mpc lsplaylists | sort -f")
             }
 
             function onMusicPathChanged(newPath) {
-                plasmoid.configuration.musicPath = playlistRoot.sanitize(newPath)
+                plasmoid.configuration.musicPath = newPath
             }
         }
     }
