@@ -462,7 +462,7 @@ Image {
 
                     onClick: {
                         plasmoid.configuration.playlistIndex = index
-                        bash.playlistChosen(modelData);
+                        bash.chosenPlaylist(modelData);
                     }
                 }
             }

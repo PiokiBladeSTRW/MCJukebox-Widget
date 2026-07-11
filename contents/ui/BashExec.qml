@@ -1,10 +1,12 @@
 import QtQuick
 import org.kde.plasma.plasma5support 2.0 as PS
 
+import com.pioki.jukebox.backend 1.0        // C++ Plugin, works same as mpc idleloop player
 import "../code/dirSanitize.js" as DirSanitize
 
 QtObject {
     id: root
+    default property list<QtObject> children
 
     // ==========================================
     // ENGINE
@@ -13,22 +15,33 @@ QtObject {
     // LISTENER LOOP
     property var listenerCallback;
 
-    property var eventListener: PS.DataSource {
-        engine: "executable"
-        connectedSources: ["mpc idle player"]
+    property var mpdListen: MPDListen {
 
-        onNewData: (sourceName, data) => {
-            _run("mpc -f '%artist%\x1f%title%\x1f%file%' current", listenerCallback)
+        function statusTitleUpdate() {
+            titlesUpdate(listenerCallback)
+            _run("mpc status", function(output){
+                let splitData= output.trim().split("\n")
 
-            listenerIdleTimer.start()
-            disconnectSource(sourceName)
+                // Nothing's Loaded Pause
+                if( splitData[0].startsWith("volume") ) {
+                    plasmoid.configuration.playStatus = false
+
+                } else if(splitData[1].startsWith("[paused]")) {
+                    plasmoid.configuration.playStatus = false
+
+                } else {
+                    plasmoid.configuration.playStatus = true
+                }
+            })
         }
-    }
-   property var listenerIdleTimer: Timer {
-        id: listenerIdleTimer
-        interval: 500
-        onTriggered: {
-            eventListener.connectSource("mpc idle player")
+
+        Component.onCompleted: {
+            start()
+            statusTitleUpdate()
+        }
+
+        onPlayerChanged: {
+            statusTitleUpdate()
         }
     }
 
@@ -108,7 +121,7 @@ QtObject {
     // Change Song -1: Previous, 1: Forward
     function changeSong(changeDirection) {
         if(changeDirection === 1) {
-            _run("mpc nect")
+            _run("mpc next")
         } else {
             _run("mpc prev")
         }
@@ -132,11 +145,14 @@ QtObject {
     // Temporary Song Play
     function tempSong(directory) {
         let cleanDir = sanitize(directory)
+
+        // Callback as idle Might Miss toggle due to Cooldown [band-aid fix]
         _run(`
             mpc clear;
             mpc add ${cleanDir};
-            mpc toggle
-            `)
+            mpc toggle;`.trim(), function(){
+                titlesUpdate(listenerCallback)
+            })
     }
 
     // Status Handling
@@ -176,11 +192,14 @@ QtObject {
     // Chose a Playlist to play Songs Of
     function chosenPlaylist(playlistName) {
         let safeName = sanitize(playlistName)
+
+        // Callback as idle Might Miss toggle due to Cooldown [band-aid fix]
         _run(`
             mpc clear;
             mpc load ${safeName};
-            mpc toggle;
-            `)
+            mpc toggle;`.trim(), function(output){
+              titlesUpdate(listenerCallback)
+            })
     }
 
     // Add a Playlist

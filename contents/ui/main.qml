@@ -135,9 +135,9 @@ PlasmoidItem {
         anchors.right: parent.right
         anchors.rightMargin: root.menuOpen ? 0 : -340
 
-        property string sourceFile : "out"
+        property string sourceFile : plasmoid.configuration.playStatus ? "empty" : "out"        // If Playing, keeps BG empty for ParrotAni
         property bool menuCloseTimed: false
-        property bool animateParrot: false
+        property bool menuFullyClosed: true                                                     // Ensure Parrot Anim only plays upon full Menu Close
 
         source: "../images/background/" + sourceFile + ".png"
         fillMode: Image.Stretch
@@ -159,9 +159,9 @@ PlasmoidItem {
                 // Open Menu
                 if( !root.menuOpen) {
                     clickSound.play()
-                    parent.animateParrot = false
 
                     root.menuOpen = true
+                    parent.menuFullyClosed = false
                     parent.sourceFile = "menu"
                 }
             }
@@ -173,12 +173,10 @@ PlasmoidItem {
 
                 // Stop Menu From Closing if Menu is Open but about to Close
                 if( parent.menuCloseTimed ) {
-                    //console.log("Cancelling MenuClose")
                     parent.menuCloseTimed = false
 
                 // Highlight Jukebox    [menuOpen in condition to handle Edge Cases]
                 } else if (!plasmoid.configuration.playStatus && !root.menuOpen) {
-                    //console.log("Add Highlight")
                     parent.sourceFile = "out_highlight"
                 }
             }
@@ -190,12 +188,10 @@ PlasmoidItem {
 
                 // Start Counting for Menu Close
                 if(root.menuOpen) {
-                    //console.log("Initializing MenuClose")
                     parent.menuCloseTimed = true
 
                 // Remove Highlight Jukebox
                 } else if (!plasmoid.configuration.playStatus) {
-                    //console.log("Removing highlight")
                     parent.sourceFile = "out"
                 }
             }
@@ -207,7 +203,6 @@ PlasmoidItem {
             running: parent.menuCloseTimed
 
             onTriggered: {
-                //console.log("CLOSE")
                 parent.menuCloseTimed = false
                 root.menuOpen = false
                 slowdown.start()
@@ -224,12 +219,13 @@ PlasmoidItem {
                     root.playlistMenuOpen = false
                 }
 
+                parent.menuFullyClosed = true
+
                 // Either Set Menu to be Jukebox or Parrot Animation
                 if(!plasmoid.configuration.playStatus) {
                     parent.sourceFile = "out"
                 } else {
                     parent.sourceFile = "empty"
-                    parent.animateParrot = true
                 }
             }
         }
@@ -246,8 +242,8 @@ PlasmoidItem {
             frameCount: 12
             frameRate: 20
 
-            visible: parent.animateParrot
-            running: parent.animateParrot
+            visible: parent.menuFullyClosed && plasmoid.configuration.playStatus
+            running: visible
             loops: Animation.Infinite
 
             smooth: false
@@ -472,7 +468,6 @@ PlasmoidItem {
 
                             case 1:
                                 bash.playToggle()
-                                plasmoid.configuration.playStatus = !plasmoid.configuration.playStatus
                                 break
 
                             case 2:
