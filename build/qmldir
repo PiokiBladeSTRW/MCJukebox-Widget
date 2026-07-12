@@ -1,0 +1,7 @@
+module com.pioki.jukebox.backend
+linktarget mpdlistenplugin
+optional plugin mpdlistenplugin
+classname com_pioki_jukebox_backendPlugin
+typeinfo mpdlisten.qmltypes
+prefer :/com/pioki/jukebox/backend/
+
