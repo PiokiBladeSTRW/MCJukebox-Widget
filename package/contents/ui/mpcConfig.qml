@@ -22,78 +22,95 @@ Image {
 
     //This needs more work to be secure
     PC.Label {
-        text: "⚠️ Make sure you know what you are Doing"
+        text: "⚠️ Be Careful Editing These"
         font.pixelSize: 15
         font.family: "Minecraft"
         color: "white"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -45
+        anchors.verticalCenterOffset: -40
     }
 
-    PC.TextField {
-        id: directoryField
-        height: 20
-        width: 300
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -15
+    // Warning Popup
+    PC.Popup {
+        id: warnPopup
+        anchors.centerIn: parent
+        width: 260
+        height: 140
+        modal: true
+        focus: true
 
-        placeholderText: "MPC Config Music Directory (Optional): "
+        closePolicy: PC.Popup.CloseOnEscape | PC.Popup.CloseOnPressOutside
 
+        background: Rectangle {
+            color: "black"
+            radius: 5
+        }
 
-        background: Image {
+        contentItem: Column {
             anchors.fill: parent
-            source: directoryField.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
-        }
+            spacing: 12
+            padding: 10
 
-        onAccepted: {
-            plasmoid.configuration.musicPath = text
-            //root.settingsPageChanged(1)
+            PC.Label {
+                text: "⚠️ WARNING"
+                font.bold: true
+                color: "red"
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            PC.Label {
+                text: "This is an Advanced Setting."
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+            PC.Label {
+                text: "Change Cautiously!"
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
     }
 
-    PC.TextField {
-        id: hostField
-        height: 20
-        width: 300
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+    Column {
+        anchors.centerIn: parent
         anchors.verticalCenterOffset: 10
+        spacing: 5
 
-        placeholderText: "MPC Config Host (Optional; Default: 127.0.0.1) "
+        Repeater {
+            model: ["MPC Config Music Directory (Optional): ", "MPC Config Host (Optional; Default: 127.0.0.1) ", "MPC Config Port (Optional; Default: 6600) "]
 
+            PC.TextField {
+                height: 20
+                width: 300
+                anchors.horizontalCenter: parent.horizontalCenter
 
-        background: Image {
-            anchors.fill: parent
-            source: hostField.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
-        }
+                placeholderText: modelData
 
-        onAccepted: {
-            plasmoid.configuration.mpdHost = text
-            //root.settingsPageChanged(1)
+                background: Image {
+                    anchors.fill: parent
+                    source: parent.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
+                }
+
+                onAccepted: {
+                    warnPopup.open()
+                    switch(index) {
+                        case 0:
+                            plasmoid.configuration.musicPath = text;
+                            break;
+
+                        case 1:
+                            plasmoid.configuration.mpdHost = text;
+                            break;
+
+                        case 2:
+                            plasmoid.configuration.mpdPort = parseInt(text, 10);
+                            break;
+                    }
+
+                    console.log(plasmoid.configuration.musicPath, plasmoid.configuration.mpdHost, plasmoid.configuration.mpdPort)
+                    //root.settingsPageChanged(1)
+                }
+            }
         }
     }
 
-    PC.TextField {
-        id: portField
-        height: 20
-        width: 300
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: 35
-
-        placeholderText: "MPC Config Port (Optional; Default: 6600) "
-
-
-        background: Image {
-            anchors.fill: parent
-            source: portField.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
-        }
-
-        onAccepted: {
-            plasmoid.configuration.mpdPort = text
-            //root.settingsPageChanged(1)
-        }
-    }
 }
