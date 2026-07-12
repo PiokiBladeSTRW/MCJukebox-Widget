@@ -216,7 +216,6 @@ QtObject {
 
     // Add a Playlist
     function addPlaylist(playlistName, playlistFolders, albumArt) {
-        console.log("entry")
 
         // Sanitize Playlist Name
         let safeName = sanitize(playlistName);
@@ -242,8 +241,6 @@ QtObject {
             let safeAlbumArt = sanitize(albumArt);
             _run("cp " + safeAlbumArt + " ~/.cache/jukebox_covers/"+ safeName +".png;")
         }
-
-        console.log("exit")
     }
 
 

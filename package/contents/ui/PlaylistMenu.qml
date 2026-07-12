@@ -438,7 +438,6 @@ Image {
                 }
 
                 bash.addPlaylist(playlistName, playlistFolders, albumArt)
-                //bash.playlistsListUpdate(playlistsListUpdate)
             }
 
             function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
@@ -455,9 +454,6 @@ Image {
                 if(newAlbumArt) {
                     albumArtUpdate.start()
                 }
-
-
-                //bash.playlistsListUpdate(playlistsListUpdate)
             }
 
         }
