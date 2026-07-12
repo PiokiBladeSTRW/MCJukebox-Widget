@@ -63,21 +63,14 @@ Image {
 
 
     // Playlist Name
-    PC.TextField {
+    VisualTextField {
         id: namePlaylist
-        height: 25
-        width:250
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -30
 
         placeholderText: "Enter Playlist Name: "
-
-        background: Image {
-            anchors.fill: parent
-            source: namePlaylist.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
-        }
 
         onTextChanged: {
             parent.playlistName = text

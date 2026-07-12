@@ -34,7 +34,7 @@ Add Fade In-Outs to All Components
 Much like parrot, Optimize note animation? *
 PlaylistAnim to Loader *
 Playlist Art sholudn't error, call Bash to check                # Was more performance taxing, hence kept as is
-MPC COnfig for Host: Port
+MPC COnfig for Host: Port   *
 Make the Graphical TextField its own Component
 hitting forward or backward should immediately update elapsedTime
 

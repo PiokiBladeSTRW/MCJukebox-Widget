@@ -80,7 +80,7 @@ Image {
         }
 
         // Search Field
-        PC.TextField {
+        VisualTextField{
             id: searchBar
             height: 25
             width: 0

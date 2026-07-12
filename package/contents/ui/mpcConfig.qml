@@ -78,17 +78,12 @@ Image {
         Repeater {
             model: ["MPC Config Music Directory (Optional): ", "MPC Config Host (Optional; Default: 127.0.0.1) ", "MPC Config Port (Optional; Default: 6600) "]
 
-            PC.TextField {
+            VisualTextField {
                 height: 20
                 width: 300
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 placeholderText: modelData
-
-                background: Image {
-                    anchors.fill: parent
-                    source: parent.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
-                }
 
                 onAccepted: {
                     warnPopup.open()

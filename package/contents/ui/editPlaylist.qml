@@ -200,10 +200,8 @@ Image {
         }
     }
 
-    PC.TextField {
+    VisualTextField {
         id: renamePlaylist
-        height: 25
-        width:250
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -211,11 +209,6 @@ Image {
         anchors.horizontalCenterOffset: 15
 
         placeholderText: "Rename Playlist [Optional]: "
-
-        background: Image {
-            anchors.fill: parent
-            source: renamePlaylist.activeFocus ? "../images/text_field_highlighted.png" : "../images/text_field.png"
-        }
 
         onTextChanged: {
             parent.playlistRename = text
