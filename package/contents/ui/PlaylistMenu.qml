@@ -6,10 +6,6 @@ import "../code/binarySearch.js" as BinSearch
 
 Image {
     id: root
-    anchors.fill: parent
-
-
-    property bool visibleCondn          // Boolean Assigned by ROOT
 
     property string homeDirPath
     property int settingsPage: 0        // 0: Disabled, 1: Selection, 2: Adding Playlist, 3: EditPlaylist, 4: MPC Modification
@@ -20,14 +16,14 @@ Image {
 
     source: "../images/amethyst_block"
     fillMode: Image.Tile
-
+/*
     opacity: visibleCondn ? 1 : 0
     Behavior on opacity {
         NumberAnimation {
             duration: 500
             easing.type: Easing.Linear
         }
-    }
+    }*/
 
 
     // ==========================================
@@ -196,7 +192,7 @@ Image {
 
         graphic: "playlistMenu_icons/folder_pick"
 
-        visible: settingsPage === 0 && visibleCondn
+        visible: settingsPage === 0
 
         onClick: {
             root.menuForceState(true)
@@ -215,7 +211,7 @@ Image {
 
         graphic: "playlistMenu_icons/music_pick"
 
-        visible: settingsPage === 0 && visibleCondn
+        visible: settingsPage === 0
 
         onClick: {
             root.menuForceState(true)
@@ -236,7 +232,7 @@ Image {
         anchors.horizontalCenterOffset: 15
 
         z: 1
-        visible: root.visibleCondn && settingsPage === 0
+        visible: settingsPage === 0
 
         clip: true
         contentWidth: playlistGrid.width
@@ -255,7 +251,7 @@ Image {
         }
 
         PC.ScrollBar.vertical: PC.ScrollBar {
-            visible: root.visibleCondn
+            visible: true
             policy: PC.ScrollBar.AsNeeded
         }
 
@@ -285,7 +281,7 @@ Image {
                     }
 
                     opacity: index === plasmoid.configuration.playlistIndex ? 1 : 0.6
-                    active: visibleCondn && settingsPage === 0
+                    active: settingsPage === 0
 
                     // Name of Playlist upon Hover
                     detectHover: true
@@ -319,7 +315,7 @@ Image {
 
         graphic: root.settingsPage === 0 ? "playlistMenu_icons/settings" : "playlistMenu_icons/back"
 
-        visible: visibleCondn
+        visible: true
 
         z: 3
 

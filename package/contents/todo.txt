@@ -32,7 +32,7 @@ Add Sections like BashExec to all Components and organize some properties positi
 
 Add Fade In-Outs to All Components
 Much like parrot, Optimize note animation? *
-PlaylistAnim to Loader
+PlaylistAnim to Loader *
 Playlist Art sholudn't error, call Bash to check
 MPC COnfig for Host: Port
 hitting forward or backward should immediately update elapsedTime

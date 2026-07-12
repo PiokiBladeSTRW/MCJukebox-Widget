@@ -394,12 +394,26 @@ PlasmoidItem {
             onClick: root.playlistMenuOpen = !root.playlistMenuOpen
         }
 
-        // Playlist Menu
-        PlaylistMenu {
-            visibleCondn: root.playlistMenuOpen
+        Loader {
+            id: playlistMenu
+            anchors.fill: parent
 
-            onMenuForceState: (state) => {
-                root.keepMenuOpen = state
+            source: {
+                if(playlistMenuOpen) {
+                    return "PlaylistMenu.qml"; break;
+                } else {
+                    return ""; break;
+                }
+            }
+
+            // Signals Connections
+            Connections {
+                target: playlistMenu.item
+                ignoreUnknownSignals: true
+
+                function onMenuForceState(state){
+                    root.keepMenuOpen = state
+                }
             }
         }
 
