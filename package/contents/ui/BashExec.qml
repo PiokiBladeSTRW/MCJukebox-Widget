@@ -186,11 +186,12 @@ QtObject {
     // Search for Songs; isTitle: 1 - Search Titles; 0 - Search Files
     function search(text, isTitle, callback) {
         let cleanText = sanitize(text)
+        let format = ""
 
         if(isTitle) {
-            let format = "title"
+            format = "title"
         } else {
-            let format = "file"
+            format = "file"
         }
 
         _run("mpc search -f '%"+ format+ "%' title "+ cleanText, callback)

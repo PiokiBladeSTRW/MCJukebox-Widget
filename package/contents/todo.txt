@@ -35,7 +35,9 @@ Much like parrot, Optimize note animation? *
 PlaylistAnim to Loader *
 Playlist Art sholudn't error, call Bash to check                # Was more performance taxing, hence kept as is
 MPC COnfig for Host: Port   *
-Make the Graphical TextField its own Component
+Make the Graphical TextField its own Component *
+Search broken *
+search debounce starts with every text change, perhaps wasting cpu cycles
 hitting forward or backward should immediately update elapsedTime
 
 Even after mpc clear, perhaps state of Shuffle and Repeat should be preserved!

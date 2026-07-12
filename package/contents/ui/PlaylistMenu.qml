@@ -80,7 +80,7 @@ Image {
         }
 
         // Search Field
-        VisualTextField{
+        PC.TextField {
             id: searchBar
             height: 25
             width: 0
@@ -108,7 +108,6 @@ Image {
                     })
                 }
             }
-
 
             onTextChanged: {
                 debounce.start()
@@ -142,7 +141,14 @@ Image {
                         height: 15
                         text: modelData
 
+                        contentItem: Text {
+                            text: modelData
+                            color: "white"
+                            elide: Text.ElideRight
+                        }
+
                         bottomPadding: 0
+                        topPadding: 0
 
                         onClicked: {
                             bash.tempSong(searchButton.searchResultsDir[index])
