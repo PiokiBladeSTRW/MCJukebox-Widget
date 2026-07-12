@@ -28,7 +28,7 @@ ReFactor the Code! Better Variable Handling, better Writing, Better Modularity [
 
 
 
-Add Sections like BashExec to all Components and organize some properties positioing for WAY BETTER READABILITY
+Add Sections like BashExec to all Components and organize some properties positioing for WAY BETTER READABILITY *
 
 Add Fade In-Outs to All Components
 Much like parrot, Optimize note animation?
@@ -58,8 +58,8 @@ timeData.js allows Division by Zero if someone intentionally adds a bad mp3, han
 Two Playlist having same name will quietly error without letting user know*
 
 Playlist song removal bugs out, because the order printed out is based on file name but final list does account for Artist Name!!
-Updating Album Art Again Fails to live Update
-Adding playlist doesn't add it to roaster of edit or grid
+Updating Album Art Again Fails to live Update *
+Adding playlist doesn't add it to roaster of edit or grid *
 
 playlist grid slight area closes widget!
 widget shouldn't close with crash
