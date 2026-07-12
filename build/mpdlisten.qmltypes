@@ -25,12 +25,5 @@ Module {
             Parameter { name: "host"; type: "QString" }
             Parameter { name: "port"; type: "ushort" }
         }
-        Method {
-            name: "start"
-            isCloned: true
-            lineNumber: 35
-            Parameter { name: "host"; type: "QString" }
-        }
-        Method { name: "start"; isCloned: true; lineNumber: 35 }
     }
 }

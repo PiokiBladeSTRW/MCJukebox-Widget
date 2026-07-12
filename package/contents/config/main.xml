@@ -15,5 +15,11 @@
         <entry name="musicPath" type="String" >
             <default></default>
         </entry>
+        <entry name="mpdHost" type="String">
+            <default>127.0.0.1</default>
+        </entry>
+        <entry name="mpdPort" type="Int">
+            <default>6600</default>
+        </entry>
     </group>
 </kcfg>

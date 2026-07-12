@@ -67,12 +67,6 @@ template <> constexpr inline auto MPDListen::qt_create_metaobjectdata<qt_meta_ta
         QtMocHelpers::MethodData<void(const QString &, quint16)>(9, 4, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::QString, 10 }, { QMetaType::UShort, 11 },
         }}),
-        // Method 'start'
-        QtMocHelpers::MethodData<void(const QString &)>(9, 4, QMC::AccessPublic | QMC::MethodCloned, QMetaType::Void, {{
-            { QMetaType::QString, 10 },
-        }}),
-        // Method 'start'
-        QtMocHelpers::MethodData<void()>(9, 4, QMC::AccessPublic | QMC::MethodCloned, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -106,8 +100,6 @@ void MPDListen::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 3: _t->onReadyRead(); break;
         case 4: _t->onDisconnected(); break;
         case 5: _t->start((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<quint16>>(_a[2]))); break;
-        case 6: _t->start((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1]))); break;
-        case 7: _t->start(); break;
         default: ;
         }
     }
@@ -138,14 +130,14 @@ int MPDListen::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 6;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 6)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 8;
+        _id -= 6;
     }
     return _id;
 }

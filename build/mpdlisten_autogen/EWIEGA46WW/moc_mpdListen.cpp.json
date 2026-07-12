@@ -26,28 +26,6 @@
                     "lineNumber": 35,
                     "name": "start",
                     "returnType": "void"
-                },
-                {
-                    "access": "public",
-                    "arguments": [
-                        {
-                            "name": "host",
-                            "type": "QString"
-                        }
-                    ],
-                    "index": 6,
-                    "isCloned": true,
-                    "lineNumber": 35,
-                    "name": "start",
-                    "returnType": "void"
-                },
-                {
-                    "access": "public",
-                    "index": 7,
-                    "isCloned": true,
-                    "lineNumber": 35,
-                    "name": "start",
-                    "returnType": "void"
                 }
             ],
             "object": true,

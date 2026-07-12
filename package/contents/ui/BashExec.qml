@@ -42,7 +42,7 @@ QtObject {
 
         // Start Up
         Component.onCompleted: {
-            start()
+            start(plasmoid.configuration.mpdHost, plasmoid.configuration.mpdPort)
             statusTitleUpdate()
         }
 

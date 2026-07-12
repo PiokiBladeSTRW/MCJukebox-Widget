@@ -32,7 +32,7 @@ class MPDListen : public QObject
         explicit MPDListen(QObject *parent = nullptr);
 
         // Q_INVOKABLE: Callable from QML, Does the Handshake with MDP. &host passes the value straight down and not a Copy
-        Q_INVOKABLE void start(const QString &host = QStringLiteral("127.0.0.1"), quint16 port = 6600);
+        Q_INVOKABLE void start(const QString &host, quint16 port);
 
 
     signals:
@@ -59,7 +59,7 @@ class MPDListen : public QObject
 
 
         QString m_host;                             // Host IP
-        quint16 m_port = 6600;                      // Host Port, Hardfixed due to MPC usually residing at such, still changeable at start
+        quint16 m_port;                      // Host Port, Hardfixed due to MPC usually residing at such, still changeable at start
 
 
         bool m_gotGreeting = false;                 // Whether the Socket handshake is done
