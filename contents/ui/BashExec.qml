@@ -6,19 +6,24 @@ import "../code/dirSanitize.js" as DirSanitize
 
 QtObject {
     id: root
-    default property list<QtObject> children
 
     // ==========================================
     // ENGINE
     // ==========================================
 
     // LISTENER LOOP
-    property var listenerCallback;
+    property var titleUpdateCallback;
+    property var playlistUpdateCallback;
 
     property var mpdListen: MPDListen {
 
+        // Update Title & playStatus upon any player Changes
         function statusTitleUpdate() {
-            titlesUpdate(listenerCallback)
+
+            // Update Title
+            titlesUpdate(titleUpdateCallback)
+
+            // Handle playStatus Configuration
             _run("mpc status", function(output){
                 let splitData= output.trim().split("\n")
 
@@ -35,13 +40,19 @@ QtObject {
             })
         }
 
+        // Start Up
         Component.onCompleted: {
             start()
             statusTitleUpdate()
         }
 
+
         onPlayerChanged: {
             statusTitleUpdate()
+        }
+
+        onPlaylistsChanged: {
+            playlistsListUpdate(playlistUpdateCallback)
         }
     }
 
@@ -54,6 +65,7 @@ QtObject {
         connectedSources: []
 
         onNewData: (sourceName, data) =>{
+            console.log("\n:", sourceName)
 
             if(root._callbackRegistry[sourceName]) {
                 var callbackFunc = root._callbackRegistry[sourceName];
@@ -204,6 +216,7 @@ QtObject {
 
     // Add a Playlist
     function addPlaylist(playlistName, playlistFolders, albumArt) {
+        console.log("entry")
 
         // Sanitize Playlist Name
         let safeName = sanitize(playlistName);
@@ -229,6 +242,8 @@ QtObject {
             let safeAlbumArt = sanitize(albumArt);
             _run("cp " + safeAlbumArt + " ~/.cache/jukebox_covers/"+ safeName +".png;")
         }
+
+        console.log("exit")
     }
 
 
@@ -251,7 +266,7 @@ QtObject {
         if(albumArt) {
             let safeAlbumArt = sanitize(albumArt);
             commands.push( "rm ~/.cache/jukebox_covers/"+safePlaylist+".png");
-            commands.push("cp "+ safeAlbumArt + " ~/.cache/jukebox_covers" + safeName + ".png");
+            commands.push("cp "+ safeAlbumArt + " ~/.cache/jukebox_covers/" + safeName + ".png");
         }
 
         // Add Chosen Songs

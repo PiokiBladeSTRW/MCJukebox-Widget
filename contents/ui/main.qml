@@ -32,17 +32,17 @@ PlasmoidItem {
     // Hanndler
     BashExec {
         id: bash
-        listenerCallback: titleUpdate
-    }
-
-    // Update Time Elapsed
-    function statusUpdate(output) {
-        root.elapsedTime = TimeData.handleElapsedTime(output);
+        titleUpdateCallback: titleUpdate
     }
 
     // Update track Title and artist Title
     function titleUpdate(output) {
         [root.trackTitle, root.trackArtist] = Titles.handleTrackTitles(output)
+    }
+
+    // Update Time Elapsed
+    function timeUpdate(output) {
+        root.elapsedTime = TimeData.handleElapsedTime(output);
     }
 
     // Timer to Poll for Updates on elapsedTime
@@ -52,15 +52,15 @@ PlasmoidItem {
         running: plasmoid.configuration.playStatus && root.menuOpen
 
         onTriggered: {
-            bash.statusUpdate(statusUpdate)
+            bash.statusUpdate(timeUpdate)
         }
     }
 
     // Set directories and data up upon Opening of Widget
     Component.onCompleted: {
         bash.bootUp()
-        bash.statusUpdate(statusUpdate)
-        bash.titlesUpdate(titleUpdate)
+        bash.statusUpdate(timeUpdate)
+        //bash.titlesUpdate(titleUpdate)
     }
 
 

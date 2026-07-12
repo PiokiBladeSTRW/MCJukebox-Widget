@@ -35,6 +35,9 @@ Much like parrot, Optimize note animation?
 PlaylistAnim to Loader
 Playlist Art sholudn't error, call Bash to check
 MPC COnfig for Host: Port
+hitting forward or backward should immediately update elapsedTime
+
+Even after mpc clear, perhaps state of Shuffle and Repeat should be preserved!
 
 
 Use More comments especially multi-line to better describe code work flow
@@ -56,6 +59,10 @@ Two Playlist having same name will quietly error without letting user know*
 
 Playlist song removal bugs out, because the order printed out is based on file name but final list does account for Artist Name!!
 Updating Album Art Again Fails to live Update
+Adding playlist doesn't add it to roaster of edit or grid
+
+playlist grid slight area closes widget!
+widget shouldn't close with crash
 
 
 

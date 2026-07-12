@@ -15,8 +15,6 @@ Image {
     property int settingsPage: 0        // 0: Disabled, 1: Selection, 2: Adding Playlist, 3: EditPlaylist, 4: MPC Modification
     property list<string> playlists
 
-    property list<string> supportedFormats: ["flac", "ogg", "mp3", "opus", "wav", "aac"]
-
     signal menuForceState(bool state)
 
 
@@ -39,6 +37,7 @@ Image {
     // Update Playlists List
     function playlistsListUpdate(output) {
         root.playlists = output.trim().split("\n")
+        console.log(root.playlists)
     }
 
     // Set HomeDirectory [and Maybe musicPath]
@@ -52,6 +51,7 @@ Image {
 
     // Call the above mentioned functions upon Boot
     Component.onCompleted: {
+        bash.playlistUpdateCallback = playlistsListUpdate;
         bash.playlistsListUpdate(playlistsListUpdate)
         bash.homeRegister(handleHomeDir)
     }
@@ -403,6 +403,17 @@ Image {
             }
         }
 
+        // Since albumArt isn't linked to MPC, the changes aren't detected, hence Manual timer to ensure Command runs first
+        Timer {
+            id: albumArtUpdate
+            interval: 700
+
+            onTriggered: {
+                playlistGridRepeater.model = []
+                playlistGridRepeater.model = root.playlists
+            }
+        }
+
         // Signals Connections
         Connections {
             target: settingMenus.item
@@ -431,7 +442,7 @@ Image {
                 }
 
                 bash.addPlaylist(playlistName, playlistFolders, albumArt)
-                bash.playlistsListUpdate(playlistsListUpdate)
+                //bash.playlistsListUpdate(playlistsListUpdate)
             }
 
             function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
@@ -442,15 +453,15 @@ Image {
                     return
                 }
 
+                bash.editPlaylist(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices)
+
                 // Force grid model Update to update Album Arts
                 if(newAlbumArt) {
-                    playlistGridRepeater.model = []
-                    playlistGridRepeater.model = root.playlists
+                    albumArtUpdate.start()
                 }
 
 
-                root.playlistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices)
-                bash.playlistsListUpdate(playlistsListUpdate)
+                //bash.playlistsListUpdate(playlistsListUpdate)
             }
 
         }
@@ -509,6 +520,8 @@ Image {
         id : folderPick
         title: "Choose Music Folder"
 
+        property list<string> supportedFormats: ["flac", "ogg", "mp3", "opus", "wav", "aac"]
+
         // When EditPlaylist Adds a Folder to Roaster, Arrange the obtained list of Songs in given Directory
         function inputSongsInDir(output) {
 
@@ -521,7 +534,7 @@ Image {
                 let splitFile = String(files[i]).trim().split(".")
 
                 //Check for valid file format
-                if( root.supportedFormats.includes( splitFile[splitFile.length - 1] )){
+                if( supportedFormats.includes( splitFile[splitFile.length - 1] )){
                     songs.push(files[i])
                 }
             }
