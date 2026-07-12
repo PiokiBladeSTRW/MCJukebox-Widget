@@ -31,7 +31,7 @@ ReFactor the Code! Better Variable Handling, better Writing, Better Modularity [
 Add Sections like BashExec to all Components and organize some properties positioing for WAY BETTER READABILITY *
 
 Add Fade In-Outs to All Components
-Much like parrot, Optimize note animation?
+Much like parrot, Optimize note animation? *
 PlaylistAnim to Loader
 Playlist Art sholudn't error, call Bash to check
 MPC COnfig for Host: Port

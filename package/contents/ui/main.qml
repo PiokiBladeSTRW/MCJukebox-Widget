@@ -80,57 +80,62 @@ PlasmoidItem {
         visible: plasmoid.configuration.playStatus && !root.menuOpen
 
         property list<color> colors: ["lime", "yellow", "red", "magenta", "blue"]
-        property int noteIndex : 0
+        property list<int> positions: [-32, 0, 32]
+        property int posIndex : 0
         property int colorIndex: 0
         property int baseOffset: 75
         property int topOffset: 0
 
-        Timer {
-            id: noteTimer
-            interval: 700
-            repeat: true
-            running: plasmoid.configuration.playStatus
+        Image {
+            id: noteImage
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
 
-            onTriggered: {
-                parent.noteIndex += 1;
-                if(parent.noteIndex === 3) {
-                    parent.noteIndex = 0;
+            property int vOffset: parent.baseOffset
+
+            anchors.horizontalCenterOffset: parent.positions[parent.posIndex]
+            anchors.verticalCenterOffset: vOffset
+
+            source: "../images/note.png"
+
+
+            SequentialAnimation {
+                id: verticalAnimation
+
+                running: noteParticles.visible
+                loops: Animation.Infinite
+
+                NumberAnimation {
+                    target: noteImage
+                    property: "anchors.verticalCenterOffset"
+                    from: noteParticles.baseOffset
+                    to: noteParticles.topOffset
+                    duration: 600
+                    easing.type: Easing.InOutQuad
                 }
 
-                parent.colorIndex += 1
-                if(parent.colorIndex === 4) {
-                    parent.colorIndex = 0
+
+                PauseAnimation{duration: 99}
+
+                PropertyAction {
+                    target: noteImage
+                    property: "anchors.verticalCenterOffset"
+                    value: noteParticles.baseOffset
                 }
-            }
-        }
 
-        Repeater {
-            id: notes
-            model: [-32, 0, 32]
-
-            Image {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenterOffset: modelData
-                anchors.verticalCenterOffset: index === parent.noteIndex ? parent.topOffset : parent.baseOffset
-
-                visible: index === parent.noteIndex
-                source: "../images/note.png"
-
-                Behavior on anchors.verticalCenterOffset {
-                    NumberAnimation {
-                        duration: 600
-                        easing.type: Easing.InOutQuad
+                ScriptAction {
+                    script: {
+                        noteParticles.posIndex = noteParticles.posIndex < 2 ? noteParticles.posIndex + 1 : 0
+                        noteParticles.colorIndex = noteParticles.colorIndex < 4 ? noteParticles.colorIndex + 1 : 0
                     }
                 }
+            }
 
-                // Different Colors of Notes
-                layer.enabled: true
-                layer.effect: MultiEffect {
-                    colorization: 1.0
-                    colorizationColor: parent.colors[parent.colorIndex]
-                }
-
+            // Different Colors of Notes
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                colorization: 1.0
+                colorizationColor: parent.colors[parent.colorIndex]
             }
         }
     }
