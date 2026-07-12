@@ -447,7 +447,10 @@ PlasmoidItem {
             // Backward 10s
             VisualButton {
                 graphic: "main_icons/backward"
-                onClick: bash.seekPosition("-10")
+                onClick: {
+                    bash.seekPosition("-10")
+                    bash.statusUpdate(timeUpdate)
+                }
             }
 
             // Progress Bar
@@ -476,7 +479,11 @@ PlasmoidItem {
             // Forward 10s
             VisualButton {
                 graphic: "main_icons/forward"
-                onClick: bash.seekPosition("+10")
+                onClick: {
+                    bash.seekPosition("+10")
+                    bash.statusUpdate(timeUpdate)
+                }
+
             }
 
             // Loop Song
