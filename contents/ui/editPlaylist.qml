@@ -45,6 +45,11 @@ Image {
     }
 
 
+    // ==========================================
+    // ROASTER EDIT
+    // ==========================================
+
+
     // Modify List of Songs in a Given Playlist [AvailableSongsList = Roaster]
     Rectangle {
         id: roasterEdit
@@ -165,46 +170,9 @@ Image {
         }
     }
 
-    // Edit Roaster and Album Art Buttons
-    Column {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenterOffset: 15
-        anchors.verticalCenterOffset: 15
-        spacing: 5
-
-        Repeater {
-            model: ["Edit Songs Roaster", "Change Album Art"]
-
-            LabelledButton {
-                text: modelData
-
-                onClick: {
-                    switch(index) {
-                        case 0:
-                            bash.obtainSongsPlaylist(root.chosenPlaylist, function(output){
-                                // Output Contans a List of Songs in the Given Playlist
-                                let songsList = output.trim().split("\n")
-                                let songsHashMap = {}
-
-                                for (let i = 0 ; i < songsList.length ; i++) {
-                                    songsHashMap[String(songsList[i])] = i + 1
-                                }
-
-                                settingMenus.item.songsList = songsList
-                                settingMenus.item.songsLookup = songsHashMap
-                            })
-                            roasterEdit .visible = true
-                            break
-                        case 1:
-                            filePickOpen(1)
-                            break;
-                    }
-                }
-            }
-        }
-    }
-
+    // ==========================================
+    // OTHER BUTTONS
+    // ==========================================
 
     PC.ComboBox {
         id: pickPlaylist
@@ -253,6 +221,52 @@ Image {
             parent.playlistRename = text
         }
     }
+
+    // Edit Roaster and Album Art Buttons
+    Column {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 15
+        anchors.verticalCenterOffset: 15
+        spacing: 5
+
+        Repeater {
+            model: ["Edit Songs Roaster", "Change Album Art"]
+
+            LabelledButton {
+                text: modelData
+
+                onClick: {
+                    switch(index) {
+                        case 0:
+                            bash.obtainSongsPlaylist(root.chosenPlaylist, function(output){
+                                // Output Contans a List of Songs in the Given Playlist
+                                let songsList = output.trim().split("\n")
+                                let songsHashMap = {}
+
+                                for (let i = 0 ; i < songsList.length ; i++) {
+                                    songsHashMap[String(songsList[i])] = i + 1
+                                }
+
+                                settingMenus.item.songsList = songsList
+                                settingMenus.item.songsLookup = songsHashMap
+                            })
+                            roasterEdit .visible = true
+                            break
+                        case 1:
+                            filePickOpen(1)
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+
+    // ==========================================
+    // CONFIRMATION & DELETION
+    // ==========================================
+
 
     // Confirmation
     VisualButton {

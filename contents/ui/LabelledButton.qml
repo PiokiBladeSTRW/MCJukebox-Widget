@@ -1,5 +1,7 @@
 import QtQuick
 
+
+// Clickable Button with Graphics & Text
 VisualButton {
     property string text: ""
     property string textColor: "white"

@@ -31,10 +31,17 @@ Image {
         }
     }
 
+
+    // ==========================================
+    // COMMANDS HANDLER
+    // ==========================================
+
+    // Update Playlists List
     function playlistsListUpdate(output) {
         root.playlists = output.trim().split("\n")
     }
 
+    // Set HomeDirectory [and Maybe musicPath]
     function handleHomeDir(output) {
         root.homeDirPath = "/home/"+ output.trim()
 
@@ -43,17 +50,418 @@ Image {
         }
     }
 
+    // Call the above mentioned functions upon Boot
     Component.onCompleted: {
         bash.playlistsListUpdate(playlistsListUpdate)
         bash.homeRegister(handleHomeDir)
     }
 
 
-    // -----------------------------
-    // UTILITIES
-    // -----------------------------
 
-    // Wrong Directory File/Folder Picked Warning
+    // ==========================================
+    // MAIN PLAYLIST MENU
+    // ==========================================
+
+    // Search Bar
+    VisualButton {
+        id: searchButton
+        height: 25
+        width: 25
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 30
+
+        property list<string> searchResults
+        property list<string> searchResultsDir
+
+        graphic: "playlistMenu_icons/search"
+
+        onClick: {
+            searchBar.visible = true
+            searchBar.width = 80
+            root.menuForceState(true)
+        }
+
+        // Search Field
+        PC.TextField {
+            id: searchBar
+            height: 25
+            width: 0
+
+            visible: false
+            Behavior on width {
+                NumberAnimation {
+                    duration: 300
+                    easing.type: Easing.Linear
+                }
+            }
+
+            // Slow Down Searches to Save CPU Cycle
+            Timer {
+                id: debounce
+                interval: 300
+                onTriggered: {
+                    // The Second Argument Boolean is whether we are searching Title or File
+                    bash.search(parent.text, true, function(output) {
+                        searchButton.searchResults = output.trim().split("\n")
+                    })
+
+                    bash.search(parent.text, false, function(output) {
+                        searchButton.searchResultsDir = output.trim().split("\n")
+                    })
+                }
+            }
+
+
+            onTextChanged: {
+                debounce.start()
+            }
+        }
+
+        // Search Results
+        Rectangle {
+            y: 25
+            width: 80
+            height: 60
+            color: "black"
+
+            visible: searchBar.visible
+
+            PC.ScrollView {
+                anchors.fill: parent
+                clip:true
+
+                ListView {
+                    height: 60
+                    width: parent.width
+                    model: searchButton.searchResults
+                    spacing: 2
+
+                    bottomMargin: 10
+
+                    // Text with onClick function
+                    delegate: PC.ItemDelegate {
+                        width: 70
+                        height: 15
+                        text: modelData
+
+                        bottomPadding: 0
+
+                        onClicked: {
+                            bash.tempSong(searchButton.searchResultsDir[index])
+                            searchBar.width= 0
+                            searchBarOff.start()
+                        }
+                    }
+                }
+            }
+        }
+
+        // Exit from Search Bar
+        MouseArea {
+            z: -1
+            width: 500
+            height: 150
+            x:-30
+            y:-25
+
+            visible: searchBar.visible
+
+            onClicked: {
+                searchBar.width= 0
+                searchBarOff.start()
+            }
+        }
+
+        Timer {
+            id: searchBarOff
+            interval: 300
+            onTriggered: {
+                root.menuForceState(false)
+                searchBar.visible = false
+            }
+        }
+    }
+
+
+    // Temporary Song File Play
+    VisualButton {
+        height: 25
+        width: 25
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.bottomMargin: 15
+        anchors.rightMargin: 2
+
+        graphic: "playlistMenu_icons/folder_pick"
+
+        visible: settingsPage === 0 && visibleCondn
+
+        onClick: {
+            root.menuForceState(true)
+            folderPick.open()
+        }
+    }
+
+    // Temporary Song Folder Play
+    VisualButton {
+        height: 25
+        width: 25
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.bottomMargin: 15
+        anchors.rightMargin: 35
+
+        graphic: "playlistMenu_icons/music_pick"
+
+        visible: settingsPage === 0 && visibleCondn
+
+        onClick: {
+            root.menuForceState(true)
+            filePick.artMode = 1
+            filePick.open()
+        }
+    }
+
+
+    // Playlists Choice Menu
+    Flickable {
+        id: scrollContainer
+        width: 195
+        height: 150
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 15
+
+        z: 1
+        visible: root.visibleCondn && settingsPage === 0
+
+        clip: true
+        contentWidth: playlistGrid.width
+        contentHeight: playlistGrid.height
+
+        // Ensure Menu Stays Open
+        HoverHandler {
+            id: hoverer
+            onHoveredChanged: {
+                if(hovered) {
+                    root.menuForceState(true)
+                } else {
+                    root.menuForceState(false)
+                }
+            }
+        }
+
+        PC.ScrollBar.vertical: PC.ScrollBar {
+            visible: root.visibleCondn
+            policy: PC.ScrollBar.AsNeeded
+        }
+
+        // Playlists List
+        Grid {
+            id: playlistGrid
+            columns: 3
+            spacing: 10
+
+            topPadding: 20
+            bottomPadding: 20
+
+            Repeater {
+                id: playlistGridRepeater
+                model: root.playlists
+
+                VisualButton {
+                    height: 50
+                    width: 50
+
+                    // Try Set Album art from Cache, if Errors & properly initialized, Fallsback to Default
+                    source: "file://"+  root.homeDirPath + "/.cache/jukebox_covers/"+modelData+".png"
+                    onStatusChanged: {
+                        if(status === 3 && root.homeDirPath) {
+                            source= "../images/note_block.png"
+                        }
+                    }
+
+                    opacity: index === plasmoid.configuration.playlistIndex ? 1 : 0.6
+                    active: visibleCondn && settingsPage === 0
+
+                    // Name of Playlist upon Hover
+                    detectHover: true
+                    PC.ToolTip.visible: hovered
+                    PC.ToolTip.text: modelData
+
+                    onClick: {
+                        plasmoid.configuration.playlistIndex = index
+                        bash.chosenPlaylist(modelData);
+                    }
+                }
+            }
+        }
+    }
+
+
+    // ==========================================
+    // SETTINGS
+    // ==========================================
+
+    // Settings Toggle
+    VisualButton {
+        id: settingsToggle
+
+        width: 30
+        height: 30
+        anchors.top: root.top
+        anchors.right: root.right
+        anchors.topMargin: 15
+        anchors.rightMargin: 15
+
+        graphic: root.settingsPage === 0 ? "playlistMenu_icons/settings" : "playlistMenu_icons/back"
+
+        visible: visibleCondn
+
+        z: 3
+
+        onClick: {
+            switch(root.settingsPage) {
+
+                // From Settings Selction
+                case 1:
+                    root.settingsPage = 0;
+                    menuForceState(false)
+                    break
+
+                // Anywhere Else
+                default:
+                    root.settingsPage = 1;
+                    menuForceState(true)
+                    break
+            }
+        }
+    }
+
+    // Base Settings Menu
+    Image {
+        id: settingsMenu
+        anchors.fill: parent
+
+        z:1
+
+        source: "../images/background/settings_bg_1.png"
+
+        visible: root.settingsPage === 1
+        opacity: visible
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.Linear
+            }
+        }
+
+        // Settings Page
+        Column {
+            anchors.centerIn: parent
+            spacing: 5
+
+            Repeater {
+                model: ["Add Playlist", "Edit Playlist", "MPC Directory Config"]
+
+                LabelledButton {
+                    text: modelData
+
+                    onClick: {
+                        // Index + 2 to Account for Page 0 and index starting at 0
+                        root.settingsPage = index + 2
+                    }
+                }
+            }
+        }
+
+    }
+
+    // Settings Menu Loader
+    Loader {
+        id: settingMenus
+        anchors.fill: parent
+
+        source: {
+            switch(root.settingsPage) {
+                case 2: return "addPlaylist.qml"; break;
+                case 3: return "editPlaylist.qml"; break;
+                case 4: return "mpcConfig.qml"; break;
+                default: return ""
+            }
+        }
+
+        onLoaded: {
+            switch(root.settingsPage) {
+                case 3:
+                    item.playlists = root.playlists
+                    break
+            }
+        }
+
+        // Signals Connections
+        Connections {
+            target: settingMenus.item
+            ignoreUnknownSignals: true
+
+            function onSettingsPageChanged(newPage) {
+                root.settingsPage = newPage
+            }
+
+            function onFolderPickOpen() {
+                folderPick.open()
+            }
+
+            function onFilePickOpen(artMode) {
+                filePick.artMode = artMode
+                filePick.open()
+            }
+
+            function onPlaylistAdded(playlistName, playlistFolders, albumArt) {
+
+                // Ensure playlist of Name doesn't exist'
+                if(BinSearch.existsInArray(playlistName, root.playlists)) {
+                    warnPopup.dirWarn = false
+                    warnPopup.open()
+                    return
+                }
+
+                bash.addPlaylist(playlistName, playlistFolders, albumArt)
+                bash.playlistsListUpdate(playlistsListUpdate)
+            }
+
+            function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
+                // Ensure playlist of Name doesn't exist
+                if(BinSearch.existsInArray(playlistRename, root.playlists)) {
+                    warnPopup.dirWarn = false
+                    warnPopup.open()
+                    return
+                }
+
+                // Force grid model Update to update Album Arts
+                if(newAlbumArt) {
+                    playlistGridRepeater.model = []
+                    playlistGridRepeater.model = root.playlists
+                }
+
+
+                root.playlistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices)
+                bash.playlistsListUpdate(playlistsListUpdate)
+            }
+
+        }
+    }
+
+
+    // ==========================================
+    // UTILITIES    [Popup, FolderDialog, FileDialog]
+    // ==========================================
+
+    // POPUP: Wrong Directory File/Folder Picked Warning
     PC.Popup {
         id: warnPopup
         anchors.centerIn: parent
@@ -190,7 +598,7 @@ Image {
                     default: break
                 }
 
-            // Music
+                // Music
             } else {
 
                 // Ensure Correct Music Directory
@@ -228,400 +636,6 @@ Image {
             }
         }
 
-    }
-
-    // -----------------------------
-    // Main Display
-    // -----------------------------
-
-    // Search Bar
-    VisualButton {
-        id: searchButton
-        height: 25
-        width: 25
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.left: parent.left
-        anchors.leftMargin: 30
-
-        property list<string> searchResults
-        property list<string> searchResultsDir
-
-        graphic: "playlistMenu_icons/search"
-
-        onClick: {
-            searchBar.visible = true
-            searchBar.width = 80
-            root.menuForceState(true)
-        }
-
-        PC.TextField {
-            id: searchBar
-            height: 25
-            width: 0
-
-            visible: false
-            Behavior on width {
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.Linear
-                }
-            }
-
-            // Slow Down Searches to Save CPU Cycle
-            Timer {
-                id: debounce
-                interval: 300
-                onTriggered: {
-                    // The Second Argument Boolean is whether we are searching Title or File
-                    bash.search(parent.text, true, function(output) {
-                        searchButton.searchResults = output.trim().split("\n")
-                    })
-
-                    bash.search(parent.text, false, function(output) {
-                        searchButton.searchResultsDir = output.trim().split("\n")
-                    })
-                }
-            }
-
-
-            onTextChanged: {
-                debounce.start()
-            }
-        }
-
-        Rectangle {
-            y: 25
-            width: 80
-            height: 60
-            color: "black"
-
-            visible: searchBar.visible
-
-            PC.ScrollView {
-                anchors.fill: parent
-                clip:true
-
-                ListView {
-                    height: 60
-                    width: parent.width
-                    model: searchButton.searchResults
-                    spacing: 2
-
-                    bottomMargin: 10
-
-                    // Text with onClick function
-                    delegate: PC.ItemDelegate {
-                        width: 70
-                        height: 15
-                        text: modelData
-
-                        bottomPadding: 0
-
-                        onClicked: {
-                            bash.tempSong(searchButton.searchResultsDir[index])
-                            searchBar.width= 0
-                            searchBarOff.start()
-                        }
-                    }
-                }
-            }
-        }
-
-        // Exit
-        MouseArea {
-            z: -1
-            width: 500
-            height: 150
-            x:-30
-            y:-25
-
-            visible: searchBar.visible
-
-            onClicked: {
-                searchBar.width= 0
-                searchBarOff.start()
-            }
-        }
-
-        Timer {
-            id: searchBarOff
-            interval: 300
-            onTriggered: {
-                root.menuForceState(false)
-                searchBar.visible = false
-            }
-        }
-    }
-
-    // Temporary Songs Options
-    VisualButton {
-        height: 25
-        width: 25
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.bottomMargin: 15
-        anchors.rightMargin: 2
-
-        graphic: "playlistMenu_icons/folder_pick"
-
-        visible: settingsPage === 0 && visibleCondn
-
-        onClick: {
-            root.menuForceState(true)
-            folderPick.open()
-        }
-    }
-
-    VisualButton {
-        height: 25
-        width: 25
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.bottomMargin: 15
-        anchors.rightMargin: 35
-
-        graphic: "playlistMenu_icons/music_pick"
-
-        visible: settingsPage === 0 && visibleCondn
-
-        onClick: {
-            root.menuForceState(true)
-            filePick.artMode = 1
-            filePick.open()
-        }
-    }
-
-
-    // Playlist Display
-    Flickable {
-        id: scrollContainer
-        width: 195
-        height: 150
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenterOffset: 15
-
-        z: 1
-        visible: root.visibleCondn && settingsPage === 0
-
-        clip: true
-        contentWidth: playlistGrid.width
-        contentHeight: playlistGrid.height
-
-        // Ensure Menu Stays Open
-        HoverHandler {
-            id: hoverer
-            onHoveredChanged: {
-                if(hovered) {
-                    root.menuForceState(true)
-                } else {
-                    root.menuForceState(false)
-                }
-            }
-        }
-
-        PC.ScrollBar.vertical: PC.ScrollBar {
-            visible: root.visibleCondn
-            policy: PC.ScrollBar.AsNeeded
-        }
-
-        // Your Playlist Display remains almost identical inside
-        Grid {
-            id: playlistGrid
-            columns: 3
-            spacing: 10
-
-            topPadding: 20
-            bottomPadding: 20
-
-            Repeater {
-                id: playlistGridRepeater
-                model: root.playlists
-
-                VisualButton {
-                    height: 50
-                    width: 50
-
-                    // Try Set Album art from Cache, if Errors & properly initialized, Fallsback to Default
-                    source: "file://"+  root.homeDirPath + "/.cache/jukebox_covers/"+modelData+".png"
-                    onStatusChanged: {
-                        if(status === 3 && root.homeDirPath) {
-                            source= "../images/note_block.png"
-                        }
-                    }
-
-                    opacity: index === plasmoid.configuration.playlistIndex ? 1 : 0.6
-                    active: visibleCondn && settingsPage === 0
-
-                    // Name of Playlist upon Hover
-                    detectHover: true
-                    PC.ToolTip.visible: hovered
-                    PC.ToolTip.text: modelData
-
-                    onClick: {
-                        plasmoid.configuration.playlistIndex = index
-                        bash.chosenPlaylist(modelData);
-                    }
-                }
-            }
-        }
-    }
-
-
-    // -----------------------------
-    // SETTINGS
-    // -----------------------------
-
-    // Settings Toggle
-    VisualButton {
-        id: settingsToggle
-
-        width: 30
-        height: 30
-        anchors.top: root.top
-        anchors.right: root.right
-        anchors.topMargin: 15
-        anchors.rightMargin: 15
-
-        graphic: root.settingsPage === 0 ? "playlistMenu_icons/settings" : "playlistMenu_icons/back"
-
-        visible: visibleCondn
-
-        z: 3
-
-        onClick: {
-            switch(root.settingsPage) {
-
-                // From Settings Selction
-                case 1:
-                    root.settingsPage = 0;
-                    menuForceState(false)
-                    break
-
-                // Anywhere Else
-                default:
-                    root.settingsPage = 1;
-                    menuForceState(true)
-                    break
-            }
-        }
-    }
-
-
-    // Base Settings Menu
-    Image {
-        id: settingsMenu
-        anchors.fill: parent
-
-        z:1
-
-        source: "../images/background/settings_bg_1.png"
-
-        visible: root.settingsPage === 1
-        opacity: visible
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 500
-                easing.type: Easing.Linear
-            }
-        }
-
-        // Settings Page
-        Column {
-            anchors.centerIn: parent
-            spacing: 5
-
-            Repeater {
-                model: ["Add Playlist", "Edit Playlist", "MPC Directory Config"]
-
-                LabelledButton {
-                    text: modelData
-
-                    onClick: {
-                        // Index + 2 to Account for Page 0 and index starting at 0
-                        root.settingsPage = index + 2
-                    }
-                }
-            }
-        }
-
-    }
-
-    Loader {
-        id: settingMenus
-        anchors.fill: parent
-
-        source: {
-            switch(root.settingsPage) {
-                case 2: return "addPlaylist.qml"; break;
-                case 3: return "editPlaylist.qml"; break;
-                case 4: return "mpcConfig.qml"; break;
-                default: return ""
-            }
-        }
-
-        onLoaded: {
-            switch(root.settingsPage) {
-                case 3:
-                    item.playlists = root.playlists
-                    break
-            }
-        }
-
-
-        Connections {
-            target: settingMenus.item
-            ignoreUnknownSignals: true
-
-            function onSettingsPageChanged(newPage) {
-                root.settingsPage = newPage
-            }
-
-            function onFolderPickOpen() {
-                folderPick.open()
-            }
-
-            function onFilePickOpen(artMode) {
-                filePick.artMode = artMode
-                filePick.open()
-            }
-
-            function onPlaylistAdded(playlistName, playlistFolders, albumArt) {
-
-                // Ensure playlist of Name doesn't exist'
-                if(BinSearch.existsInArray(playlistName, root.playlists)) {
-                    warnPopup.dirWarn = false
-                    warnPopup.open()
-                    return
-                }
-
-                bash.addPlaylist(playlistName, playlistFolders, albumArt)
-                bash.playlistsListUpdate(playlistsListUpdate)
-            }
-
-            function onPlaylistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices) {
-                // Ensure playlist of Name doesn't exist
-                if(BinSearch.existsInArray(playlistRename, root.playlists)) {
-                    warnPopup.dirWarn = false
-                    warnPopup.open()
-                    return
-                }
-
-                // Force grid model Update to update Album Arts
-                if(newAlbumArt) {
-                    playlistGridRepeater.model = []
-                    playlistGridRepeater.model = root.playlists
-                }
-
-
-                root.playlistEdited(chosenPlaylist, playlistRename, newAlbumArt, songsAdded, removalIndices)
-                bash.playlistsListUpdate(playlistsListUpdate)
-            }
-
-        }
     }
 
 }

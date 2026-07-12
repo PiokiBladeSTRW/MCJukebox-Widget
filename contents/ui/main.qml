@@ -23,33 +23,29 @@ PlasmoidItem {
     property bool keepMenuOpen: false
 
 
-    // Terminal Commands Handler
+
+    // ==========================================
+    // BASH HANDLER
+    // ==========================================
+
+
+    // Hanndler
     BashExec {
         id: bash
         listenerCallback: titleUpdate
     }
 
+    // Update Time Elapsed
     function statusUpdate(output) {
         root.elapsedTime = TimeData.handleElapsedTime(output);
     }
+
+    // Update track Title and artist Title
     function titleUpdate(output) {
         [root.trackTitle, root.trackArtist] = Titles.handleTrackTitles(output)
     }
 
-    Component.onCompleted: {
-        bash.bootUp()
-        bash.statusUpdate(statusUpdate)
-        bash.titlesUpdate(titleUpdate)
-    }
-
-    // Sound Effect
-    SoundEffect {
-        id: clickSound
-        source: "../sounds/insert.wav"
-        volume: 0.5
-    }
-
-    // Status Timer
+    // Timer to Poll for Updates on elapsedTime
     Timer {
         interval: 1000
         repeat: true
@@ -60,7 +56,20 @@ PlasmoidItem {
         }
     }
 
-    // Note Block Particles
+    // Set directories and data up upon Opening of Widget
+    Component.onCompleted: {
+        bash.bootUp()
+        bash.statusUpdate(statusUpdate)
+        bash.titlesUpdate(titleUpdate)
+    }
+
+
+
+    // ==========================================
+    // VISUAL PARTICLES
+    // ==========================================
+
+    // Note Block Particles for Playing [Perhaps Optimize?]
     Item {
         id: noteParticles
 
@@ -127,7 +136,13 @@ PlasmoidItem {
     }
 
 
-    // Menu
+
+    // ==========================================
+    // MAIN MENU
+    // ==========================================
+
+
+    // Song Playing Menu
     Image {
         id: menu
         width: 400
@@ -142,7 +157,7 @@ PlasmoidItem {
         source: "../images/background/" + sourceFile + ".png"
         fillMode: Image.Stretch
 
-        // Menu Pop Animation
+        // Menu Pop Out/In Animation
         Behavior on anchors.rightMargin {
             NumberAnimation {
                 duration: 300
@@ -150,7 +165,14 @@ PlasmoidItem {
             }
         }
 
+        // Sound Effect for Opening Menu
+        SoundEffect {
+            id: openSound
+            source: "../sounds/insert.wav"
+            volume: 0.5
+        }
 
+        // Handle Menu Open & Close States based on Mouse
         MouseArea{
             anchors.fill: parent
             hoverEnabled: true
@@ -158,7 +180,7 @@ PlasmoidItem {
             onClicked: {
                 // Open Menu
                 if( !root.menuOpen) {
-                    clickSound.play()
+                    openSound.play()
 
                     root.menuOpen = true
                     parent.menuFullyClosed = false
@@ -197,6 +219,7 @@ PlasmoidItem {
             }
         }
 
+        // Grace Period Timer to ensure Mouse Leaving doesn't Insta-Shut menu
         Timer {
             id: menuCloseTimer
             interval: 600
@@ -205,12 +228,13 @@ PlasmoidItem {
             onTriggered: {
                 parent.menuCloseTimed = false
                 root.menuOpen = false
-                slowdown.start()
+                fullyCloseWait.start()
             }
         }
 
+        // Let Menu Close Animation Finish before Changing Background
         Timer {
-            id: slowdown
+            id: fullyCloseWait
             interval: 300
 
             onTriggered: {
@@ -230,6 +254,7 @@ PlasmoidItem {
             }
         }
 
+        // If Menu Closed & Song Playing, Dancing parrot
         AnimatedSprite {
             id: parentAnim
             anchors.fill: parent
@@ -248,6 +273,11 @@ PlasmoidItem {
 
             smooth: false
         }
+
+
+        // ==========================================
+        // TITLES
+        // ==========================================
 
 
         // Song Title
@@ -270,6 +300,7 @@ PlasmoidItem {
                 }
             }
 
+            // Let the Text Animate
             Text {
                 id: scrollingText
                 text: root.trackTitle
@@ -307,7 +338,6 @@ PlasmoidItem {
             }
         }
 
-
         // Artist Title
         Text {
             id: title_text
@@ -331,7 +361,13 @@ PlasmoidItem {
             text: root.trackArtist
         }
 
-        // Playlist Choice Menu Toggle
+
+        // ==========================================
+        // PLAYLISTS
+        // ==========================================
+
+
+        // Playlist Menu Toggle
         VisualButton {
             id: playlist_menu_toggle
 
@@ -353,7 +389,6 @@ PlasmoidItem {
             onClick: root.playlistMenuOpen = !root.playlistMenuOpen
         }
 
-
         // Playlist Menu
         PlaylistMenu {
             visibleCondn: root.playlistMenuOpen
@@ -364,7 +399,11 @@ PlasmoidItem {
         }
 
 
-        // Seconds Forward/Backward and Progress Bar
+        // ==========================================
+        // BOTTOM ROW [SHUFFLE, REPEAT, BACKWARD, FORWARD, TIME ELAPSED]
+        // ==========================================
+
+        // Bottom Row
         Row {
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
@@ -429,7 +468,11 @@ PlasmoidItem {
         }
 
 
-        // Play/Pause & Forward/Backward
+        // ==========================================
+        // RIGHT COLUMN [PLAY, PAUSE, NEXT, PREV]
+        // ==========================================
+
+        // Right Column
         Column{
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter

@@ -1,6 +1,6 @@
 To Do:
 
-Avoid Prompt Injection in folder/file names using ' '       !! Imp
+Avoid Prompt Injection in folder/file names using ' '       !! Imp *
 
 Improve Polling of mpc status and title grab. Should not be grabbed every second, title only when song is changed and time ONLY when songs are playing *
 Same command fired twice in playlistMenu will run only once due to CallbackRegistry swalloing one up *
@@ -15,24 +15,33 @@ Replace the parrotAnim system with a AnimatedSprite *
 Rename main function to better names in JS, for further clarity *
 Adding album art via edit playlist does not add album art to the roaster *
 Reopening the widget should not reset elapsed time *
-
-Add Fade In-Outs to All Components
-Perhaps centralize Bash Calling
+Perhaps centralize Bash Calling *
 Perhaps the Background image can also become a State machine        # Decided not to, current system works fine, States with String for this case works just the same!
 
-Sanitize Search
-Sanitize a Bit Hard to read, as it is used inconsistently across
+Sanitize Search *
+Sanitize a Bit Hard to read, as it is used inconsistently across *
 
-Code readability kind-of sucks
+Code readability kind-of sucks *
 Better LabelledButton*
+
+ReFactor the Code! Better Variable Handling, better Writing, Better Modularity [ Perhaps Before Search and Aritst Name] *
+
+
+
+Add Sections like BashExec to all Components and organize some properties positioing for WAY BETTER READABILITY
+
+Add Fade In-Outs to All Components
+Much like parrot, Optimize note animation?
+PlaylistAnim to Loader
+Playlist Art sholudn't error, call Bash to check
+MPC COnfig for Host: Port
+
 
 Use More comments especially multi-line to better describe code work flow
 
 Make the codes not PIXEL Perfect. the values should be more dependend on Root Height/Width to Ensure that different Resolutions Work Fine
 
 Reduce dependency of one component on other's naming
-
-ReFactor the Code! Better Variable Handling, better Writing, Better Modularity [ Perhaps Before Search and Aritst Name]
 
 Change the Fonts to make it look better [Specifically settings Menu]
 

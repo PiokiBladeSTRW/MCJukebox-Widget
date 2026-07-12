@@ -1,5 +1,6 @@
 import QtQuick
 
+// Clicakble Button with Graphics
 Image {
     property bool active: true
     property string graphic: "mud"

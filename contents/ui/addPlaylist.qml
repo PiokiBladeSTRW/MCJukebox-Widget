@@ -40,7 +40,7 @@ Image {
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: 15
         spacing: 5
-
+        Base
         Repeater {
             model: ["Add Songs", "Add Album Art [Optional]"]
 
@@ -83,6 +83,7 @@ Image {
             parent.playlistName = text
         }
     }
+
 
     // Accept Button
     VisualButton {
