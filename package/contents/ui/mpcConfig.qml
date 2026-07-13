@@ -8,17 +8,25 @@ Image {
 
     z:2
     source: "../images/background/settings_bg_4.png"
-    // visible: playlistRoot.settingsPage === 4 ? 1 : 0
-    // opacity: visible ? 1 : 0
-    //
-    // Behavior on opacity {
-    //     NumberAnimation {
-    //         duration: 500
-    //         easing.type: Easing.Linear
-    //     }
-    // }
 
-    //signal settingsPageChanged(int newPage)
+    // Animation handler
+    signal fadeOutComplete
+
+    opacity: 0
+    Behavior on opacity { FadeAnim{} }
+    visible : opacity > 0
+
+    function changeOpacity(value) {
+        opacity = value
+    }
+
+    onVisibleChanged: {
+        if( !visible ) {
+            fadeOutComplete()
+        }
+    }
+
+
 
     //This needs more work to be secure
     PC.Label {

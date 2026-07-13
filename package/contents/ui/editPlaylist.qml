@@ -8,15 +8,24 @@ Image {
 
     z:2
     source: "../images/background/settings_bg_3.png"
-    // visible: playlistRoot.settingsPage === 3
-    // opacity: visible ? 1 : 0
-    //
-    // Behavior on opacity {
-    //     NumberAnimation {
-    //         duration: 500
-    //         easing.type: Easing.Linear
-    //     }
-    // }
+
+    // Animation handler
+    signal fadeOutComplete
+
+    opacity: 0
+    Behavior on opacity { FadeAnim{} }
+    visible : opacity > 0
+
+    function changeOpacity(value) {
+        opacity = value
+    }
+
+    onVisibleChanged: {
+        if( !visible ) {
+            fadeOutComplete()
+        }
+    }
+
 
     property list<string> playlists: []
 

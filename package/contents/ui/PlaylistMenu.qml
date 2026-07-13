@@ -16,14 +16,24 @@ Image {
 
     source: "../images/amethyst_block"
     fillMode: Image.Tile
-/*
-    opacity: visibleCondn ? 1 : 0
-    Behavior on opacity {
-        NumberAnimation {
-            duration: 500
-            easing.type: Easing.Linear
+
+
+    // Animation handler
+    signal fadeOutComplete
+
+    opacity: 0
+    Behavior on opacity { FadeAnim{} }
+    visible : opacity > 0
+
+    function changeOpacity(value) {
+        opacity = value
+    }
+
+    onVisibleChanged: {
+        if( !visible ) {
+            fadeOutComplete()
         }
-    }*/
+    }
 
 
     // ==========================================
@@ -353,15 +363,9 @@ Image {
 
         source: "../images/background/settings_bg_1.png"
 
-        visible: root.settingsPage === 1
-        opacity: visible
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 500
-                easing.type: Easing.Linear
-            }
-        }
+        opacity: root.settingsPage === 1 ? 1 : 0
+        Behavior on opacity { FadeAnim{} }
+        visible: opacity > 0
 
         // Settings Page
         Column {
@@ -386,19 +390,23 @@ Image {
 
     // Settings Menu Loader
     Loader {
-        id: settingMenus
+        id: settingMenuLoader
         anchors.fill: parent
 
-        source: {
+        source: ""
+
+        function setSource() {
             switch(root.settingsPage) {
-                case 2: return "addPlaylist.qml"; break;
-                case 3: return "editPlaylist.qml"; break;
-                case 4: return "mpcConfig.qml"; break;
-                default: return ""
+                case 2: settingMenuLoader.source = "addPlaylist.qml"; break;
+                case 3: settingMenuLoader.source =  "editPlaylist.qml"; break;
+                case 4: settingMenuLoader.source =  "mpcConfig.qml"; break;
+                default: settingMenuLoader.source =  ""
             }
         }
 
         onLoaded: {
+            settingMenuLoader.item.changeOpacity(1)
+
             switch(root.settingsPage) {
                 case 3:
                     item.playlists = root.playlists
@@ -417,10 +425,28 @@ Image {
             }
         }
 
+        // Allow Elements to Fade Out
+        Connections {
+            target: root
+
+            onSettingsPageChanged() {
+
+                if(settingMenuLoader.source != "") {
+                    settingMenuLoader.item.changeOpacity(0)
+                } else {
+                    settingMenuLoader.setSource()
+                }
+            }
+        }
+
         // Signals Connections
         Connections {
-            target: settingMenus.item
+            target: settingMenuLoader.item
             ignoreUnknownSignals: true
+
+            function onFadeOutComplete() {
+                settingMenuLoader.setSource()
+            }
 
             function onSettingsPageChanged(newPage) {
                 root.settingsPage = newPage
@@ -540,12 +566,12 @@ Image {
             songs.sort()
 
             // Obtain the next Index position for new Songs in Lookup hashmap and Add the songs to Lookup
-            let baseVal = Object.keys(settingMenus.item.songsLookup).length + 1
+            let baseVal = Object.keys(settingMenuLoader.item.songsLookup).length + 1
             for (let i = 0; i < songs.length ; i++){
-                settingMenus.item.songsLookup[songs[i]] = baseVal + i
+                settingMenuLoader.item.songsLookup[songs[i]] = baseVal + i
             }
 
-            settingMenus.item.songsList.push(...songs)
+            settingMenuLoader.item.songsList.push(...songs)
         }
 
 
@@ -566,10 +592,10 @@ Image {
                     bash.tempSong(path)
                     break
                 case 2:
-                    settingMenus.item.playlistFolders.push(path)
+                    settingMenuLoader.item.playlistFolders.push(path)
                     break
                 case 3:
-                    settingMenus.item.songsAdd.push(path)
+                    settingMenuLoader.item.songsAdd.push(path)
                     bash.obtainSongsDirectory(path, folderPick.inputSongsInDir)
                     break
             }
@@ -602,10 +628,10 @@ Image {
             if(artMode) {
                 switch(root.settingsPage) {
                     case 2:
-                        settingMenus.item.albumArt = path
+                        settingMenuLoader.item.albumArt = path
                         break
                     case 3:
-                        settingMenus.item.newAlbumArt = path
+                        settingMenuLoader.item.newAlbumArt = path
                         break
                     default: break
                 }
@@ -630,9 +656,9 @@ Image {
                     case 3:
                         // Add the Song to the Editable Roaster, to the SongsAddition List for MPC and for Index Lookup
                         let title = path.split("/")
-                        settingMenus.item.songsLookup[title[title.length - 1]] = Object.keys(settingMenus.item.songsLookup).length + 1
-                        settingMenus.item.songsList.push(title[title.length - 1])
-                        settingMenus.item.songsAdd.push(path)
+                        settingMenuLoader.item.songsLookup[title[title.length - 1]] = Object.keys(settingMenuLoader.item.songsLookup).length + 1
+                        settingMenuLoader.item.songsList.push(title[title.length - 1])
+                        settingMenuLoader.item.songsAdd.push(path)
                         break
                     default: break
                 }

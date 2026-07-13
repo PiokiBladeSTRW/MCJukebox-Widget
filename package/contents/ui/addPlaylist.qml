@@ -21,16 +21,23 @@ Image {
 
     signal playlistAdded(string playlistName, list<string> playlistFolders, string albumArt)
 
-/*
-    visible: playlistRoot.settingsPage === 2
-    opacity: visible ? 1 : 0
+    // Animation handler
+    signal fadeOutComplete
 
-    Behavior on opacity {
-        NumberAnimation {
-            duration: 500
-            easing.type: Easing.Linear
+    opacity: 0
+    Behavior on opacity { FadeAnim{} }
+    visible : opacity > 0
+
+    function changeOpacity(value) {
+        opacity = value
+    }
+
+    onVisibleChanged: {
+        if( !visible ) {
+            fadeOutComplete()
         }
-    }*/
+    }
+
 
 
     // Add Songs and Album Art Buttons

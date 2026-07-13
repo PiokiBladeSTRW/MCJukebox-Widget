@@ -297,14 +297,9 @@ PlasmoidItem {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenterOffset: -30 * Singleton.scaleFactor
 
-            visible: root.menuOpen? 1 : 0
-            opacity:!root.playlistMenuOpen ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 800
-                    easing.type: Easing.Linear
-                }
-            }
+            opacity: root.menuOpen && !root.playlistMenuOpen ? 1 : 0
+            Behavior on opacity { FadeAnim{} }
+            visible: opacity > 0
 
             // Let the Text Animate
             Text {
@@ -355,14 +350,9 @@ PlasmoidItem {
             renderType: Text.NativeRendering
             font.pixelSize: 16
 
-            visible: root.menuOpen? 1 : 0
-            opacity:!root.playlistMenuOpen ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 800
-                    easing.type: Easing.Linear
-                }
-            }
+            opacity: root.menuOpen && !root.playlistMenuOpen ? 1 : 0
+            Behavior on opacity { FadeAnim{} }
+            visible: opacity > 0
 
             text: root.trackArtist
         }
@@ -383,14 +373,9 @@ PlasmoidItem {
             anchors.verticalCenter: parent.verticalCenter
             source: "../images/playlist.png"
 
-            visible: root.menuOpen ? 1 : 0
             opacity: root.menuOpen ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 800
-                    easing.type: Easing.Linear
-                }
-            }
+            Behavior on opacity { FadeAnim{} }
+            visible: opacity > 0
 
             onClick: root.playlistMenuOpen = !root.playlistMenuOpen
         }
@@ -399,11 +384,18 @@ PlasmoidItem {
             id: playlistMenu
             anchors.fill: parent
 
-            source: {
-                if(playlistMenuOpen) {
-                    return "PlaylistMenu.qml"; break;
-                } else {
-                    return ""; break;
+            onLoaded: {item.changeOpacity(1)}
+
+            // Animation
+            Connections {
+                target: root
+
+                function onPlaylistMenuOpenChanged() {
+                    if(playlistMenu.source != "") {
+                        playlistMenu.item.changeOpacity(0)
+                    } else {
+                        playlistMenu.source = "PlaylistMenu.qml"
+                    }
                 }
             }
 
@@ -414,6 +406,10 @@ PlasmoidItem {
 
                 function onMenuForceState(state){
                     root.keepMenuOpen = state
+                }
+
+                function onFadeOutComplete(){
+                    playlistMenu.source = ""
                 }
             }
         }
@@ -430,14 +426,9 @@ PlasmoidItem {
             anchors.verticalCenterOffset: 30 * Singleton.scaleFactor
             spacing: 15
 
-            opacity: root.menuOpen ? 1 : 0
-            visible: root.playlistMenuOpen ? false : true
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 800
-                    easing.type: Easing.Linear
-                }
-            }
+            opacity: root.menuOpen && !root.playlistMenuOpen ? 1 : 0
+            Behavior on opacity { FadeAnim{} }
+            visible: opacity > 0
 
             // Shuffle Songs
             VisualButton {
@@ -509,17 +500,11 @@ PlasmoidItem {
             anchors.rightMargin: 10 * Singleton.scaleFactor
             spacing: 10
 
-            visible: root.playlistMenuOpen? false : true
-            opacity: root.menuOpen ? 1 : 0
-
             property int playButtonIndex: 1
 
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 800
-                    easing.type: Easing.Linear
-                }
-            }
+            opacity: root.menuOpen && !root.playlistMenuOpen ? 1 : 0
+            Behavior on opacity { FadeAnim{} }
+            visible: opacity > 0
 
             Repeater {
                 model: ["main_icons/prev", 0, "main_icons/next"]
