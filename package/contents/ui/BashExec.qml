@@ -161,8 +161,13 @@ QtObject {
             mpc clear;
             mpc add ${cleanDir};
             mpc toggle;`.trim(), function(){
-                titlesUpdate(listenerCallback)
+                titlesUpdate(titleUpdateCallback)
             })
+
+        // If Shuffle was previously Enabled
+        if(plasmoid.configuration.shuffle) {
+            shuffleToggle()
+        }
     }
 
     // Status Handling
@@ -209,8 +214,13 @@ QtObject {
             mpc clear;
             mpc load ${safeName};
             mpc toggle;`.trim(), function(output){
-              titlesUpdate(listenerCallback)
+              titlesUpdate(titleUpdateCallback)
             })
+
+        // If Shuffle was previously Enabled
+        if(plasmoid.configuration.shuffle) {
+            shuffleToggle()
+        }
     }
 
     // Add a Playlist

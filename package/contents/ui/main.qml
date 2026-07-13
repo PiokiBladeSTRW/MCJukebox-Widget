@@ -442,7 +442,10 @@ PlasmoidItem {
             // Shuffle Songs
             VisualButton {
                 graphic: "main_icons/shuffle"
-                onClick: bash.shuffleToggle()
+                onClick: {
+                    bash.shuffleToggle()
+                    plasmoid.configuration.shuffle = !plasmoid.configuration.shuffle
+                }
             }
 
             // Backward 10s

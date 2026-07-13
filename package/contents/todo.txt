@@ -45,7 +45,7 @@ Even after mpc clear, perhaps state of Shuffle and Repeat should be preserved!
 
 Use More comments especially multi-line to better describe code work flow *
 
-Make the codes not PIXEL Perfect. the values should be more dependend on Root Height/Width to Ensure that different Resolutions Work Fine
+Make the codes not PIXEL Perfect. the values should be more dependend on Root Height/Width to Ensure that different Resolutions Work Fine *
 
 Reduce dependency of one component on other's naming *
 
