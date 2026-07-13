@@ -61,12 +61,13 @@ Image {
     // Search Bar
     VisualButton {
         id: searchButton
-        height: 25
-        width: 25
+        height: 25 * Singleton.scaleFactor
+        width: 25 * Singleton.scaleFactor
+
         anchors.top: parent.top
-        anchors.topMargin: 10
+        anchors.topMargin: 10 * Singleton.scaleFactor
         anchors.left: parent.left
-        anchors.leftMargin: 30
+        anchors.leftMargin: 30 * Singleton.scaleFactor
 
         property list<string> searchResults
         property list<string> searchResultsDir
@@ -75,14 +76,14 @@ Image {
 
         onClick: {
             searchBar.visible = true
-            searchBar.width = 80
+            searchBar.width = 80 * Singleton.scaleFactor
             root.menuForceState(true)
         }
 
         // Search Field
         PC.TextField {
             id: searchBar
-            height: 25
+            height: 25 * Singleton.scaleFactor
             width: 0
 
             visible: false
@@ -116,9 +117,9 @@ Image {
 
         // Search Results
         Rectangle {
-            y: 25
-            width: 80
-            height: 60
+            y: 25 * Singleton.scaleFactor
+            width: 80 * Singleton.scaleFactor
+            height: 60 * Singleton.scaleFactor
             color: "black"
 
             visible: searchBar.visible
@@ -128,7 +129,7 @@ Image {
                 clip:true
 
                 ListView {
-                    height: 60
+                    height: 60 * Singleton.scaleFactor
                     width: parent.width
                     model: searchButton.searchResults
                     spacing: 2
@@ -137,8 +138,8 @@ Image {
 
                     // Text with onClick function
                     delegate: PC.ItemDelegate {
-                        width: 70
-                        height: 15
+                        width: 70 * Singleton.scaleFactor
+                        height: 15 * Singleton.scaleFactor
                         text: modelData
 
                         contentItem: Text {
@@ -163,10 +164,10 @@ Image {
         // Exit from Search Bar
         MouseArea {
             z: -1
-            width: 500
-            height: 150
-            x:-30
-            y:-25
+            width: 500 * Singleton.scaleFactor
+            height: 150 * Singleton.scaleFactor
+            x:-30 * Singleton.scaleFactor
+            y:-25 * Singleton.scaleFactor
 
             visible: searchBar.visible
 
@@ -189,12 +190,12 @@ Image {
 
     // Temporary Song File Play
     VisualButton {
-        height: 25
-        width: 25
+        height: 25 * Singleton.scaleFactor
+        width: 25 * Singleton.scaleFactor
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.bottomMargin: 15
-        anchors.rightMargin: 2
+        anchors.bottomMargin: 15 * Singleton.scaleFactor
+        anchors.rightMargin: 2 * Singleton.scaleFactor
 
         graphic: "playlistMenu_icons/folder_pick"
 
@@ -208,12 +209,12 @@ Image {
 
     // Temporary Song Folder Play
     VisualButton {
-        height: 25
-        width: 25
+        height: 25 * Singleton.scaleFactor
+        width: 25 * Singleton.scaleFactor
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.bottomMargin: 15
-        anchors.rightMargin: 35
+        anchors.bottomMargin: 15 * Singleton.scaleFactor
+        anchors.rightMargin: 35 * Singleton.scaleFactor
 
         graphic: "playlistMenu_icons/music_pick"
 
@@ -230,12 +231,12 @@ Image {
     // Playlists Choice Menu
     Flickable {
         id: scrollContainer
-        width: 195
-        height: 150
+        width: 195 * Singleton.scaleFactor
+        height: 150 * Singleton.scaleFactor
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenterOffset: 15
+        anchors.horizontalCenterOffset: 15 * Singleton.scaleFactor
 
         z: 1
         visible: settingsPage === 0
@@ -275,8 +276,8 @@ Image {
                 model: root.playlists
 
                 VisualButton {
-                    height: 50
-                    width: 50
+                    height: 50 * Singleton.scaleFactor
+                    width: 50 * Singleton.scaleFactor
 
                     // Try Set Album art from Cache, if Errors & properly initialized, Fallsback to Default
                     source: "file://"+  root.homeDirPath + "/.cache/jukebox_covers/"+modelData+".png"
@@ -312,12 +313,12 @@ Image {
     VisualButton {
         id: settingsToggle
 
-        width: 30
-        height: 30
+        width: 30 * Singleton.scaleFactor
+        height: 30 * Singleton.scaleFactor
         anchors.top: root.top
         anchors.right: root.right
-        anchors.topMargin: 15
-        anchors.rightMargin: 15
+        anchors.topMargin: 15 * Singleton.scaleFactor
+        anchors.rightMargin: 15 * Singleton.scaleFactor
 
         graphic: root.settingsPage === 0 ? "playlistMenu_icons/settings" : "playlistMenu_icons/back"
 
@@ -474,8 +475,8 @@ Image {
     PC.Popup {
         id: warnPopup
         anchors.centerIn: parent
-        width: 260
-        height: 140
+        width: 260 * Singleton.scaleFactor
+        height: 140 * Singleton.scaleFactor
         modal: true
         focus: true
 

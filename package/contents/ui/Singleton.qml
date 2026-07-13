@@ -1,0 +1,8 @@
+// Singleton to share value across everywhere
+// qmldir exists to define this as a singleton everywhere
+pragma Singleton
+import QtQuick
+
+QtObject {
+    property real scaleFactor: 1.0  //Scaling Factor
+}

@@ -8,8 +8,8 @@ VisualButton {
 
     graphic: "button"
 
-    width: 250
-    height: 25
+    width: 250 * Singleton.scaleFactor
+    height: 25 * Singleton.scaleFactor
 
     Text {
         anchors.verticalCenter: parent.verticalCenter

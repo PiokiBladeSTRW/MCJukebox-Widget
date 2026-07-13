@@ -65,8 +65,6 @@ QtObject {
         connectedSources: []
 
         onNewData: (sourceName, data) =>{
-            console.log("\n:", sourceName)
-
             if(root._callbackRegistry[sourceName]) {
                 var callbackFunc = root._callbackRegistry[sourceName];
 

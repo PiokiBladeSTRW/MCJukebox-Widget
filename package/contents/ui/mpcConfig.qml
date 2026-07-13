@@ -35,8 +35,8 @@ Image {
     PC.Popup {
         id: warnPopup
         anchors.centerIn: parent
-        width: 260
-        height: 140
+        width: 260 * Singleton.scaleFactor
+        height: 140 * Singleton.scaleFactor
         modal: true
         focus: true
 
@@ -79,8 +79,8 @@ Image {
             model: ["MPC Config Music Directory (Optional): ", "MPC Config Host (Optional; Default: 127.0.0.1) ", "MPC Config Port (Optional; Default: 6600) "]
 
             VisualTextField {
-                height: 20
-                width: 300
+                height: 20 * Singleton.scaleFactor
+                width: 300 * Singleton.scaleFactor
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 placeholderText: modelData

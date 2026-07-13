@@ -38,7 +38,7 @@ Image {
     Column {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: 15
+        anchors.verticalCenterOffset: 15 * Singleton.scaleFactor
         spacing: 5
 
         Repeater {
@@ -68,7 +68,7 @@ Image {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -30
+        anchors.verticalCenterOffset: -30 * Singleton.scaleFactor
 
         placeholderText: "Enter Playlist Name: "
 
@@ -80,13 +80,13 @@ Image {
 
     // Accept Button
     VisualButton {
-        width: 30
-        height: 30
+        width: 30 * Singleton.scaleFactor
+        height: 30 * Singleton.scaleFactor
 
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.bottomMargin: 15
-        anchors.rightMargin: 15
+        anchors.bottomMargin: 15 * Singleton.scaleFactor
+        anchors.rightMargin: 15 * Singleton.scaleFactor
 
         graphic: "playlistMenu_icons/enter"
 

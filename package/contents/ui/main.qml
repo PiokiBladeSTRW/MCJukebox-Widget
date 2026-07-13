@@ -60,7 +60,8 @@ PlasmoidItem {
     Component.onCompleted: {
         bash.bootUp()
         bash.statusUpdate(timeUpdate)
-        //bash.titlesUpdate(titleUpdate)
+
+        Singleton.scaleFactor= Math.min(root.width /500, root.height / 150)
     }
 
 
@@ -75,15 +76,15 @@ PlasmoidItem {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenterOffset: 100
+        anchors.horizontalCenterOffset: 100 * Singleton.scaleFactor
 
         visible: plasmoid.configuration.playStatus && !root.menuOpen
 
         property list<color> colors: ["lime", "yellow", "red", "magenta", "blue"]
-        property list<int> positions: [-32, 0, 32]
+        property list<int> positions: [-32 * Singleton.scaleFactor, 0, 32 * Singleton.scaleFactor]
         property int posIndex : 0
         property int colorIndex: 0
-        property int baseOffset: 75
+        property int baseOffset: 75 * Singleton.scaleFactor
         property int topOffset: 0
 
         Image {
@@ -150,10 +151,10 @@ PlasmoidItem {
     // Song Playing Menu
     Image {
         id: menu
-        width: 400
+        width: 400 * Singleton.scaleFactor
         height: parent.height
         anchors.right: parent.right
-        anchors.rightMargin: root.menuOpen ? 0 : -340
+        anchors.rightMargin: root.menuOpen ? 0 : -340 * Singleton.scaleFactor
 
         property string sourceFile : plasmoid.configuration.playStatus ? "empty" : "out"        // If Playing, keeps BG empty for ParrotAni
         property bool menuCloseTimed: false
@@ -288,13 +289,13 @@ PlasmoidItem {
         // Song Title
         Item {
             id: textContainer
-            width: 300 // The visible viewport window width
-            height: 20
+            width: 300 * Singleton.scaleFactor      // The visible viewport window width
+            height: 20 * Singleton.scaleFactor
             clip: true
 
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenterOffset: -30
+            anchors.verticalCenterOffset: -30 * Singleton.scaleFactor
 
             visible: root.menuOpen? 1 : 0
             opacity:!root.playlistMenuOpen ? 1 : 0
@@ -348,7 +349,7 @@ PlasmoidItem {
             id: title_text
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenterOffset: -5
+            anchors.verticalCenterOffset: -5 * Singleton.scaleFactor
 
             font.family: "Minecraft"
             renderType: Text.NativeRendering
@@ -376,7 +377,7 @@ PlasmoidItem {
         VisualButton {
             id: playlist_menu_toggle
 
-            height: 100
+            height: 100 * Singleton.scaleFactor
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
@@ -426,7 +427,7 @@ PlasmoidItem {
         Row {
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenterOffset: 30
+            anchors.verticalCenterOffset: 30 * Singleton.scaleFactor
             spacing: 15
 
             opacity: root.menuOpen ? 1 : 0
@@ -456,8 +457,8 @@ PlasmoidItem {
             // Progress Bar
             Image {
                 id: duration_t
-                height: 10
-                width: 120
+                height: 10 * Singleton.scaleFactor
+                width: 120 * Singleton.scaleFactor
                 anchors.verticalCenter: parent.verticalCenter
                 fillMode: Image.Stretch
                 source: "../images/white_background"
@@ -465,7 +466,7 @@ PlasmoidItem {
 
                 Image {
                     id: duration_e
-                    height: 12
+                    height: 12 * Singleton.scaleFactor
                     width: parent.width * root.elapsedTime
                     fillMode: Image.Stretch
                     source: "../images/white_progress"
@@ -502,7 +503,7 @@ PlasmoidItem {
         Column{
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            anchors.rightMargin: 10
+            anchors.rightMargin: 10 * Singleton.scaleFactor
             spacing: 10
 
             visible: root.playlistMenuOpen? false : true
@@ -520,8 +521,8 @@ PlasmoidItem {
             Repeater {
                 model: ["main_icons/prev", 0, "main_icons/next"]
                 VisualButton {
-                    width: 25
-                    height: 25
+                    width: 25 * Singleton.scaleFactor
+                    height: 25 * Singleton.scaleFactor
 
                     graphic: index === parent.playButtonIndex ?  plasmoid.configuration.playStatus ? "main_icons/pause" : "main_icons/play" : modelData
 

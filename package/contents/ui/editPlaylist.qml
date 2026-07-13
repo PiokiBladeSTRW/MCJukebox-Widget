@@ -53,10 +53,10 @@ Image {
     // Modify List of Songs in a Given Playlist [AvailableSongsList = Roaster]
     Rectangle {
         id: roasterEdit
-        width: 350
+        width: 350 * Singleton.scaleFactor
         height: parent.height
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: -20
+        anchors.horizontalCenterOffset: -20 * Singleton.scaleFactor
         z:3
 
         color: "#171616"
@@ -70,8 +70,8 @@ Image {
         Rectangle {
             id: roasterDisplay
             width: roasterEdit.width
-            height: 80
-            radius: 10
+            height: 80 * Singleton.scaleFactor
+            radius: 10 * Singleton.scaleFactor
 
             color: "#303030"
 
@@ -87,7 +87,7 @@ Image {
                     delegate: PC.ItemDelegate {
                         id: songItem
                         width: roasterDisplay.width
-                        height: 24
+                        height: 24 * Singleton.scaleFactor
                         text: ""
 
                         background: Rectangle {
@@ -101,7 +101,7 @@ Image {
                             anchors.fill: parent
 
                             Text {
-                                width: 300
+                                width: 300 * Singleton.scaleFactor
                                 anchors.left: parent.left
 
                                 text: modelData
@@ -131,12 +131,12 @@ Image {
             model: [20, 60, 320]
 
             VisualButton {
-                width: 20
-                height: 20
+                width: 20 * Singleton.scaleFactor
+                height: 20 * Singleton.scaleFactor
 
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
-                anchors.bottomMargin: 10
+                anchors.bottomMargin: 10 * Singleton.scaleFactor
                 anchors.leftMargin: modelData
 
                 graphic: roasterEdit.displayGraphics[index]
@@ -160,9 +160,9 @@ Image {
         // Area Outside for another Exit
         MouseArea {
             height: parent.height
-            width: 50
+            width: 50 * Singleton.scaleFactor
             anchors.right: parent.right
-            anchors.rightMargin: -50
+            anchors.rightMargin: -50 * Singleton.scaleFactor
 
             onClicked: {
                 roasterEdit.visible = false
@@ -176,18 +176,18 @@ Image {
 
     PC.ComboBox {
         id: pickPlaylist
-        height: 25
-        width: 60
+        height: 25 * Singleton.scaleFactor
+        width: 60 * Singleton.scaleFactor
 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 15
-        anchors.leftMargin: 15
+        anchors.topMargin: 15 * Singleton.scaleFactor
+        anchors.leftMargin: 15 * Singleton.scaleFactor
 
         model : root.playlists
 
         Component.onCompleted: {
-            popup.height = 120
+            popup.height = 120 * Singleton.scaleFactor
         }
 
         background: Image{
@@ -205,8 +205,8 @@ Image {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -30
-        anchors.horizontalCenterOffset: 15
+        anchors.verticalCenterOffset: -30 * Singleton.scaleFactor
+        anchors.horizontalCenterOffset: 15 * Singleton.scaleFactor
 
         placeholderText: "Rename Playlist [Optional]: "
 
@@ -219,8 +219,8 @@ Image {
     Column {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenterOffset: 15
-        anchors.verticalCenterOffset: 15
+        anchors.horizontalCenterOffset: 15 * Singleton.scaleFactor
+        anchors.verticalCenterOffset: 15 * Singleton.scaleFactor
         spacing: 5
 
         Repeater {
@@ -263,12 +263,12 @@ Image {
 
     // Confirmation
     VisualButton {
-        width: 20
-        height: 20
+        width: 20 * Singleton.scaleFactor
+        height: 20 * Singleton.scaleFactor
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.bottomMargin: 15
-        anchors.rightMargin: 32.5
+        anchors.bottomMargin: 15 * Singleton.scaleFactor
+        anchors.rightMargin: 32.5 * Singleton.scaleFactor
 
         graphic: "playlistMenu_icons/enter"
 
@@ -282,12 +282,12 @@ Image {
 
     // Delete Playlist
     VisualButton {
-        width: 20
-        height: 20
+        width: 20 * Singleton.scaleFactor
+        height: 20 * Singleton.scaleFactor
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.bottomMargin: 15
-        anchors.rightMargin: 7.5
+        anchors.bottomMargin: 15 * Singleton.scaleFactor
+        anchors.rightMargin: 7.5 * Singleton.scaleFactor
 
         graphic: "playlistMenu_icons/delete"
 

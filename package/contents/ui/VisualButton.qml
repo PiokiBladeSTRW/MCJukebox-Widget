@@ -13,8 +13,8 @@ Image {
     fillMode: Image.Stretch
     smooth: false
 
-    width: 20
-    height: 20
+    width: 20 * Singleton.scaleFactor
+    height: 20 * Singleton.scaleFactor
 
     MouseArea{
         visible: active

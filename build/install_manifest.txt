@@ -5,9 +5,11 @@
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/mpcConfig.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/VisualButton.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/editPlaylist.qml
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/Singleton.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/BashExec.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/PlaylistMenu.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/LabelledButton.qml
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/VisualTextField.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/main.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/addPlaylist.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/white_progress.png
