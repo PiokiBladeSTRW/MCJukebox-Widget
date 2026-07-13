@@ -38,16 +38,16 @@ MPC COnfig for Host: Port   *
 Make the Graphical TextField its own Component *
 Search broken *
 search debounce starts with every text change, perhaps wasting cpu cycles # It isn't
-hitting forward or backward should immediately update elapsedTime
+hitting forward or backward should immediately update elapsedTime *
 
 Even after mpc clear, perhaps state of Shuffle and Repeat should be preserved!
 
 
-Use More comments especially multi-line to better describe code work flow
+Use More comments especially multi-line to better describe code work flow *
 
 Make the codes not PIXEL Perfect. the values should be more dependend on Root Height/Width to Ensure that different Resolutions Work Fine
 
-Reduce dependency of one component on other's naming
+Reduce dependency of one component on other's naming *
 
 Change the Fonts to make it look better [Specifically settings Menu]
 
