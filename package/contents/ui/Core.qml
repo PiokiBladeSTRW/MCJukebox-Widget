@@ -368,7 +368,6 @@ Item {
             opacity: root.menuOpen ? 1 : 0
             Behavior on opacity { FadeAnim{} }
             visible: opacity > 0
-            active: root.menuOpen
 
             onClicked: root.playlistMenuOpen = !root.playlistMenuOpen
 
