@@ -101,5 +101,9 @@ Image {
             root.playlistAdded(parent.playlistName, parent.playlistFolders, parent.albumArt)
             root.settingsPageChanged(1)
         }
+
+        detectHover: true
+        PC.ToolTip.visible: hovered
+        PC.ToolTip.text: "Confirm"
     }
 }

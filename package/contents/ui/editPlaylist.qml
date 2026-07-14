@@ -135,6 +135,7 @@ Image {
             }
         }
 
+        property list<string> tooltips: ["Add Folder", "Add File", "Confirm"]
         // Addition and Confirmation Button
         Repeater {
             model: [20, 60, 320]
@@ -164,6 +165,10 @@ Image {
                             break
                     }
                 }
+
+                detectHover: true
+                PC.ToolTip.visible: hovered
+                PC.ToolTip.text: parent.tooltips[index]
             }
         }
 
@@ -297,6 +302,10 @@ Image {
             parent.reset()
             root.settingsPageChanged(1)
         }
+
+        detectHover: true
+        PC.ToolTip.visible: hovered
+        PC.ToolTip.text: "Confirm"
     }
 
     // Delete Playlist
@@ -315,5 +324,9 @@ Image {
             parent.reset()
             root.settingsPageChanged(1)
         }
+
+        detectHover: true
+        PC.ToolTip.visible: hovered
+        PC.ToolTip.text: "Delete Playlist"
     }
 }

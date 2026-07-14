@@ -81,6 +81,10 @@ Image {
 
         graphic: "playlistMenu_icons/search"
 
+        detectHover: true
+        PC.ToolTip.visible: hovered
+        PC.ToolTip.text: "Search Song"
+
         onClick: {
             searchBar.visible = true
             searchBar.width = 80 * Singleton.scaleFactor
@@ -212,6 +216,10 @@ Image {
             Singleton.menuForceCount += 1
             folderPick.open()
         }
+
+        detectHover: true
+        PC.ToolTip.visible: hovered
+        PC.ToolTip.text: "Play Folder"
     }
 
     // Temporary Song Folder Play
@@ -232,6 +240,10 @@ Image {
             filePick.artMode = 1
             filePick.open()
         }
+
+        detectHover: true
+        PC.ToolTip.visible: hovered
+        PC.ToolTip.text: "Play File"
     }
 
 
@@ -347,6 +359,10 @@ Image {
                     break
             }
         }
+
+        detectHover: true
+        PC.ToolTip.visible: hovered
+        PC.ToolTip.text: root.settingsPage===0 ? "Settings" : "Back"
     }
 
     // Base Settings Menu

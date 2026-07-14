@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Effects
 import QtMultimedia
 import org.kde.plasma.plasmoid
+import org.kde.plasma.components 3.0 as PC
 
 import "../code/timeData.js" as TimeData
 import "../code/titles.js" as Titles
@@ -369,6 +370,10 @@ Item {
             visible: opacity > 0
 
             onClick: root.playlistMenuOpen = !root.playlistMenuOpen
+
+            detectHover: true
+            PC.ToolTip.visible: hovered
+            PC.ToolTip.text: "Toggle Playlist Menu"
         }
 
         Loader {
@@ -424,6 +429,10 @@ Item {
                     bash.shuffleToggle()
                     plasmoid.configuration.shuffle = !plasmoid.configuration.shuffle
                 }
+
+                detectHover: true
+                PC.ToolTip.visible: hovered
+                PC.ToolTip.text: "Shuffle"
             }
 
             // Backward 10s
@@ -433,6 +442,10 @@ Item {
                     bash.seekPosition("-10")
                     bash.statusUpdate(timeUpdate)
                 }
+
+                detectHover: true
+                PC.ToolTip.visible: hovered
+                PC.ToolTip.text: "Backward 10s"
             }
 
             // Progress Bar
@@ -466,12 +479,20 @@ Item {
                     bash.statusUpdate(timeUpdate)
                 }
 
+                detectHover: true
+                PC.ToolTip.visible: hovered
+                PC.ToolTip.text: "Forward 10s"
+
             }
 
             // Loop Song
             VisualButton {
                 graphic: "main_icons/loop"
                 onClick: bash.repeatToggle()
+
+                detectHover: true
+                PC.ToolTip.visible: hovered
+                PC.ToolTip.text: "Repeat"
             }
         }
 
@@ -493,6 +514,8 @@ Item {
             Behavior on opacity { FadeAnim{} }
             visible: opacity > 0
 
+            property list<string> tooltips: ["Previous", "Play/Pause", "Next"]
+
             Repeater {
                 model: ["main_icons/prev", 0, "main_icons/next"]
                 VisualButton {
@@ -500,6 +523,10 @@ Item {
                     height: 25 * Singleton.scaleFactor
 
                     graphic: index === parent.playButtonIndex ?  plasmoid.configuration.playStatus ? "main_icons/pause" : "main_icons/play" : modelData
+
+                    detectHover: true
+                    PC.ToolTip.visible: hovered
+                    PC.ToolTip.text: parent.tooltips[index]
 
                     onClick: {
                         switch(index) {
