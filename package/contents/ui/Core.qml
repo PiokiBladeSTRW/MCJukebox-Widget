@@ -220,7 +220,7 @@ Item {
         // Grace Period Timer to ensure Mouse Leaving doesn't Insta-Shut menu
         Timer {
             id: menuCloseTimer
-            interval: 600
+            interval: 800
             running: parent.menuCloseTimed
 
             onTriggered: {
