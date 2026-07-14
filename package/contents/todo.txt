@@ -45,6 +45,7 @@ hitting forward or backward should immediately update elapsedTime *
 
 Even after mpc clear, perhaps state of Shuffle and Repeat should be preserved! *
 
+Increase Menuoff timer
 
 Use More comments especially multi-line to better describe code work flow *
 

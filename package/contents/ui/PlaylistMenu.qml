@@ -574,7 +574,6 @@ Image {
                     songs.push(files[i])
                 }
             }
-            songs.sort()
 
             // Obtain the next Index position for new Songs in Lookup hashmap and Add the songs to Lookup
             let baseVal = Object.keys(settingMenuLoader.item.songsLookup).length + 1

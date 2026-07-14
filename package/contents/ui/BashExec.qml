@@ -311,8 +311,8 @@ QtObject {
 
     // Obtain List of Files[later filtered to Songs] in a Directory
     function obtainSongsDirectory(path, callback) {
-        let finalPath = sanitize( plasmoid.configuration.musicPath + path )
-        _run("ls -p "+ finalPath + " | grep -v /", callback)
+        let finalPath = sanitize(path)
+        _run("mpc ls "+ finalPath, callback)
     }
 
     // Obtain a List of Playlists
