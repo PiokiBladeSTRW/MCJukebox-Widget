@@ -52,6 +52,7 @@ Item {
     // Set directories and data up upon Opening of Widget
     Component.onCompleted: {
         bash.titleUpdateCallback = titleUpdate
+        bash.titlesUpdate(titleUpdate)
         bash.statusUpdate(timeUpdate)
     }
 
@@ -297,7 +298,7 @@ Item {
                 id: scrollingText
                 text: root.trackTitle
 
-                font.family: "Minecraft"
+                font.family: Singleton.minecraftFont.name
                 renderType: Text.NativeRendering
                 font.pixelSize: 16
 
@@ -332,12 +333,12 @@ Item {
 
         // Artist Title
         Text {
-            id: title_text
+            id: artist_title
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenterOffset: -5 * Singleton.scaleFactor
 
-            font.family: "Minecraft"
+            font.family: Singleton.minecraftFont.name
             renderType: Text.NativeRendering
             font.pixelSize: 16
 

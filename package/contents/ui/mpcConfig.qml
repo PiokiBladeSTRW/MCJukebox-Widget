@@ -32,7 +32,7 @@ Image {
     PC.Label {
         text: "⚠️ Be Careful Editing These"
         font.pixelSize: 15
-        font.family: "Minecraft"
+        font.family: Singleton.minecraftFont.name
         color: "white"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter

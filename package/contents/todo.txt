@@ -26,7 +26,7 @@ Better LabelledButton*
 
 ReFactor the Code! Better Variable Handling, better Writing, Better Modularity [ Perhaps Before Search and Aritst Name] *
 
-
+Hover Tooltips everywhere
 
 Add Sections like BashExec to all Components and organize some properties positioing for WAY BETTER READABILITY *
 
@@ -49,9 +49,9 @@ Make the codes not PIXEL Perfect. the values should be more dependend on Root He
 
 Reduce dependency of one component on other's naming *
 
-Change the Fonts to make it look better [Specifically settings Menu]
+Change the Fonts to make it look better [Specifically settings Menu] *
 
-Make it compatible with New users [Install MPC/MPD if not installed, if Installed ask the user for their Music folder directory with a brief tutorial! Update the config file containing it]
+Make it compatible with New users [Install MPC/MPD if not installed, if Installed ask the user for their Music folder directory with a brief tutorial! Update the config file containing it] *
 
 Bugs:
 If you do mpc clear or have nothing on play already, choosing a song does not display unless u restart widget *

@@ -5,6 +5,7 @@ import QtQuick
 VisualButton {
     property string text: ""
     property string textColor: "white"
+    property string font: Singleton.minecraftFont.name
 
     graphic: "button"
 
@@ -16,7 +17,7 @@ VisualButton {
         anchors.horizontalCenter: parent.horizontalCenter
 
         text: parent.text
-        font.family: "Minecraft"
+        font.family: parent.font
         renderType: Text.NativeRendering
         font.pixelSize: 14
 

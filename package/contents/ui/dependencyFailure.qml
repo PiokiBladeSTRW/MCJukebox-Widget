@@ -104,7 +104,7 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
 
                     color: "white"
-                    font.family: "Minecraft"
+                    font.family: Singleton.thickMinecraftFont.name
                     font.pixelSize: 12
                 }
 
@@ -114,7 +114,7 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
 
                     color: "white"
-                    font.family: "Minecraft"
+                    font.family: Singleton.thickMinecraftFont.name
                     font.pixelSize: 12
                 }
 
@@ -126,7 +126,7 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
 
                     color: "white"
-                    font.family: "Minecraft"
+                    font.family: Singleton.thickMinecraftFont.name
                     font.pixelSize: 12
                 }
 
@@ -136,7 +136,7 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
 
                     color: "white"
-                    font.family: "Minecraft"
+                    font.family: Singleton.thickMinecraftFont.name
                     font.pixelSize: 12
                 }
             }

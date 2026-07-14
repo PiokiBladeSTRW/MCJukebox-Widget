@@ -21,7 +21,9 @@ QtObject {
         function statusTitleUpdate() {
 
             // Update Title
-            titlesUpdate(titleUpdateCallback)
+            if(titleUpdateCallback) {
+                titlesUpdate(titleUpdateCallback)
+            }
 
             // Handle playStatus Configuration
             _run("mpc status", function(output){

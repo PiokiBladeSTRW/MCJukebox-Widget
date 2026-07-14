@@ -5,4 +5,12 @@ import QtQuick
 
 QtObject {
     property real scaleFactor: 1.0  //Scaling Factor
+
+    property var thickMinecraftFont: FontLoader {
+        source: "../fonts/Minecrafter.ttf"
+    }
+
+    property var minecraftFont: FontLoader {
+        source: "../fonts/Minecraft.ttf"
+    }
 }

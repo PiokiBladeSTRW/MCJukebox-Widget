@@ -429,7 +429,7 @@ Image {
         Connections {
             target: root
 
-            onSettingsPageChanged() {
+            function onSettingsPageChanged() {
 
                 if(settingMenuLoader.source != "") {
                     settingMenuLoader.item.changeOpacity(0)
