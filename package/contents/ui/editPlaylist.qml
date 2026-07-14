@@ -160,6 +160,7 @@ Image {
                             break;
                         case 2:
                             roasterEdit.visible = false;
+                            Singleton.menuForceCount -= 1
                             break
                     }
                 }
@@ -175,6 +176,7 @@ Image {
 
             onClicked: {
                 roasterEdit.visible = false
+                Singleton.menuForceCount -= 1
             }
         }
     }
@@ -206,6 +208,11 @@ Image {
 
         onActivated: {
             parent.chosenPlaylist = currentText
+        }
+
+        hoverEnabled: true
+        onHoveredChanged: {
+            Singleton.menuForceCount += hovered ? 1 : -1
         }
     }
 
@@ -250,10 +257,13 @@ Image {
                                     songsHashMap[String(songsList[i])] = i + 1
                                 }
 
-                                settingMenus.item.songsList = songsList
-                                settingMenus.item.songsLookup = songsHashMap
+                                root.songsList = songsList
+                                root.songsLookup = songsHashMap
                             })
                             roasterEdit .visible = true
+
+                            Singleton.menuForceCount += 1
+
                             break
                         case 1:
                             filePickOpen(1)

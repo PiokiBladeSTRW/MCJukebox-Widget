@@ -19,9 +19,8 @@ Item {
     property string trackArtist
 
     property bool menuOpen: false
+    property bool keepMenuOpen: Singleton.menuForceCount > 0
     property bool playlistMenuOpen : false
-    property bool keepMenuOpen: false
-
 
 
     // ==========================================
@@ -395,10 +394,6 @@ Item {
             Connections {
                 target: playlistMenu.item
                 ignoreUnknownSignals: true
-
-                function onMenuForceState(state){
-                    root.keepMenuOpen = state
-                }
 
                 function onFadeOutComplete(){
                     playlistMenu.source = ""

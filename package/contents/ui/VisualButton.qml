@@ -23,7 +23,13 @@ Image {
 
         onClicked: parent.click()
 
-        onEntered: parent.hovered = true
-        onExited: parent.hovered = false
+        onEntered: {
+            Singleton.menuForceCount += 1
+            parent.hovered = true
+        }
+        onExited: {
+            Singleton.menuForceCount -= 1
+            parent.hovered = false
+        }
     }
 }

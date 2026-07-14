@@ -11,9 +11,6 @@ Image {
     property int settingsPage: 0        // 0: Disabled, 1: Selection, 2: Adding Playlist, 3: EditPlaylist, 4: MPC Modification
     property list<string> playlists
 
-    signal menuForceState(bool state)
-
-
     source: "../images/amethyst_block"
     fillMode: Image.Tile
 
@@ -87,7 +84,7 @@ Image {
         onClick: {
             searchBar.visible = true
             searchBar.width = 80 * Singleton.scaleFactor
-            root.menuForceState(true)
+            Singleton.menuForceCount += 1
         }
 
         // Search Field
@@ -191,7 +188,7 @@ Image {
             id: searchBarOff
             interval: 300
             onTriggered: {
-                root.menuForceState(false)
+                Singleton.menuForceCount -= 1
                 searchBar.visible = false
             }
         }
@@ -212,7 +209,7 @@ Image {
         visible: settingsPage === 0
 
         onClick: {
-            root.menuForceState(true)
+            Singleton.menuForceCount += 1
             folderPick.open()
         }
     }
@@ -231,7 +228,7 @@ Image {
         visible: settingsPage === 0
 
         onClick: {
-            root.menuForceState(true)
+            Singleton.menuForceCount += 1
             filePick.artMode = 1
             filePick.open()
         }
@@ -255,21 +252,17 @@ Image {
         contentWidth: playlistGrid.width
         contentHeight: playlistGrid.height
 
-        // Ensure Menu Stays Open
-        HoverHandler {
-            id: hoverer
-            onHoveredChanged: {
-                if(hovered) {
-                    root.menuForceState(true)
-                } else {
-                    root.menuForceState(false)
-                }
-            }
-        }
-
         PC.ScrollBar.vertical: PC.ScrollBar {
             visible: true
             policy: PC.ScrollBar.AsNeeded
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+
+                onEntered: Singleton.menuForceCount += 1
+                onExited: Singleton.menuForceCount -= 1
+            }
         }
 
         // Playlists List
@@ -337,18 +330,20 @@ Image {
         z: 3
 
         onClick: {
+            // Reset Count to Cleanup Leftover additions which never went out of focus
+            Singleton.menuForceCount = 0
+
+            // Change settings page
             switch(root.settingsPage) {
 
                 // From Settings Selction
                 case 1:
                     root.settingsPage = 0;
-                    menuForceState(false)
                     break
 
                 // Anywhere Else
                 default:
                     root.settingsPage = 1;
-                    menuForceState(true)
                     break
             }
         }
@@ -588,7 +583,7 @@ Image {
 
             switch(root.settingsPage) {
                 case 0:
-                    root.menuForceState(false)
+                    Singleton.menuForceCount -= 1
                     bash.tempSong(path)
                     break
                 case 2:
@@ -606,7 +601,7 @@ Image {
         onRejected: {
             folderPick.close()
             if(root.settingsPage === 0) {
-                root.menuForceState(false)
+                Singleton.menuForceCount -= 1
             }
         }
     }
@@ -649,7 +644,7 @@ Image {
 
                 switch(root.settingsPage) {
                     case 0:
-                        root.menuForceState(false)
+                        Singleton.menuForceCount -= 1
                         bash.tempSong(path)
                         break
 
@@ -670,7 +665,7 @@ Image {
         onRejected:{
             filePick.close()
             if(root.settingsPage === 0) {
-                root.menuForceState(false)
+                Singleton.menuForceCount -= 1
             }
         }
 
