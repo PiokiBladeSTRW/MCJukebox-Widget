@@ -26,9 +26,9 @@ Better LabelledButton*
 
 ReFactor the Code! Better Variable Handling, better Writing, Better Modularity [ Perhaps Before Search and Aritst Name] *
 
-Hover Tooltips everywhere
+Hover Tooltips everywhere *
 Improve keepMenuOpen        *
-Change onClick to onClicked
+Change onClick to onClicked *
 PlaylistMenuToggler is always visbile regardless of being in settings       # Made a Feature!
 
 Add Sections like BashExec to all Components and organize some properties positioing for WAY BETTER READABILITY *

@@ -7,7 +7,7 @@ Image {
 
     property bool detectHover: false
     property bool hovered: false
-    signal click
+    signal clicked
 
     source: "../images/" + graphic + ".png"
     fillMode: Image.Stretch
@@ -21,7 +21,7 @@ Image {
         hoverEnabled: detectHover
         anchors.fill: parent
 
-        onClicked: parent.click()
+        onClicked: parent.clicked()
 
         onEntered: {
             Singleton.menuForceCount += 1

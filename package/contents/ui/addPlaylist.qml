@@ -54,7 +54,7 @@ Image {
             LabelledButton {
                 text: modelData
 
-                onClick: {
+                onClicked: {
                     switch(index) {
                         case 0:
                             root.folderPickOpen()
@@ -97,7 +97,7 @@ Image {
 
         graphic: "playlistMenu_icons/enter"
 
-        onClick: {
+        onClicked: {
             root.playlistAdded(parent.playlistName, parent.playlistFolders, parent.albumArt)
             root.settingsPageChanged(1)
         }

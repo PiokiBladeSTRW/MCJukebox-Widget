@@ -85,7 +85,7 @@ Image {
         PC.ToolTip.visible: hovered
         PC.ToolTip.text: "Search Song"
 
-        onClick: {
+        onClicked: {
             searchBar.visible = true
             searchBar.width = 80 * Singleton.scaleFactor
             Singleton.menuForceCount += 1
@@ -147,7 +147,7 @@ Image {
 
                     bottomMargin: 10
 
-                    // Text with onClick function
+                    // Text with onClicked function
                     delegate: PC.ItemDelegate {
                         width: 70 * Singleton.scaleFactor
                         height: 15 * Singleton.scaleFactor
@@ -212,7 +212,7 @@ Image {
 
         visible: settingsPage === 0
 
-        onClick: {
+        onClicked: {
             Singleton.menuForceCount += 1
             folderPick.open()
         }
@@ -235,7 +235,7 @@ Image {
 
         visible: settingsPage === 0
 
-        onClick: {
+        onClicked: {
             Singleton.menuForceCount += 1
             filePick.artMode = 1
             filePick.open()
@@ -310,7 +310,7 @@ Image {
                     PC.ToolTip.visible: hovered
                     PC.ToolTip.text: modelData
 
-                    onClick: {
+                    onClicked: {
                         plasmoid.configuration.playlistIndex = index
                         bash.chosenPlaylist(modelData);
                     }
@@ -341,7 +341,7 @@ Image {
 
         z: 3
 
-        onClick: {
+        onClicked: {
             // Reset Count to Cleanup Leftover additions which never went out of focus
             Singleton.menuForceCount = 0
 
@@ -389,7 +389,7 @@ Image {
                 LabelledButton {
                     text: modelData
 
-                    onClick: {
+                    onClicked: {
                         // Index + 2 to Account for Page 0 and index starting at 0
                         root.settingsPage = index + 2
                     }

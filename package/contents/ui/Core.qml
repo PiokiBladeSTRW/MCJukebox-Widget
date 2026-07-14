@@ -369,7 +369,7 @@ Item {
             Behavior on opacity { FadeAnim{} }
             visible: opacity > 0
 
-            onClick: root.playlistMenuOpen = !root.playlistMenuOpen
+            onClicked: root.playlistMenuOpen = !root.playlistMenuOpen
 
             detectHover: true
             PC.ToolTip.visible: hovered
@@ -425,7 +425,7 @@ Item {
             // Shuffle Songs
             VisualButton {
                 graphic: "main_icons/shuffle"
-                onClick: {
+                onClicked: {
                     bash.shuffleToggle()
                     plasmoid.configuration.shuffle = !plasmoid.configuration.shuffle
                 }
@@ -438,7 +438,7 @@ Item {
             // Backward 10s
             VisualButton {
                 graphic: "main_icons/backward"
-                onClick: {
+                onClicked: {
                     bash.seekPosition("-10")
                     bash.statusUpdate(timeUpdate)
                 }
@@ -474,7 +474,7 @@ Item {
             // Forward 10s
             VisualButton {
                 graphic: "main_icons/forward"
-                onClick: {
+                onClicked: {
                     bash.seekPosition("+10")
                     bash.statusUpdate(timeUpdate)
                 }
@@ -488,7 +488,7 @@ Item {
             // Loop Song
             VisualButton {
                 graphic: "main_icons/loop"
-                onClick: bash.repeatToggle()
+                onClicked: bash.repeatToggle()
 
                 detectHover: true
                 PC.ToolTip.visible: hovered
@@ -528,7 +528,7 @@ Item {
                     PC.ToolTip.visible: hovered
                     PC.ToolTip.text: parent.tooltips[index]
 
-                    onClick: {
+                    onClicked: {
                         switch(index) {
                             case 0:
                                 if(root.elapsedTime < 0.05) {

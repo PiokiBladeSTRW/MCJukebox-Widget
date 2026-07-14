@@ -92,7 +92,7 @@ Image {
                     model: root.songsList
                     spacing: 2
 
-                    // Text with onClick function
+                    // Text with onClicked function
                     delegate: PC.ItemDelegate {
                         id: songItem
                         width: roasterDisplay.width
@@ -151,7 +151,7 @@ Image {
 
                 graphic: roasterEdit.displayGraphics[index]
 
-                onClick : {
+                onClicked : {
                     switch(index) {
                         case 0:
                             folderPickOpen()
@@ -250,7 +250,7 @@ Image {
             LabelledButton {
                 text: modelData
 
-                onClick: {
+                onClicked: {
                     switch(index) {
                         case 0:
                             bash.obtainSongsPlaylist(root.chosenPlaylist, function(output){
@@ -296,7 +296,7 @@ Image {
 
         graphic: "playlistMenu_icons/enter"
 
-        onClick: {
+        onClicked: {
             parent.removalIndices.sort((a,b) => b-a)
             root.playlistEdited(parent.chosenPlaylist, parent.playlistRename, parent.newAlbumArt, parent.songsAdd, parent.removalIndices)
             parent.reset()
@@ -319,7 +319,7 @@ Image {
 
         graphic: "playlistMenu_icons/delete"
 
-        onClick: {
+        onClicked: {
             bash.deletePlaylist(parent.chosenPlaylist)
             parent.reset()
             root.settingsPageChanged(1)
