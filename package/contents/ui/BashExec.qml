@@ -283,6 +283,7 @@ QtObject {
 
         // Add Chosen Songs
         for (let i = 0; i<songsAdded.length; i++) {
+            console.log(songsAdded[i])
             commands.push("mpc addplaylist "+ safeName + " "+ sanitize(songsAdded[i])) ;
         }
 
