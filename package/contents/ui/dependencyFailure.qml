@@ -33,6 +33,13 @@ Item {
             }
         }
 
+        Rectangle {
+            anchors.fill: parent
+            visible: root.menuOpen
+            color: "black"
+            opacity: 0.3
+        }
+
         // Handle Menu Open & Close States based on Mouse
         MouseArea{
             anchors.fill: parent
@@ -76,5 +83,63 @@ Item {
             }
         }
 
+
+        // Warning Labels
+        Item {
+            id: textContainer
+            width: 400 * Singleton.scaleFactor
+            height: parent.height
+
+            anchors.centerIn: parent
+
+            visible: root.menuOpen
+
+            Column {
+                anchors.centerIn: parent
+                spacing: 5
+
+                Text {
+                    width: 320
+                    text: "⚠️<b>Missing Dependencies!</b>"
+                    horizontalAlignment: Text.AlignHCenter
+
+                    color: "white"
+                    font.family: "Minecraft"
+                    font.pixelSize: 12
+                }
+
+                Text {
+                    width: 320
+                    text: "Please Install MPC & MPD and Enable MPD"
+                    horizontalAlignment: Text.AlignHCenter
+
+                    color: "white"
+                    font.family: "Minecraft"
+                    font.pixelSize: 12
+                }
+
+                Item {width: 1; height: 4}
+
+                Text {
+                    width: 320
+                    text: "<b>Install:</b> <i>apt/dnf install mpc mpd</i> OR <i>pacman -S mpc mpd</i>"
+                    horizontalAlignment: Text.AlignHCenter
+
+                    color: "white"
+                    font.family: "Minecraft"
+                    font.pixelSize: 12
+                }
+
+                Text {
+                    width: 320
+                    text: "<b>Enable MPD via:</b> <i>systemctl --user enable mpd</i> & Restart "
+                    horizontalAlignment: Text.AlignHCenter
+
+                    color: "white"
+                    font.family: "Minecraft"
+                    font.pixelSize: 12
+                }
+            }
+        }
     }
 }

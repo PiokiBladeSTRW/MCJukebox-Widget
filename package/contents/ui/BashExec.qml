@@ -111,7 +111,7 @@ QtObject {
 
     // Refresh Slates Upon Open
     function hasDependencies(callback) {
-        _run("which mpc && which mpe && echo 1 || echo 0", callback)
+        _run("which mpc && which mpd && echo 1 || echo 0", callback)
     }
 
     function bootUp() {
