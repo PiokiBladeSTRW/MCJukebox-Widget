@@ -171,7 +171,7 @@ Item {
             onClicked: {
                 // Open Menu
                 if( !root.menuOpen) {
-                    bash.soundEffect(openSoundEffect)
+                    bash.soundEffect(parent.openSoundEffect)
 
                     root.menuOpen = true
                     parent.menuFullyClosed = false
