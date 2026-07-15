@@ -237,7 +237,7 @@ Image {
 
         onClicked: {
             Singleton.menuForceCount += 1
-            filePick.artMode = 1
+            filePick.artMode = 0
             filePick.open()
         }
 
