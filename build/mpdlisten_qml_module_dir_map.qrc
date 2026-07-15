@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/">
-    <file alias="/com/pioki/jukebox/backend">/home/pioki/P-PF/Leftover/PlasmaDev/com.pioki.jukebox/build</file>
-
-  </qresource>
-</RCC>
