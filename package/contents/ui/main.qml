@@ -7,6 +7,8 @@ PlasmoidItem {
     width: 500
     height: 150
 
+    Plasmoid.backgroundHints: "NoBackground"
+
     // ==========================================
     // SETUP BASH
     // ==========================================

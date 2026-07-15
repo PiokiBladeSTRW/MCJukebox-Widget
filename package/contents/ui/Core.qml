@@ -138,6 +138,25 @@ Item {
     // MAIN MENU
     // ==========================================
 
+    // Border
+    Rectangle {
+        width: 400 * Singleton.scaleFactor
+        height: parent.height
+        anchors.right: parent.right
+
+        radius: 8 * Singleton.scaleFactor
+        color: "transparent"
+
+        border.width: 3
+        border.color: "black"
+
+        opacity: root.menuOpen ? 1 : 0
+        Behavior on opacity { FadeAnim{} }
+        visible: opacity > 0
+
+        z:5
+    }
+
 
     // Song Playing Menu
     Image {
