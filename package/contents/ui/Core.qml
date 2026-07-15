@@ -10,8 +10,10 @@ import "../code/titles.js" as Titles
 // Main Component
 Item {
     id: root
-    height: 150
-    width: 500
+
+
+    height: 150 *Singleton.scaleFactor
+    width: 500 * Singleton.scaleFactor
     clip: true
 
     property real elapsedTime

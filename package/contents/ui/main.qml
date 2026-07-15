@@ -17,9 +17,11 @@ PlasmoidItem {
         id: bash
     }
 
-    Component.onCompleted: {
-        Singleton.scaleFactor= Math.min(root.width /500, root.height / 150)
+    onHeightChanged: {
+        Singleton.scaleFactor= root.height / 150
+    }
 
+    Component.onCompleted: {
         bash.bootUp()
 
         bash.hasDependencies(function(output){
