@@ -261,8 +261,9 @@ Image {
         visible: settingsPage === 0
 
         clip: true
-        contentWidth: playlistGrid.width
+        contentWidth: width
         contentHeight: playlistGrid.height
+
 
         PC.ScrollBar.vertical: PC.ScrollBar {
             visible: true
