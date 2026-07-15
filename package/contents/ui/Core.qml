@@ -529,6 +529,7 @@ Item {
                                 } else {
                                     bash.seekPosition("0")
                                 }
+                                root.elapsedTime = 0                // Manual Reset of elapsedTime to avoid shell spawn
                                 break
 
                             case 1:
