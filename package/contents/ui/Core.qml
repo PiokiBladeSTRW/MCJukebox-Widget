@@ -1,7 +1,6 @@
 // Imports
 import QtQuick
 import QtQuick.Effects
-import QtMultimedia
 import org.kde.plasma.plasmoid
 import org.kde.plasma.components 3.0 as PC
 
@@ -151,6 +150,7 @@ Item {
         property string sourceFile : plasmoid.configuration.playStatus ? "empty" : "out"        // If Playing, keeps BG empty for ParrotAni
         property bool menuCloseTimed: false
         property bool menuFullyClosed: true                                                     // Ensure Parrot Anim only plays upon full Menu Close
+        property string openSoundEffect: "contents/sounds/insert.wav"
 
         source: "../images/background/" + sourceFile + ".png"
         fillMode: Image.Stretch
@@ -163,13 +163,6 @@ Item {
             }
         }
 
-        // Sound Effect for Opening Menu
-        SoundEffect {
-            id: openSound
-            source: "../sounds/insert.wav"
-            volume: 0.5
-        }
-
         // Handle Menu Open & Close States based on Mouse
         MouseArea{
             anchors.fill: parent
@@ -178,7 +171,7 @@ Item {
             onClicked: {
                 // Open Menu
                 if( !root.menuOpen) {
-                    openSound.play()
+                    bash.soundEffect(openSoundEffect)
 
                     root.menuOpen = true
                     parent.menuFullyClosed = false

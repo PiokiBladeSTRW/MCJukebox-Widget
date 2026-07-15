@@ -206,6 +206,13 @@ QtObject {
         _run("mpc search -f '%"+ format+ "%' title "+ cleanText, callback)
     }
 
+    function soundEffect(path) {
+        let safePath = sanitize(path)
+        let cmd = "paplay " + safePath + " || pw-play " + safePath + " || jack-play "+ safePath
+
+        _run(cmd)
+    }
+
 
     // ---------------
     // PLAYLIST COMMANDS
