@@ -122,7 +122,7 @@ Item {
 
                 Text {
                     width: 320
-                    text: "<b>Install:</b> <i>apt/dnf install mpc mpd</i> OR <i>pacman -S mpc mpd</i>"
+                    text: "<b>Install:</b> <i>sudo apt install mpc mpd</i> "
                     horizontalAlignment: Text.AlignHCenter
 
                     color: "white"

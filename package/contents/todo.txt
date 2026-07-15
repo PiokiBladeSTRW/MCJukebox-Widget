@@ -33,7 +33,7 @@ PlaylistMenuToggler is always visbile regardless of being in settings       # Ma
 
 Add Sections like BashExec to all Components and organize some properties positioing for WAY BETTER READABILITY *
 
-No Need for tutorials other than UBUNTU in dependency failure as this is a Plasma widget
+No Need for tutorials other than UBUNTU in dependency failure as this is a Plasma widget *
 
 Add Fade In-Outs to All Components *
 Much like parrot, Optimize note animation? *
