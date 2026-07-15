@@ -529,6 +529,7 @@ Item {
                                 } else {
                                     bash.seekPosition("0")
                                 }
+                                root.elapsedTime = 0        //Reset Time Elapsed Manually instead of Summon Shell
                                 break
 
                             case 1:
