@@ -2,7 +2,7 @@
     "KPlugin": {
         "Name": "Minecraft Jukebox",
         "Description": "Minecraft Themed Music Player for Personal use",
-        "Icon": "preferences-system-time",
+        "Icon": "/icon.png",
         "Id": "com.pioki.jukebox",
         "Authors": [
             { "Name": "Pioki Blade" }

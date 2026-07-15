@@ -2,16 +2,20 @@
 /usr/lib/x86_64-linux-gnu/qt6/qml/com/pioki/jukebox/backend/libmpdlistenplugin.so
 /usr/lib/x86_64-linux-gnu/qt6/qml/com/pioki/jukebox/backend/qmldir
 /usr/share/plasma/plasmoids/com.pioki.jukebox/metadata.json
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/Core.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/mpcConfig.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/VisualButton.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/editPlaylist.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/Singleton.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/BashExec.qml
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/qmldir
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/PlaylistMenu.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/LabelledButton.qml
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/dependencyFailure.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/VisualTextField.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/main.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/addPlaylist.qml
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/ui/FadeAnim.qml
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/white_progress.png
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/playlistMenu_icons/back.png
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/playlistMenu_icons/image_pick.png
@@ -53,6 +57,7 @@
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/background/menu.png
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/background/out.png
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/background/out_play.png
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/background/warning.png
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/background/settings_bg_2.png
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/background/settings_bg_1.png
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/images/text_field_highlighted.png
@@ -71,3 +76,7 @@
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/code/titles.js
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/sounds/insert.wav
 /usr/share/plasma/plasmoids/com.pioki.jukebox/contents/todo.txt
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/fonts/Credits.txt
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/fonts/Minecrafter.ttf
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/fonts/Minecraft.ttf
+/usr/share/plasma/plasmoids/com.pioki.jukebox/contents/icon.png
