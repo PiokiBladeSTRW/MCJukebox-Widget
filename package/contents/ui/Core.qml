@@ -166,7 +166,7 @@ Item {
         width: 400 * Singleton.scaleFactor
         height: parent.height
         anchors.right: parent.right
-        anchors.rightMargin: root.menuOpen ? 0 : -340 * Singleton.scaleFactor
+        anchors.rightMargin: root.menuOpen ? 0 : -325 * Singleton.scaleFactor
 
         property string sourceFile : plasmoid.configuration.playStatus ? "empty" : "out"        // If Playing, keeps BG empty for ParrotAni
         property bool menuCloseTimed: false

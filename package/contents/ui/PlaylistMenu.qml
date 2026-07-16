@@ -79,6 +79,8 @@ Image {
         property list<string> searchResults
         property list<string> searchResultsDir
 
+        visible: root.settingsPage === 0
+
         graphic: "playlistMenu_icons/search"
 
         detectHover: true
