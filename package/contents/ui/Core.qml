@@ -269,11 +269,13 @@ Item {
         // If Menu Closed & Song Playing, Dancing parrot
         AnimatedSprite {
             id: parentAnim
-            anchors.fill: parent
+            anchors.centerIn: parent
+            anchors.horizontalCenterOffset: 42 * Singleton.scaleFactor
+
 
             source: "../images/background/out_play.png"
 
-            frameWidth: 450
+            frameWidth: 455
             frameHeight: 120
 
             frameCount: 12
