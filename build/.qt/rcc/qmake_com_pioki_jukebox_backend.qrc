@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/com/pioki/jukebox/backend">
-    <file alias="qmldir">/home/pioki/P-PF/Leftover/PlasmaDev/com.pioki.jukebox/build/qmldir</file>
-  </qresource>
-</RCC>
-
