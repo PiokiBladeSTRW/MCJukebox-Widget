@@ -2,6 +2,8 @@
 
 ## [DISCLAIMER: This project is not affiliated with Mojang AB or Microsoft]
 
+![Project Icon](./assets/icon.png)
+
 This Project contains the source code for a Plasma based Widget of a Minecraft themed Music Player! On the bottom right corner sits a Jukebox, click it and it pops open with full playback control.
 Originally made as a personal project, until further development led me to polish the code way more than I needed to, leading me to publish the source code, in hopes to learn more.
 
