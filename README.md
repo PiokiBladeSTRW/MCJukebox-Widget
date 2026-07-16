@@ -1,8 +1,9 @@
 # Minecraft Themed Jukebox Widget [Plasma]
 
-## [DISCLAIMER: This project is not affiliated with Mojang AB or Microsoft]
-
 ![Project Icon](./assets/icon.png)
+
+
+## [DISCLAIMER: This project is not affiliated with Mojang AB or Microsoft]
 
 This Project contains the source code for a Plasma based Widget of a Minecraft themed Music Player! On the bottom right corner sits a Jukebox, click it and it pops open with full playback control.
 Originally made as a personal project, until further development led me to polish the code way more than I needed to, leading me to publish the source code, in hopes to learn more.
@@ -39,6 +40,18 @@ This project is uploaded just as a source code and not as an installable or a di
  > cmake -B build; cmake --build build; sudo cmake --install build
  
  Then hop onto your desktop in Edit Mode and you'll find Minecraft Jukebox Widget. Position it and enjoy :)
+ 
+ 
+## Screenshots
+
+![Main Menu](./assets/main_menu.png)
+> Main Menu
+
+![Playlist Menu](./assets/playlist_menu.png)
+> Playlist Menu
+
+![Settings Menu](./assets/settings_menu.png)
+> Settings Menu
 
 ## License and Copyright Disclaimer
 
