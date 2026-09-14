@@ -1,0 +1,30 @@
+
+Bugs:
+
+-> The 'insert.wav' sound never plays, local sounds cannot be played
+-> Live update of the progress Bar
+-> KDE is supported beyond Ubuntu but dependencyFailure specifically coaches for Ubuntu
+
+Features to Add:
+
+* UI/UX:
+    -> Vissible Toggle of Repeat/ Shuffle and such
+    -> Button Click feedback
+    -> Visible Album art in Menu
+    -> Toggleable Music Toast, which shows which music is playing (?)
+
+    -> Volume Control
+    -> Draggable Progress Bar to change time
+    -> Queue View??
+    -> Default States [in case of no song playing or no playlist, instead of displaying empty screen show a message]
+
+* Backend:
+    -> Connection to Youtube to play songs and playlists from Internet
+    -> Keybindings, to allow you to change music and such using Keyboard shortcuts without needing to go to desktop [also MPRIS integration]
+    -> Give option to add to queue instead of Replacing Queue
+    -> Spinners for Adding songs from folders or such incase it takes time
+    -> If MPD is down, perhaps display a Message saying so 
+
+* New Options:
+    -> Crossfade option
+
