@@ -26,5 +26,5 @@ Features to Add:
     -> If MPD is down, perhaps display a Message saying so 
 
 * New Options:
-    -> Crossfade option
+    -> Cgtrossfade option
 
